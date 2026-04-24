@@ -1,10 +1,118 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Geek Devs Comm</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial;
+      background: #0f0f10;
+      color: white;
+    }
+
+    .header {
+      padding: 40px;
+    }
+
+    .header h1 {
+      font-weight: 300;
+      font-size: 48px;
+      margin: 0;
+    }
+
+    .header p {
+      color: #aaa;
+      margin-top: 5px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      padding: 20px 40px 40px;
+    }
+
+    .tile {
+      background: #1a1a1a;
+      padding: 20px;
+      min-height: 120px;
+      display: flex;
+      align-items: flex-end;
+      font-size: 20px;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .tile:hover {
+      transform: scale(1.03);
+      opacity: 0.9;
+    }
+
+    .large {
+      grid-column: span 2;
+      grid-row: span 2;
+      font-size: 28px;
+    }
+
+    .blue { background: #0078d7; }
+    .green { background: #107c10; }
+    .purple { background: #5c2d91; }
+    .red { background: #d13438; }
+    .yellow { background: #f2c811; color: black; }
+    .pink { background: #e81123; }
+
+    .footer {
+      padding: 20px 40px;
+      color: #777;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
+
+<div class="header">
   <h1>Geek Devs Comm</h1>
-  <p>This website is still under maintenance! Stay tuned!</p>
+  <p>Build • Share • Innovate</p>
+</div>
+
+<div class="grid">
+
+  <div class="tile large blue" onclick="openLink('https://github.com/rdcubing')">
+    Projects
+  </div>
+
+  <div class="tile green" onclick="alert('Downloads coming soon')">
+    Downloads
+  </div>
+
+  <div class="tile purple" onclick="alert('Community page soon')">
+    Community
+  </div>
+
+  <div class="tile pink large" onclick="alert('Music player coming soon')">
+    Music
+  </div>
+
+  <div class="tile yellow" onclick="alert('Docs coming soon')">
+    Docs
+  </div>
+
+  <div class="tile red" onclick="alert('Contact coming soon')">
+    Contact
+  </div>
+
+</div>
+
+<div class="footer">
+  © 2026 Geek Devs Comm
+</div>
+
+<script>
+  function openLink(url) {
+    window.open(url, '_blank');
+  }
+</script>
+
 </body>
 </html>
