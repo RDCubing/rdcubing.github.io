@@ -76,32 +76,7 @@
   <p>Build • Share • Innovate</p>
 </div>
 
-<div class="grid">
-
-  <div class="tile large blue" onclick="openLink('https://github.com/rdcubing')">
-    Projects
-  </div>
-
-  <div class="tile green" onclick="alert('Downloads coming soon')">
-    Downloads
-  </div>
-
-  <div class="tile purple" onclick="alert('Community page soon')">
-    Community
-  </div>
-
-  <div class="tile pink large" onclick="alert('Music player coming soon')">
-    Music
-  </div>
-
-  <div class="tile yellow" onclick="alert('Docs coming soon')">
-    Docs
-  </div>
-
-  <div class="tile red" onclick="alert('Contact coming soon')">
-    Contact
-  </div>
-
+<div class="grid" id="appGrid">
 </div>
 
 <div class="footer">
@@ -109,9 +84,74 @@
 </div>
 
 <script>
-  function openLink(url) {
-    window.open(url, '_blank');
-  }
+var apiUrl =
+"https://github.com/RDCubing/geekhubapi/raw/refs/heads/main/projects.json";
+
+function createTile(app, large)
+{
+    var tile = document.createElement("div");
+
+    tile.className =
+        "tile " +
+        (large ? "large blue" : "purple");
+
+    tile.innerHTML = app.Title;
+
+    tile.onclick = function()
+    {
+        window.open(app.DownloadUrl, "_blank");
+    };
+
+    return tile;
+}
+
+function loadApps()
+{
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function()
+    {
+        if (xhr.readyState === 4 && xhr.status === 200)
+        {
+            var data = JSON.parse(xhr.responseText);
+            var grid = document.getElementById("appGrid");
+
+            var count = 0;
+
+            function addApps(list)
+            {
+                for (var i = 0; i < list.length; i++)
+                {
+                    var app = list[i];
+
+                    if (app.TopApp === "Yes")
+                    {
+                        count++;
+
+                        grid.appendChild(
+                            createTile(
+                                app,
+                                count <= 2
+                            )
+                        );
+                    }
+                }
+            }
+
+            addApps(data.NeonStore);
+
+            if (data.OtherPlatforms)
+            {
+                addApps(data.OtherPlatforms);
+            }
+        }
+    };
+
+    xhr.open("GET", apiUrl, true);
+    xhr.send();
+}
+
+loadApps();
 </script>
 
 </body>
