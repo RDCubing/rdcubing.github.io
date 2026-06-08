@@ -1,364 +1,368 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Geek Devs Comm - Metro Shell</title>
+    <meta charset="UTF-8" />
+    <title>Geek Devs Comm - Webstore</title>
 
-<style>
-body {
-    margin: 0;
-    font-family: "Segoe UI", Arial;
-    background: #0f0f10;
-    color: white;
-    overflow: hidden; /* IMPORTANT: shell-style */
-}
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial;
+            color: white;
+            overflow: hidden;
+            cursor: default;
+            user-select: none;
+        }
 
-.shell {
-    position: absolute;
-    top: 0;
-    left: 0;
+        .shell {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: scroll;
+            overflow-y: hidden;
+            white-space: nowrap;
+            font-size: 0;
+            background: url(Store1.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
 
-    width: 100%;
-    height: 100%;
+        .section {
+            display: inline-block;
+            vertical-align: top;
+            padding: 40px 0;
+            box-sizing: border-box;
+            overflow: hidden;
+            font-size: 16px;
+        }
 
-    overflow-x: scroll;
-    overflow-y: hidden;
+        .header h1 {
+            font-weight: 100;
+            font-size: 64px;
+            margin: 0;
+        }
 
-    white-space: nowrap;   /* KEY: forces horizontal layout */
-    font-size: 0;          /* removes inline-block spacing issues */
-}
+        .header p {
+            color: #aaa;
+            font-size: 18px;
+        }
 
-.section {
-    display: inline-block;
-    vertical-align: top;
+        .spotlight {
+            position: relative;
+            margin: 0 40px 20px 40px;
+            width: 711px;
+            height: 400px;
+            overflow: hidden;
+            background: #111;
+        }
 
-    width: 100vw;
-    min-width: 100vw;
-    max-width: 100vw;
+        .spotlight-banner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+        }
 
-    height: 100vh;
+        .spotlight-info {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 12px;
+            transition: opacity 0.6s ease;
+        }
 
-    padding: 40px;
-    box-sizing: border-box;
+        .spotlight-icon {
+            width: 64px;
+            height: 64px;
+            margin-right: 15px;
+        }
 
-    overflow: hidden; /* prevents content influencing layout */
-    font-size: 16px;
-}
+        .spotlight-title {
+            font-size: 28px;
+            font-weight: 300;
+        }
 
-/* ===== HEADER ===== */
-.header h1 {
-    font-weight: 300;
-    font-size: 48px;
-    margin: 0;
-}
+        .spotlight-publisher {
+            font-size: 14px;
+            color: #ccc;
+        }
 
-.header p {
-    color: #aaa;
-}
+        .spotlight-subtitle {
+            font-size: 16px;
+            color: #aaa;
+        }
 
-.spotlight {
-    position: relative;
-    margin: 0 40px 20px 40px;
-    height: 400px;
-    overflow: hidden;
-    background: #111;
-}
+        .list {
+            display: block;
+            width: 100%;
+            height: calc(100vh - 160px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-/* IMPORTANT: separate image layer behavior */
-.spotlight-banner {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;   /* prevents stretching */
-    object-position: center;
-}
+        * {
+            max-width: 100vw;
+            box-sizing: border-box;
+        }
 
-.spotlight-info {
-    position: absolute;
-    left: 20px;
-    bottom: 20px;
-    display: flex;
-    align-items: center;
-    background: rgba(0,0,0,0.6);
-    padding: 12px;
-    transition: opacity 0.6s ease;
-}
+        .shell,
+        .section {
+            transform: translateZ(0);
+        }
 
-.spotlight-icon {
-    width: 64px;
-    height: 64px;
-    margin-right: 15px;
-}
+        .app-row {
+            display: flex;
+            align-items: center;
+            background: rgba(40, 40, 40, 0.60);
+            padding: 10px;
+            margin: 8px;
+            opacity: 1;
+        }
 
-.spotlight-title {
-    font-size: 28px;
-    font-weight: 300;
-}
+            .app-row:hover {
+                background: #393939;
+            }
 
-.spotlight-publisher {
-    font-size: 14px;
-    color: #ccc;
-}
+        .app-icon {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            margin-right: 15px;
+            background: #111;
+            flex-shrink: 0;
+        }
 
-.spotlight-subtitle {
-    font-size: 16px;
-    color: #aaa;
-}
+        .app-text {
+            display: flex;
+            flex-direction: column;
+        }
 
-.list {
-    display: block;
+        .app-title {
+            font-size: 18px;
+            font-weight: 300;
+        }
 
-    width: 100%;
-    height: calc(100vh - 160px);
+        .app-sub {
+            font-size: 13px;
+            color: #aaa;
+        }
 
-    overflow-y: auto;
-    overflow-x: hidden;
+        .blue {
+            background: #0078d7;
+        }
 
-    position: relative;
-}
+        .green {
+            background: #107c10;
+        }
 
-* {
-    max-width: 100vw;
-    box-sizing: border-box;
-}
+        .red {
+            background: #d13438;
+        }
 
-.app-row, .spotlight, .list {
-    width: 100%;
-}
+        .purple {
+            background: #5c2d91;
+        }
 
-.shell, .section {
-    transform: translateZ(0);
-}
+        .section-title {
+            font-size: 24px;
+            font-weight: 300;
+            margin-bottom: 10px;
+            color: #ddd;
+        }
 
-.app-row {
-    display: flex;
-    align-items: center;
-    background: #1a1a1a;
-    padding: 10px;
-    cursor: pointer;
-    transition: 0.2s ease;
-    opacity: 0;
-    transform: translateY(10px);
-}
-
-.app-row.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.app-row:hover {
-    background: #252525;
-}
-
-.app-icon {
-    width: 64px;
-    height: 64px;
-    object-fit: contain; /* 🔥 FIX IMAGE STRETCH */
-    margin-right: 15px;
-    background: #111;
-    flex-shrink: 0;
-}
-
-.app-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.app-title {
-    font-size: 18px;
-    font-weight: 300;
-}
-
-.app-sub {
-    font-size: 13px;
-    color: #aaa;
-}
-
-.blue { background: #0078d7; }
-.green { background: #107c10; }
-.red { background: #d13438; }
-.purple { background: #5c2d91; }
-
-.section-title {
-    font-size: 24px;
-    font-weight: 300;
-    margin-bottom: 10px;
-    color: #ddd;
-}
-
-.spotlight-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    background-size: cover;
-    background-position: center;
-    filter: blur(25px);
-    transform: scale(1.2);
-    opacity: 0.6;
-}
-</style>
+        .spotlight-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-position: center;
+            filter: blur(25px);
+            transform: scale(1.2);
+            opacity: 0.6;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="shell" id="shell">
+        <div class="section" style="margin-left: 64px;">
+            <div class="header">
+                <h1>Geek Devs Comm</h1>
+                <p>Build • Share • Innovate</p>
+            </div>
 
-<div class="shell" id="shell">
-
-    <!-- ===== HOME ===== -->
-    <div class="section">
-
-        <div class="header">
-            <h1>Geek Devs Comm</h1>
-            <p>Build • Share • Innovate</p>
-        </div>
-
-        <div id="spotlight" class="spotlight">
-            <div id="spotlightBg" class="spotlight-bg"></div>
-<img id="spotlightBanner" class="spotlight-banner">
-            <div class="spotlight-info">
-                <img id="spotlightIcon" class="spotlight-icon">
-                <div>
-                    <div id="spotlightTitle" class="spotlight-title"></div>
-                    <div id="spotlightPublisher" class="spotlight-publisher"></div>
-                    <div id="spotlightSubtitle" class="spotlight-subtitle"></div>
+            <div id="spotlight" class="spotlight">
+                <div id="spotlightBg" class="spotlight-bg"></div>
+                <img id="spotlightBanner" class="spotlight-banner" />
+                <div class="spotlight-info">
+                    <img id="spotlightIcon" class="spotlight-icon" />
+                    <div>
+                        <div id="spotlightTitle" class="spotlight-title"></div>
+                        <div id="spotlightPublisher" class="spotlight-publisher"></div>
+                        <div id="spotlightSubtitle" class="spotlight-subtitle"></div>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <div class="section">
+            <div class="section-title">Top Apps</div>
+            <div class="list" id="topApps"></div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">All Apps</div>
+            <div class="list" id="allApps"></div>
+        </div>
     </div>
 
-    <!-- ===== TOP APPS ===== -->
-    <div class="section">
-        <div class="section-title">Top Apps</div>
-        <div class="list" id="topApps"></div>
+    <script>
+            var apiUrl = "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/projects.json";
 
-    </div>
+            var topApps = [];
+            var spotlightIndex = 0;
 
-    <!-- ===== ALL APPS ===== -->
-    <div class="section">
-        <div class="section-title">All Apps</div>
-        <div class="list" id="allApps"></div>
-    </div>
+            function updateSpotlight() {
+                if (topApps.length === 0) return;
+                var app = topApps[spotlightIndex];
+                var downloadTarget = function () {
+                    window.open(app.DownloadUrl, "_blank");
+                };
 
-</div>
+                document.getElementById("spotlightBanner").onclick = downloadTarget;
+                document.getElementById("spotlightBanner").style.cursor = "pointer";
+                document.getElementById("spotlightIcon").onclick = downloadTarget;
+                document.getElementById("spotlightTitle").onclick = downloadTarget;
+                document.getElementById("spotlightBanner").style.opacity = 0;
+                document.getElementById("spotlightIcon").style.opacity = 0;
 
-<script>
+                setTimeout(function () {
+                    document.getElementById("spotlightBanner").src = app.DetailImagePath;
+                    document.getElementById("spotlightIcon").src = app.ImagePath;
+                    document.getElementById("spotlightTitle").innerHTML = app.Title;
+                    document.getElementById("spotlightPublisher").innerHTML = app.Publisher;
+                    document.getElementById("spotlightSubtitle").innerHTML = app.Subtitle;
 
-var apiUrl =
-"https://raw.githubusercontent.com/RDCubing/geekhubapi/main/projects.json";
+                    document.getElementById("spotlightBanner").style.opacity = 1;
+                    document.getElementById("spotlightIcon").style.opacity = 1;
+                }, 300);
 
-var topApps = [];
-var spotlightIndex = 0;
+                spotlightIndex++;
+                if (spotlightIndex >= topApps.length) spotlightIndex = 0;
+            }
 
-/* ===== SPOTLIGHT ===== */
-function updateSpotlight()
-{
-    if(topApps.length === 0) return;
+            function createRow(app) {
+                var row = document.createElement("div");
+                row.className = "app-row";
 
-    var app = topApps[spotlightIndex];
+                row.innerHTML =
+                    '<img class="app-icon" src="' +
+                    app.ImagePath +
+                    '">' +
+                    '<div class="app-text">' +
+                    '<div class="app-title">' +
+                    app.Title +
+                    "</div>" +
+                    '<div class="app-sub">' +
+                    app.Publisher +
+                    " • " +
+                    app.Subtitle +
+                    "</div>" +
+                    "</div>";
 
-    document.getElementById("spotlightBanner").style.opacity = 0;
-    document.getElementById("spotlightIcon").style.opacity = 0;
+                row.onclick = function () {
+                    window.open(app.DownloadUrl, "_blank");
+                };
 
-    setTimeout(function()
-    {
-        document.getElementById("spotlightBanner").src = app.DetailImagePath;
-        document.getElementById("spotlightIcon").src = app.ImagePath;
-        document.getElementById("spotlightTitle").innerHTML = app.Title;
-        document.getElementById("spotlightPublisher").innerHTML = app.Publisher;
-        document.getElementById("spotlightSubtitle").innerHTML = app.Subtitle;
+                return row;
+            }
 
-        document.getElementById("spotlightBanner").style.opacity = 1;
-        document.getElementById("spotlightIcon").style.opacity = 1;
+            function loadApps() {
+                var xhr = new XMLHttpRequest();
 
-    }, 300);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var data = JSON.parse(xhr.responseText);
 
-    spotlightIndex++;
-    if(spotlightIndex >= topApps.length)
-        spotlightIndex = 0;
-}
+                        var topContainer = document.getElementById("topApps");
+                        var allContainer = document.getElementById("allApps");
 
-function createRow(app)
-{
-    var row = document.createElement("div");
-    row.className = "app-row";
+                        function add(list, target, onlyTop) {
+                            for (var i = 0; i < list.length; i++) {
+                                var app = list[i];
 
-    row.innerHTML =
-        '<img class="app-icon" src="' + app.ImagePath + '">' +
-        '<div class="app-text">' +
-            '<div class="app-title">' + app.Title + '</div>' +
-            '<div class="app-sub">' + app.Publisher + ' • ' + app.Subtitle + '</div>' +
-        '</div>';
+                                if (!onlyTop || app.TopApp === "Yes") {
+                                    if (app.TopApp === "Yes") topApps.push(app);
 
-    row.onclick = function()
-    {
-        window.open(app.DownloadUrl, "_blank");
-    };
+                                    target.appendChild(createRow(app));
+                                }
+                            }
+                        }
 
-    setTimeout(function()
-    {
-        row.className += " visible";
-    }, 50);
+                        add(data.NeonStore, topContainer, true);
+                        add(data.OtherPlatforms, allContainer, false);
 
-    return row;
-}
-
-/* ===== LOAD ===== */
-function loadApps()
-{
-    var xhr = new XMLHttpRequest();
-
-    xhr.onreadystatechange = function()
-    {
-        if(xhr.readyState === 4 && xhr.status === 200)
-        {
-            var data = JSON.parse(xhr.responseText);
-
-            var topContainer = document.getElementById("topApps");
-            var allContainer = document.getElementById("allApps");
-
-            function add(list, target, onlyTop)
-            {
-                for(var i = 0; i < list.length; i++)
-                {
-                    var app = list[i];
-
-                    if(!onlyTop || app.TopApp === "Yes")
-                    {
-                        if(app.TopApp === "Yes")
-                            topApps.push(app);
-
-                        target.appendChild(createRow(app));
+                        updateSpotlight();
+                        setInterval(updateSpotlight, 4000);
                     }
+                };
+
+                xhr.open("GET", apiUrl, true);
+                xhr.send();
+            }
+
+            loadApps();
+
+            var shell = document.getElementById("shell");
+            var scrollTarget = shell.scrollLeft;
+            var animationFrameId = null;
+
+            shell.addEventListener("wheel", function (e) {
+                e.preventDefault();
+
+                if (!animationFrameId) {
+                    scrollTarget = this.scrollLeft;
+                }
+
+                scrollTarget += e.deltaY;
+
+                var maxScroll = this.scrollWidth - this.clientWidth;
+                scrollTarget = Math.max(0, Math.min(scrollTarget, maxScroll));
+
+                if (!animationFrameId) {
+                    animationFrameId = requestAnimationFrame(animateScroll);
+                }
+            }, { passive: false });
+
+            function animateScroll() {
+                var current = shell.scrollLeft;
+                var next = current + (scrollTarget - current) * 0.15;
+
+                shell.scrollLeft = next;
+
+                if (Math.abs(scrollTarget - next) > 0.5) {
+                    animationFrameId = requestAnimationFrame(animateScroll);
+                } else {
+                    shell.scrollLeft = scrollTarget;
+                    animationFrameId = null;
                 }
             }
 
-            add(data.NeonStore, topContainer, true);
-            add(data.OtherPlatforms, allContainer, false);
-
-            updateSpotlight();
-            setInterval(updateSpotlight, 4000);
-        }
-    };
-
-    xhr.open("GET", apiUrl, true);
-    xhr.send();
-}
-
-loadApps();
-
-/* ===== MOUSE WHEEL HORIZONTAL SCROLL ===== */
-document.getElementById("shell").addEventListener("wheel", function(e)
-{
-    e.preventDefault();
-    this.scrollLeft += e.deltaY;
-}, { passive: false });
-
-</script>
-
+            document.addEventListener("contextmenu", function (e) {
+                e.preventDefault();
+            });
+    </script>
 </body>
 </html>
