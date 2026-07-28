@@ -6,6 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Geek Devs Community - Services</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 
 <style>
 
@@ -13,13 +16,24 @@
     box-sizing: border-box;
 }
 
-html, body {
-    margin:0;
-    padding:0;
-    overflow-x:hidden;
-    font-family:Tahoma, Arial, sans-serif;
-    color:#333;
-    background:white;
+html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: white;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: white;
+    color: #333;
+    font-family: Tahoma, Arial, sans-serif;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 
@@ -66,15 +80,43 @@ html, body {
 
 
 .container {
-    max-width:900px;
-    width:100%;
-    margin:30px auto;
-    padding:0 15px;
+    max-width: 1100px;
+    width: 100%;
+    margin: 30px auto;
+    padding: 0 15px;
+    display: flex;
+    gap: 25px;
 }
 
+.sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: #f2f2f2;
+    border: 1px solid #ccc;
+    padding: 15px;
+    height: fit-content;
+}
+
+.sidebar h3 {
+    color: #005a9e;
+    margin-top: 0;
+}
+
+.sidebar a {
+    display: block;
+    color: #0066cc;
+    text-decoration: none;
+    padding: 6px 0;
+    overflow-wrap: break-word;
+}
+
+.sidebar a:hover {
+    text-decoration: underline;
+}
 
 .content {
-    width:100%;
+    flex: 1;
+    min-width: 0;
 }
 
 
@@ -142,18 +184,20 @@ p {
 
 
 .footer {
-    margin-top:40px;
-    background:#eeeeee;
-    border-top:1px solid #ccc;
-    padding:15px 40px;
-    font-size:12px;
-    color:#666;
+    background: #eeeeee;
+    border-top: 1px solid #ccc;
+    padding: 15px 40px;
+    font-size: 12px;
+    color: #666;
+    margin-top: auto;
 }
 
 
 /* Mobile */
 
-@media(max-width:768px) {
+/* Mobile */
+
+@media (max-width:768px) {
 
     .header {
         padding: 15px 20px;
@@ -171,31 +215,99 @@ p {
         font-size: 15px;
     }
 
-
     .nav {
-        padding:10px 20px;
+        padding: 10px 20px;
     }
-
 
     .nav a {
-        display:inline-block;
-        margin-bottom:8px;
+        display: inline-block;
+        margin-bottom: 8px;
     }
-
 
     h1 {
-        font-size:26px;
+        font-size: 26px;
     }
-
 
     h2 {
-        font-size:18px;
+        font-size: 18px;
     }
 
-
     .button {
-        display:block;
-        text-align:center;
+        display: block;
+        text-align: center;
+    }
+
+    .container {
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .content {
+        width: 100%;
+    }
+
+}
+
+
+/* Small Phones */
+
+@media (max-width:480px) {
+
+    .header {
+        padding: 12px 15px;
+        font-size: 20px;
+    }
+
+    .header::after {
+        width: 72px;
+        height: 72px;
+    }
+
+    .header span {
+        font-size: 14px;
+    }
+
+    .nav {
+        padding: 8px 15px;
+    }
+
+    .nav a {
+        display: block;
+        margin: 0 0 8px;
+    }
+
+    .container {
+        padding: 0 10px;
+        margin-top: 15px;
+        gap: 15px;
+    }
+
+    .sidebar,
+    .box,
+    .announcement {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    h2 {
+        font-size: 17px;
+    }
+
+    p,
+    .announcement-content {
+        font-size: 13px;
+    }
+
+    .footer {
+        padding: 15px;
+        text-align: center;
     }
 
 }
@@ -230,6 +342,25 @@ Geek Devs Community
 
 <div class="container">
 
+<div class="sidebar">
+
+<h3>Services</h3>
+
+<a href="#running">Running Services</a>
+<a href="#hubbot">HubBot</a>
+<a href="#neonstore-api">NeonStore API</a>
+<a href="#about">Community Infrastructure</a>
+
+<br>
+
+<h3>Quick Links</h3>
+
+<a href="https://rdcubing.github.io/webstore">NeonStore WebStore</a>
+<a href="https://rdcubing.github.io/downloads">Downloads</a>
+<a href="https://github.com/RDCubing" target="_blank">GitHub</a>
+<a href="https://discord.gg/YBsVhkcHT4" target="_blank">Discord</a>
+
+</div>
 
 <div class="content">
 
@@ -250,11 +381,11 @@ applications and platforms.
 
 
 
-<h2>Running Services</h2>
+<h2 id="running">Running Services</h2>
 
 
 
-<div class="service">
+<div class="service" id="hubbot">
 
 
 <div class="service-title">
@@ -289,7 +420,7 @@ Open Service
 
 
 
-<div class="service">
+<div class="service" id="neonstore-api">
 
 
 <div class="service-title">
@@ -325,7 +456,7 @@ Open Service
 
 
 
-<h2>About Hosted Services</h2>
+<h2 id="about">About Hosted Services</h2>
 
 
 <div class="service">

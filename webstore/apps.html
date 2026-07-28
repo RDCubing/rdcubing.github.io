@@ -7,6 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Geek Devs Community - Applications</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 
 <style>
 
@@ -14,7 +17,13 @@
     box-sizing: border-box;
 }
 
-html,
+html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: white;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -22,6 +31,10 @@ body {
     background: white;
     color: #333;
     font-family: Tahoma, Arial, sans-serif;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 
@@ -73,11 +86,43 @@ body {
 
 /* Main */
 
-.page {
-    max-width: 900px;
+.container {
+    max-width: 1100px;
     width: 100%;
     margin: 30px auto;
     padding: 0 15px;
+    display: flex;
+    gap: 25px;
+}
+
+.sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: #f2f2f2;
+    border: 1px solid #ccc;
+    padding: 15px;
+    height: fit-content;
+}
+
+.sidebar h3 {
+    color: #005a9e;
+    margin: 0;
+}
+
+.sidebar h3 + a {
+    margin-top: 8px;
+}
+
+.sidebar a {
+    display: block;
+    color: #0066cc;
+    text-decoration: none;
+    padding: 6px 0;
+}
+
+.content {
+    flex: 1;
+    min-width: 0;
 }
 
 
@@ -145,12 +190,12 @@ p {
 /* Footer */
 
 .footer {
-    margin-top: 40px;
     background: #eeeeee;
     border-top: 1px solid #ccc;
     padding: 15px 40px;
     font-size: 12px;
     color: #666;
+    margin-top: auto;
 }
 
 
@@ -184,10 +229,19 @@ p {
         margin-bottom: 8px;
     }
 
-    .page {
-        margin: 20px auto;
-        padding: 0 15px;
-    }
+    .container {
+    flex-direction: column;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+.sidebar {
+    width: 100%;
+}
+
+.content {
+    width: 100%;
+}
 
     h1 {
         font-size: 26px;
@@ -213,9 +267,11 @@ p {
         font-size: 20px;
     }
 
-    .page {
-        padding: 0 10px;
-    }
+    .container {
+    margin: 15px auto;
+    padding: 0 10px;
+    gap: 15px;
+}
 
     .app {
         flex-direction: column;
@@ -263,48 +319,38 @@ Geek Devs Community
 
 
 
-<div class="page">
+<div class="container">
 
+    <div class="sidebar">
 
-<h1>
-All Applications
-</h1>
+        <h3>Applications</h3>
 
+        <a href="#neon">All Applications</a>
 
-<p>
-Browse all applications and projects available through Geek Devs Community.
-</p>
+        <h3 style="margin-top:24px;">Resources</h3>
 
+        <a href="https://rdcubing.github.io/webstore">WebStore Home</a>
+        <a href="https://rdcubing.github.io/downloads">Downloads</a>
+        <a href="https://github.com/RDCubing" target="_blank">GitHub</a>
+        <a href="https://discord.gg/YBsVhkcHT4" target="_blank">Discord</a>
 
+    </div>
 
+    <div class="content">
 
-<h2>
-NeonStore Applications
-</h2>
+        <h1>All Applications</h1>
 
+        <p>
+            Browse all applications and projects available through Geek Devs Community.
+        </p>
 
-<div id="neonApps">
+        <h2 id="neon">NeonStore Applications</h2>
 
-Loading applications...
+        <div id="neonApps">
+            Loading applications...
+        </div>
 
-</div>
-
-
-
-
-
-<h2>
-Other Platform Applications
-</h2>
-
-
-<div id="otherApps">
-
-Loading applications...
-
-</div>
-
-
+    </div>
 
 </div>
 
@@ -346,7 +392,7 @@ div.className="app";
 div.onclick=function(){
 
 location.href =
-"/webstore/app?id="+
+"https://rdcubing.github.io/webstore/app?id=" +
 encodeURIComponent(app.Id);
 
 };
@@ -392,64 +438,84 @@ return div;
 
 
 }
+const appsPerPage = 10;
 
+let allApps = [];
+let currentPage = 1;
 
+function renderPage(page) {
 
+    const container = document.getElementById("neonApps");
+    container.innerHTML = "";
+
+    const start = (page - 1) * appsPerPage;
+    const end = start + appsPerPage;
+
+    allApps
+        .slice(start, end)
+        .forEach(app => {
+            container.appendChild(createApp(app));
+        });
+
+    renderPagination();
+}
+
+function renderPagination() {
+
+    let pagination = document.getElementById("pagination");
+
+    if (!pagination) {
+        pagination = document.createElement("div");
+        pagination.id = "pagination";
+        pagination.style.marginTop = "20px";
+        pagination.style.textAlign = "center";
+        document.getElementById("neonApps").after(pagination);
+    }
+
+    pagination.innerHTML = "";
+
+    const totalPages = Math.ceil(allApps.length / appsPerPage);
+
+    for (let i = 1; i <= totalPages; i++) {
+
+        const button = document.createElement("button");
+
+        button.textContent = i;
+
+        button.style.margin = "0 4px";
+        button.style.padding = "6px 12px";
+        button.style.cursor = "pointer";
+
+        if (i === currentPage) {
+            button.disabled = true;
+        }
+
+        button.onclick = () => {
+            currentPage = i;
+            renderPage(currentPage);
+        };
+
+        pagination.appendChild(button);
+    }
+}
 
 fetch(apiUrl)
+.then(r => r.json())
+.then(data => {
 
-.then(r=>r.json())
+    allApps = [
+        ...data.NeonStore,
+        ...data.OtherPlatforms
+    ];
 
-.then(data=>{
+    allApps.sort((a, b) => a.Title.localeCompare(b.Title));
 
-
-let neon =
-document.getElementById("neonApps");
-
-
-let other =
-document.getElementById("otherApps");
-
-
-
-neon.innerHTML="";
-
-other.innerHTML="";
-
-
-
-data.NeonStore.forEach(app=>{
-
-
-neon.appendChild(
-createApp(app)
-);
-
-
-});
-
-
-
-data.OtherPlatforms.forEach(app=>{
-
-
-other.appendChild(
-createApp(app)
-);
-
-
-});
-
+    renderPage(1);
 
 })
-
-.catch(()=>{
-
-
-document.getElementById("neonApps").innerHTML =
-"Unable to load applications.";
-
-
+.catch(() => {
+    document.getElementById("neonApps").innerHTML =
+        "Unable to load applications.";
 });
 
 

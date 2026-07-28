@@ -7,6 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Geek Devs Community - WebStore</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 
 <style>
 
@@ -14,7 +17,13 @@
     box-sizing: border-box;
 }
 
-html,
+html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: white;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -22,6 +31,10 @@ body {
     background: white;
     color: #333;
     font-family: Tahoma, Arial, sans-serif;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 
@@ -74,10 +87,42 @@ body {
 /* Layout */
 
 .page {
-    max-width: 900px;
+    max-width: 1100px;
     width: 100%;
     margin: 30px auto;
     padding: 0 15px;
+    display: flex;
+    gap: 25px;
+}
+
+.sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: #f2f2f2;
+    border: 1px solid #ccc;
+    padding: 15px;
+    height: fit-content;
+}
+
+.sidebar h3 {
+    color: #005a9e;
+    margin-top: 0;
+}
+
+.sidebar h3:nth-of-type(2) {
+    margin-top: 24px;
+}
+
+.sidebar a {
+    display: block;
+    color: #0066cc;
+    text-decoration: none;
+    padding: 6px 0;
+}
+
+.content {
+    flex: 1;
+    min-width: 0;
 }
 
 
@@ -189,16 +234,16 @@ p {
 /* Footer */
 
 .footer {
-    margin-top: 40px;
     background: #eeeeee;
     border-top: 1px solid #ccc;
     padding: 15px 40px;
     font-size: 12px;
     color: #666;
+    margin-top: auto;
 }
 
 
-/* Mobile */
+/* Tablet & Mobile */
 
 @media (max-width:768px) {
 
@@ -229,7 +274,17 @@ p {
     }
 
     .page {
+        flex-direction: column;
         margin: 20px auto;
+        padding: 0 10px;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .content {
+        width: 100%;
     }
 
     h1 {
@@ -240,13 +295,15 @@ p {
         font-size: 18px;
     }
 
-    .featured {
+    .featured,
+    .app {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    .featured img {
-        margin: 0 0 15px;
+    .featured img,
+    .app img {
+        margin: 0 0 12px;
     }
 
     .button {
@@ -257,40 +314,64 @@ p {
     .footer {
         padding: 15px 20px;
     }
-
 }
 
-@media (max-width:768px) {
+
+/* Small Phones */
+
+@media (max-width:480px) {
 
     .header {
-        padding: 15px 20px;
-        font-size: 22px;
+        padding: 12px 15px;
+        font-size: 20px;
     }
 
     .header::after {
-        width: 96px;
-        height: 96px;
+        width: 72px;
+        height: 72px;
     }
 
     .header span {
+        font-size: 14px;
+    }
+
+    .nav {
+        padding: 8px 15px;
+    }
+
+    .nav a {
         display: block;
-        margin-top: 5px;
-        font-size: 15px;
+        margin: 0 0 8px;
     }
 
     .page {
-        padding: 0 10px;
+        margin: 15px auto;
+        padding: 0 8px;
+        gap: 15px;
     }
 
-    .app {
-        flex-direction: column;
-        align-items: flex-start;
+    .sidebar,
+    .panel {
+        padding: 12px;
     }
 
-    .app img {
-        margin: 0 0 12px;
+    h1 {
+        font-size: 22px;
     }
 
+    h2 {
+        font-size: 17px;
+    }
+
+    p,
+    .app-sub {
+        font-size: 13px;
+    }
+
+    .footer {
+        padding: 15px;
+        text-align: center;
+    }
 }
 
 </style>
@@ -328,6 +409,25 @@ Geek Devs Community
 
 
 <div class="page">
+
+<div class="sidebar">
+
+<h3>WebStore</h3>
+
+<a href="#featured">Featured Application</a>
+<a href="#topapps">Top Apps</a>
+<a href="#about">About NeonStore</a>
+
+<h3>Resources</h3>
+
+<a href="https://rdcubing.github.io/downloads">Downloads</a>
+<a href="https://rdcubing.github.io/webstore/apps">All Apps</a>
+<a href="https://github.com/RDCubing" target="_blank">GitHub</a>
+<a href="https://discord.gg/YBsVhkcHT4" target="_blank">Discord</a>
+
+</div>
+
+<div class="content">
 
 
 <h1>
@@ -373,12 +473,7 @@ Download NeonStore
 
 </div>
 
-
-
-<h2>
-Featured Application
-</h2>
-
+<h2 id="featured">Featured Application</h2>
 
 <div class="featured">
 
@@ -409,28 +504,14 @@ View Details
 
 </div>
 
-
-
-
-<h2>
-Top Apps
-</h2>
-
-
+<h2 id="topapps">Top Apps</h2>
 <div id="topApps">
 
 Loading applications...
 
 </div>
 
-
-
-
-<h2>
-About NeonStore
-</h2>
-
-
+<h2 id="about">About NeonStore</h2>
 <div class="panel">
 
 
@@ -451,6 +532,7 @@ and discover developer-created applications.
 
 
 
+</div>
 </div>
 
 

@@ -7,6 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Geek Devs Community - App</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 
 <style>
 
@@ -14,7 +17,13 @@
     box-sizing: border-box;
 }
 
-html,
+html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: white;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -22,6 +31,10 @@ body {
     background: white;
     color: #333;
     font-family: Tahoma, Arial, sans-serif;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 /* Header */
@@ -70,11 +83,43 @@ body {
 
 /* Layout */
 
-.page {
-    max-width: 900px;
+.container {
+    max-width: 1100px;
     width: 100%;
     margin: 30px auto;
     padding: 0 15px;
+    display: flex;
+    gap: 25px;
+}
+
+.sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: #f2f2f2;
+    border: 1px solid #ccc;
+    padding: 15px;
+    height: fit-content;
+}
+
+.sidebar h3 {
+    color: #005a9e;
+    margin: 0;
+}
+
+.sidebar h3 + a {
+    margin-top: 8px;
+}
+
+.sidebar a {
+    display: block;
+    color: #0066cc;
+    text-decoration: none;
+    padding: 6px 0;
+}
+
+.content {
+    flex: 1;
+    min-width: 0;
 }
 
 /* Typography */
@@ -148,17 +193,17 @@ h2 {
 /* Footer */
 
 .footer {
-    margin-top: 40px;
     background: #eeeeee;
     border-top: 1px solid #ccc;
     padding: 15px 40px;
     font-size: 12px;
     color: #666;
+    margin-top: auto;
 }
 
 /* Mobile */
 
-@media (max-width: 768px) {
+@media (max-width:768px) {
 
     .header {
         padding: 15px 20px;
@@ -186,9 +231,15 @@ h2 {
         margin-bottom: 8px;
     }
 
-    .page {
-        margin-top: 20px;
+    .container {
+        flex-direction: column;
+        margin: 20px auto;
         padding: 0 15px;
+    }
+
+    .sidebar,
+    .content {
+        width: 100%;
     }
 
     h1 {
@@ -202,13 +253,11 @@ h2 {
     .app-header {
         flex-direction: column;
         align-items: flex-start;
-        text-align: left;
     }
 
     .app-icon {
         width: 80px;
         height: 80px;
-        margin: 0;
     }
 
     .title {
@@ -219,20 +268,73 @@ h2 {
         display: block;
         text-align: center;
     }
+
+    .footer {
+        padding: 15px 20px;
+    }
 }
 
-@media (max-width: 400px) {
+
+@media (max-width:480px) {
 
     .header {
+        padding: 12px 15px;
         font-size: 20px;
     }
 
-    .page {
-        padding: 10px;
+    .header::after {
+        width: 72px;
+        height: 72px;
+    }
+
+    .header span {
+        font-size: 14px;
+    }
+
+    .nav {
+        padding: 8px 15px;
+    }
+
+    .nav a {
+        display: block;
+        margin: 0 0 8px;
+    }
+
+    .container {
+        margin: 15px auto;
+        padding: 0 10px;
+        gap: 15px;
+    }
+
+    .sidebar,
+    .panel {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    h2 {
+        font-size: 17px;
     }
 
     .title {
         font-size: 20px;
+    }
+
+    .app-icon {
+        width: 64px;
+        height: 64px;
+    }
+
+    .button {
+        padding: 10px 14px;
+    }
+
+    .footer {
+        padding: 15px;
+        text-align: center;
     }
 }
 
@@ -272,16 +374,32 @@ Geek Devs Community
 
 
 
-<div class="page">
+<div class="container">
 
+    <div class="sidebar">
 
-<div id="app">
+        <h3>Application</h3>
 
-Loading application...
+        <a href="#details">Details</a>
+        <a href="#description">Description</a>
+        <a href="#information">Information</a>
 
-</div>
+        <h3 style="margin-top:24px;">Resources</h3>
 
+        <a href="https://rdcubing.github.io/webstore">WebStore Home</a>
+        <a href="https://rdcubing.github.io/webstore/apps">All Applications</a>
+        <a href="https://rdcubing.github.io/downloads">Downloads</a>
+        <a href="https://github.com/RDCubing" target="_blank">GitHub</a>
 
+    </div>
+
+    <div class="content">
+
+        <div id="app">
+            Loading application...
+        </div>
+
+    </div>
 
 </div>
 
@@ -302,74 +420,45 @@ NeonStore WebStore
 
 <script>
 
-
 const apiUrl =
 "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/projects.json";
-
-
 
 const params =
 new URLSearchParams(window.location.search);
 
-
-
 const appId =
 params.get("id");
 
-
-
-
-
 function showApp(app)
 {
+    document.title =
+        app.Title + " - Geek Devs Community WebStore";
 
+    document.getElementById("app").innerHTML = `
 
-document.title =
-app.Title + " - Geek Devs WebStore";
-
-
-
-document.getElementById("app").innerHTML = `
-
-
-<h1>
+<h1 id="details">
 ${app.Title}
 </h1>
 
-
-
 <div class="panel">
-
 
 <div class="app-header">
 
-
 <img class="app-icon"
-src="${app.ImagePath}">
-
+src="${app.ImagePath}"
+alt="${app.Title}">
 
 <div>
 
-
 <div class="title">
-
 ${app.Title}
-
 </div>
-
-
 
 <div class="subtitle">
-
 ${app.Publisher}
-
 <br>
-
 ${app.Subtitle}
-
 </div>
-
-
 
 <a class="button"
 href="${app.DownloadUrl}"
@@ -379,127 +468,69 @@ Download
 
 </a>
 
-
+</div>
 
 </div>
 
-
 </div>
 
-
-</div>
-
-
-
-
-
-<h2>
+<h2 id="description">
 Description
 </h2>
 
-
-
 <div class="panel">
 
-
-${app.Description || 
-"No description available."}
-
+${app.Description || "No description available."}
 
 </div>
 
-
-
-
-
-<h2>
+<h2 id="information">
 Information
 </h2>
 
-
-
 <div class="panel">
 
-
 <b>Publisher:</b>
-
 ${app.Publisher}
 
-
 <br><br>
-
 
 <b>Platform:</b>
-
 ${app.Platform || "Unknown"}
-
 
 <br><br>
 
-
 <b>Version:</b>
-
 ${app.Version || "Unknown"}
-
 
 </div>
 
-
-
 `;
-
-
-
 }
-
-
-
-
 
 fetch(apiUrl)
 
-.then(r=>r.json())
+.then(response => response.json())
 
-.then(data=>{
+.then(data => {
 
+    const apps = [
+        ...(data.NeonStore || []),
+        ...(data.OtherPlatforms || [])
+    ];
 
-let apps = [];
+    const app =
+        apps.find(a => a.Id === appId);
 
+    if (app) {
 
-apps =
-apps.concat(data.NeonStore || []);
+        showApp(app);
 
-apps =
-apps.concat(data.OtherPlatforms || []);
+    } else {
 
+        document.getElementById("app").innerHTML = `
 
-
-
-let app =
-apps.find(x=>x.Id == appId);
-
-
-
-if(app)
-
-{
-
-showApp(app);
-
-}
-
-else
-
-{
-
-document.getElementById("app").innerHTML =
-
-`
-
-<h1>
-Application Not Found
-</h1>
-
+<h1>Application Not Found</h1>
 
 <p>
 The requested application could not be found.
@@ -507,23 +538,15 @@ The requested application could not be found.
 
 `;
 
-}
-
-
+    }
 
 })
 
-.catch(()=>{
+.catch(() => {
 
+    document.getElementById("app").innerHTML = `
 
-document.getElementById("app").innerHTML =
-
-`
-
-<h1>
-Error
-</h1>
-
+<h1>Error</h1>
 
 <p>
 Unable to load application information.
@@ -532,8 +555,6 @@ Unable to load application information.
 `;
 
 });
-
-
 
 </script>
 

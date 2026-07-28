@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Geek Devs Community - Downloads</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 
 <style>
 
@@ -12,13 +15,24 @@
     box-sizing:border-box;
 }
 
-html,body{
-    margin:0;
-    padding:0;
-    overflow-x:hidden;
-    font-family:Tahoma,Arial,sans-serif;
-    background:white;
-    color:#333;
+html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: white;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: white;
+    color: #333;
+    font-family: Tahoma, Arial, sans-serif;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .header {
@@ -61,10 +75,42 @@ html,body{
     font-size:14px;
 }
 
-.page{
-    max-width:900px;
+.container{
+    max-width:1100px;
     margin:30px auto;
     padding:0 15px;
+    display:flex;
+    gap:25px;
+}
+
+.sidebar{
+    width:220px;
+    flex-shrink:0;
+    background:#f2f2f2;
+    border:1px solid #ccc;
+    padding:15px;
+    height:fit-content;
+}
+
+.sidebar h3{
+    color:#005a9e;
+    margin:0;
+}
+
+.sidebar h3 + a{
+    margin-top:8px;
+}
+
+.sidebar a{
+    display:block;
+    color:#0066cc;
+    text-decoration:none;
+    padding:6px 0;
+}
+
+.content{
+    flex:1;
+    min-width:0;
 }
 
 h1{
@@ -123,68 +169,163 @@ h2{
     background:#006cc1;
 }
 
-.footer{
-    margin-top:40px;
-    background:#eee;
-    border-top:1px solid #ccc;
-    padding:15px 40px;
-    font-size:12px;
-    color:#666;
+.footer {
+    background: #eeeeee;
+    border-top: 1px solid #ccc;
+    padding: 15px 40px;
+    font-size: 12px;
+    color: #666;
+    margin-top: auto;
 }
 
-@media(max-width:768px){
+@media (max-width:768px){
 
-.header {
-        padding: 15px 20px;
-        font-size: 22px;
+    .header{
+        padding:15px 20px;
+        font-size:22px;
     }
 
-    .header::after {
-        width: 96px;
-        height: 96px;
+    .header::after{
+        width:96px;
+        height:96px;
     }
 
-    .header span {
-        display: block;
-        margin-top: 5px;
-        font-size: 15px;
+    .header span{
+        display:block;
+        margin-top:5px;
+        font-size:15px;
     }
 
-.nav{
-    padding:10px 20px;
+    .nav{
+        padding:10px 20px;
+    }
+
+    .nav a{
+        display:inline-block;
+        margin-right:15px;
+        margin-bottom:8px;
+    }
+
+    .container{
+        flex-direction:column;
+        margin:20px auto;
+        padding:0 15px;
+        gap:20px;
+    }
+
+    .sidebar,
+    .content{
+        width:100%;
+    }
+
+    .page{
+        margin:0;
+        padding:0;
+    }
+
+    h1{
+        font-size:26px;
+    }
+
+    h2{
+        font-size:18px;
+    }
+
+    .download{
+        align-items:flex-start;
+    }
+
+    .icon-box{
+        width:80px;
+        height:80px;
+    }
+
+    .icon-box img{
+        width:68px;
+        height:68px;
+    }
+
+    .button{
+        display:block;
+        text-align:center;
+    }
+
+    .footer{
+        padding:15px 20px;
+    }
+
 }
 
-.nav a{
-    display:inline-block;
-    margin-bottom:8px;
-    margin-right:15px;
-}
+@media (max-width:480px){
 
-.icon-box {
-    width: 80px;
-    height: 80px;
-    background: #0F4C4C;
-    border: 1px solid #005a9e;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
+    .header{
+        padding:12px 15px;
+        font-size:20px;
+    }
 
-.icon-box img {
-    width: 68px;
-    height: 68px;
-    object-fit: contain;
-}
+    .header::after{
+        width:72px;
+        height:72px;
+    }
 
-.button{
-    display:block;
-    text-align:center;
-}
+    .header span{
+        font-size:14px;
+    }
 
-.footer{
-    padding:15px 20px;
-}
+    .nav{
+        padding:8px 15px;
+    }
+
+    .nav a{
+        display:block;
+        margin:0 0 8px;
+    }
+
+    .container{
+        margin:15px auto;
+        padding:0 10px;
+        gap:15px;
+    }
+
+    .sidebar,
+    .panel{
+        padding:12px;
+    }
+
+    h1{
+        font-size:22px;
+    }
+
+    h2{
+        font-size:17px;
+    }
+
+    .download{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .icon-box{
+        width:64px;
+        height:64px;
+    }
+
+    .icon-box img{
+        width:52px;
+        height:52px;
+    }
+
+    .button{
+        display:block;
+        width:100%;
+        text-align:center;
+    }
+
+    .footer{
+        padding:15px;
+        text-align:center;
+    }
 
 }
 
@@ -201,48 +342,68 @@ Geek Devs Community
 <div class="nav">
     <a href="https://rdcubing.github.io">Home</a>
     <a href="https://rdcubing.github.io/webstore">WebStore</a>
-	<a href="https://rdcubing.github.io/downloads">Downloads</a>
+    <a href="https://rdcubing.github.io/downloads">Downloads</a>
     <a target="_blank" href="https://discord.gg/YBsVhkcHT4">Discord</a>
     <a href="https://rdcubing.github.io/services">Services</a>
-	<a target="_blank" href="https://github.com/RDCubing">GitHub</a>
+    <a target="_blank" href="https://github.com/RDCubing">GitHub</a>
 </div>
 
-<div class="page">
+<div class="container">
 
-<h1>Downloads</h1>
+    <div class="sidebar">
 
-<p>
-Download the latest Geek Devs Community software.
-This page always displays the newest version published through the update service.
-</p>
+        <h3>Downloads</h3>
 
-<h2>Latest Release</h2>
+        <a href="#latest">Latest Release</a>
 
-<div class="panel">
+        <h3 style="margin-top:24px;">Resources</h3>
 
-<div class="download">
+        <a href="https://rdcubing.github.io/webstore">WebStore</a>
+        <a href="https://rdcubing.github.io/webstore/apps">All Applications</a>
+        <a href="https://rdcubing.github.io/services">Services</a>
+        <a href="https://github.com/RDCubing" target="_blank">GitHub</a>
+        <a href="https://discord.gg/YBsVhkcHT4" target="_blank">Discord</a>
 
-<div class="icon-box">
-    <img src="neonstore.png" alt="NeonStore Icon">
-</div>
+    </div>
 
-<div>
+    <div class="content">
 
-<h3 id="title">Loading...</h3>
+        <h1>Downloads</h1>
 
-<p id="version"></p>
+        <p>
+            Download the latest Geek Devs Community software.
+            This page always displays the newest version published through the update service.
+        </p>
 
-<p id="description"></p>
+        <h2 id="latest">Latest Release</h2>
 
-<a id="download" class="button" target="_blank">
-Download
-</a>
+        <div class="panel">
 
-</div>
+            <div class="download">
 
-</div>
+                <div class="icon-box">
+                    <img src="neonstore.png" alt="NeonStore Icon">
+                </div>
 
-</div>
+                <div>
+
+                    <h3 id="title">Loading...</h3>
+
+                    <p id="version"></p>
+
+                    <p id="description"></p>
+
+                    <a id="download" class="button" target="_blank">
+                        Download
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
@@ -254,28 +415,28 @@ Downloads
 <script>
 
 fetch("https://raw.githubusercontent.com/RDCubing/geekhubapi/main/update.json")
-.then(r=>r.json())
-.then(data=>{
+.then(r => r.json())
+.then(data => {
 
-const app=data.NeonStore ?? data;
+    const app = data.NeonStore ?? data;
 
-document.getElementById("title").textContent=
-app.Name || app.Title || "NeonStore";
+    document.getElementById("title").textContent =
+        app.Name || app.Title || "NeonStore";
 
-document.getElementById("version").textContent=
-"Version: " + (app.Version || "Unknown");
+    document.getElementById("version").textContent =
+        "Version: " + (app.Version || "Unknown");
 
-document.getElementById("description").textContent=
-app.Description || "";
+    document.getElementById("description").textContent =
+        app.Description || "";
 
-document.getElementById("download").href=
-app.Download || app.DownloadUrl || app.Url;
+    document.getElementById("download").href =
+        app.Download || app.DownloadUrl || app.Url;
 
 })
-.catch(()=>{
+.catch(() => {
 
-document.querySelector(".panel").innerHTML=
-"<b>Unable to load release information.</b>";
+    document.querySelector(".panel").innerHTML =
+        "<b>Unable to load release information.</b>";
 
 });
 
