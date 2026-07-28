@@ -189,9 +189,26 @@ p {
 @media (max-width:768px) {
 
     .header {
-        padding: 15px 20px;
-        font-size: 22px;
-    }
+    position: relative;
+    background: #005a9e;
+    color: white;
+    padding: 18px 40px;
+    font-size: 28px;
+    font-weight: bold;
+    overflow: hidden;
+	}
+
+	.header::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 128px;
+		height: 128px;
+		background: url("8BackgroundNew.png") no-repeat center;
+		background-size: cover;
+		pointer-events: none;
+	}
 
     .header span {
         display: block;
@@ -241,10 +258,22 @@ p {
 
 }
 
-@media (max-width:480px) {
+@media (max-width:768px) {
 
     .header {
-        font-size: 20px;
+        padding: 15px 20px;
+        font-size: 22px;
+    }
+
+    .header::after {
+        width: 96px;
+        height: 96px;
+    }
+
+    .header span {
+        display: block;
+        margin-top: 5px;
+        font-size: 15px;
     }
 
     .page {
@@ -285,29 +314,13 @@ Geek Devs Community
 
 
 <div class="nav">
-
-<a href="https://rdcubing.github.io">
-Home
-</a>
-
-<a href="https://rdcubing.github.io/webstore">
-WebStore
-</a>
-
-<a href="https://rdcubing.github.io/webstore/apps">
-All Apps
-</a>
-
-<a target="_blank" href="https://discord.gg/YBsVhkcHT4">Discord</a>
-
-<a href="https://rdcubing.github.io/services">
-Services
-</a>
-
-<a href="https://github.com/RDCubing">
-GitHub
-</a>
-
+    <a href="https://rdcubing.github.io">Home</a>
+    <a href="https://rdcubing.github.io/webstore">WebStore</a>
+	<a href="https://rdcubing.github.io/webstore">All Apps</a>
+	<a href="https://rdcubing.github.io/downloads">Downloads</a>
+    <a target="_blank" href="https://discord.gg/YBsVhkcHT4">Discord</a>
+    <a href="https://rdcubing.github.io/services">Services</a>
+	<a target="_blank" href="https://github.com/RDCubing">GitHub</a>
 </div>
 
 
@@ -323,6 +336,40 @@ Geek Devs Community WebStore
 <p>
 Discover applications, tools, and projects created by Geek Devs Community members.
 </p>
+
+<h2>Get the Best Experience</h2>
+
+<div class="panel">
+
+<b>Download NeonStore for Windows 8.1</b>
+
+<br><br>
+
+Enjoy the complete Geek Devs Community experience with the official
+<b>NeonStore</b> application for Windows 8.1.
+
+<br><br>
+
+The desktop app includes features not available on the website,
+including:
+
+<br><br>
+
+• User accounts and profile synchronization<br>
+• App ratings and reviews<br>
+• Personalized recommendations<br>
+• Faster browsing and downloads<br>
+• Automatic update notifications<br>
+• Early access to new community applications
+
+<br><br>
+
+<a class="button"
+href="https://rdcubing.github.io/webstore/download">
+Download NeonStore
+</a>
+
+</div>
 
 
 

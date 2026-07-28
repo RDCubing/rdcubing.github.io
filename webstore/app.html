@@ -27,11 +27,25 @@ body {
 /* Header */
 
 .header {
+    position: relative;
     background: #005a9e;
     color: white;
     padding: 18px 40px;
     font-size: 28px;
     font-weight: bold;
+    overflow: hidden;
+}
+
+.header::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 128px;
+    height: 128px;
+    background: url("8BackgroundNew.png") no-repeat center;
+    background-size: cover;
+    pointer-events: none;
 }
 
 .header span {
@@ -151,6 +165,11 @@ h2 {
         font-size: 22px;
     }
 
+    .header::after {
+        width: 96px;
+        height: 96px;
+    }
+
     .header span {
         display: block;
         margin-top: 5px;
@@ -241,29 +260,13 @@ Geek Devs Community
 
 
 <div class="nav">
-
-<a href="https://rdcubing.github.io">
-Home
-</a>
-
-<a href="https://rdcubing.github.io/webstore">
-WebStore
-</a>
-
-<a href="https://rdcubing.github.io/webstore/apps">
-All Apps
-</a>
-
-<a target="_blank" href="https://discord.gg/YBsVhkcHT4">Discord</a>
-
-<a href="https://rdcubing.github.io/services">
-Services
-</a>
-
-<a href="https://github.com/RDCubing">
-GitHub
-</a>
-
+    <a href="https://rdcubing.github.io">Home</a>
+    <a href="https://rdcubing.github.io/webstore">WebStore</a>
+	<a href="https://rdcubing.github.io/webstore">All Apps</a>
+	<a href="https://rdcubing.github.io/downloads">Downloads</a>
+    <a target="_blank" href="https://discord.gg/YBsVhkcHT4">Discord</a>
+    <a href="https://rdcubing.github.io/services">Services</a>
+	<a target="_blank" href="https://github.com/RDCubing">GitHub</a>
 </div>
 
 
