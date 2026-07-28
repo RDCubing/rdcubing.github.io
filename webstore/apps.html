@@ -199,7 +199,7 @@ p {
 }
 
 
-/* Mobile */
+/* Tablet */
 
 @media (max-width:768px) {
 
@@ -230,18 +230,16 @@ p {
     }
 
     .container {
-    flex-direction: column;
-    margin: 20px auto;
-    padding: 0 15px;
-}
+        flex-direction: column;
+        margin: 20px auto;
+        padding: 0 15px;
+        gap: 20px;
+    }
 
-.sidebar {
-    width: 100%;
-}
-
-.content {
-    width: 100%;
-}
+    .sidebar,
+    .content {
+        width: 100%;
+    }
 
     h1 {
         font-size: 26px;
@@ -251,8 +249,9 @@ p {
         font-size: 18px;
     }
 
-    .app {
-        padding: 12px;
+    .button {
+        display: block;
+        text-align: center;
     }
 
     .footer {
@@ -261,27 +260,67 @@ p {
 
 }
 
+/* Phones */
+
 @media (max-width:480px) {
 
     .header {
+        padding: 12px 15px;
         font-size: 20px;
     }
 
-    .container {
-    margin: 15px auto;
-    padding: 0 10px;
-    gap: 15px;
-}
-
-    .app {
-        flex-direction: column;
-        align-items: flex-start;
+    .header::after {
+        width: 72px;
+        height: 72px;
     }
 
-    .app img {
-        margin: 0 0 12px;
-        width: 56px;
-        height: 56px;
+    .header span {
+        font-size: 14px;
+    }
+
+    .nav {
+        padding: 8px 15px;
+    }
+
+    .nav a {
+        display: block;
+        margin: 0 0 8px;
+    }
+
+    .container {
+        margin: 15px auto;
+        padding: 0 10px;
+        gap: 15px;
+    }
+
+    .sidebar,
+    .announcement,
+    .box {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    h2 {
+        font-size: 17px;
+    }
+
+    p,
+    .announcement-content {
+        font-size: 13px;
+    }
+
+    .button {
+        display: block;
+        padding: 10px 14px;
+        text-align: center;
+    }
+
+    .footer {
+        padding: 15px;
+        text-align: center;
     }
 
 }
