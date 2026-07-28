@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Geek Devs Community - App</title>
+
+
+<style>
+
+* {
+    box-sizing:border-box;
+}
+
+
+body {
+
+    margin:0;
+
+    background:white;
+
+    color:#333;
+
+    font-family:
+    Tahoma,
+    Arial,
+    sans-serif;
+
+}
+
+
+
+.header {
+
+    background:#005a9e;
+
+    color:white;
+
+    padding:18px 40px;
+
+    font-size:28px;
+
+    font-weight:bold;
+
+}
+
+
+
+.header span {
+
+    font-size:18px;
+
+    font-weight:normal;
+
+}
+
+
+
+
+.nav {
+
+    background:#eeeeee;
+
+    border-bottom:1px solid #ccc;
+
+    padding:10px 40px;
+
+}
+
+
+
+.nav a {
+
+    color:#0066cc;
+
+    text-decoration:none;
+
+    margin-right:25px;
+
+    font-size:14px;
+
+}
+
+
+
+
+
+.page {
+
+    width:900px;
+
+    max-width:100%;
+
+    margin:30px auto;
+
+    padding:0 15px;
+
+}
+
+
+
+
+
+h1 {
+
+    color:#005a9e;
+
+    font-size:30px;
+
+    font-weight:normal;
+
+}
+
+
+
+
+
+h2 {
+
+    color:#333;
+
+    font-size:20px;
+
+    border-bottom:1px solid #ccc;
+
+    padding-bottom:5px;
+
+    margin-top:35px;
+
+}
+
+
+
+
+
+.panel {
+
+    background:#f5f5f5;
+
+    border:1px solid #ccc;
+
+    padding:20px;
+
+}
+
+
+
+
+
+.app-header {
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+
+
+
+
+.app-icon {
+
+    width:96px;
+
+    height:96px;
+
+    object-fit:contain;
+
+    margin-right:20px;
+
+}
+
+
+
+
+
+.title {
+
+    color:#005a9e;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+}
+
+
+
+
+
+.subtitle {
+
+    color:#777;
+
+    font-size:13px;
+
+}
+
+
+
+
+
+.button {
+
+    display:inline-block;
+
+    background:#0078d7;
+
+    color:white;
+
+    padding:8px 18px;
+
+    text-decoration:none;
+
+    margin-top:15px;
+
+    font-size:14px;
+
+}
+
+
+
+
+
+.button:hover {
+
+    background:#006cc1;
+
+}
+
+
+
+
+
+.footer {
+
+    margin-top:40px;
+
+    background:#eeeeee;
+
+    border-top:1px solid #ccc;
+
+    padding:15px 40px;
+
+    font-size:12px;
+
+    color:#666;
+
+}
+
+
+
+</style>
+
+</head>
+
+
+
+<body>
+
+
+
+<div class="header">
+
+Geek Devs Community
+
+<span>| WebStore</span>
+
+</div>
+
+
+
+
+<div class="nav">
+
+<a href="/webstore">
+Home
+</a>
+
+
+<a href="/webstore/apps">
+All Apps
+</a>
+
+
+<a href="/services">
+Services
+</a>
+
+
+<a href="https://github.com/RDCubing">
+GitHub
+</a>
+
+
+</div>
+
+
+
+
+<div class="page">
+
+
+<div id="app">
+
+Loading application...
+
+</div>
+
+
+
+</div>
+
+
+
+
+<div class="footer">
+
+© 2026 Geek Devs Community<br>
+
+NeonStore WebStore
+
+</div>
+
+
+
+
+
+<script>
+
+
+const apiUrl =
+"https://raw.githubusercontent.com/RDCubing/geekhubapi/main/projects.json";
+
+
+
+const params =
+new URLSearchParams(window.location.search);
+
+
+
+const appId =
+params.get("id");
+
+
+
+
+
+function showApp(app)
+{
+
+
+document.title =
+app.Title + " - Geek Devs WebStore";
+
+
+
+document.getElementById("app").innerHTML = `
+
+
+<h1>
+${app.Title}
+</h1>
+
+
+
+<div class="panel">
+
+
+<div class="app-header">
+
+
+<img class="app-icon"
+src="${app.ImagePath}">
+
+
+<div>
+
+
+<div class="title">
+
+${app.Title}
+
+</div>
+
+
+
+<div class="subtitle">
+
+${app.Publisher}
+
+<br>
+
+${app.Subtitle}
+
+</div>
+
+
+
+<a class="button"
+href="${app.DownloadUrl}"
+target="_blank">
+
+Download
+
+</a>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<h2>
+Description
+</h2>
+
+
+
+<div class="panel">
+
+
+${app.Description || 
+"No description available."}
+
+
+</div>
+
+
+
+
+
+<h2>
+Information
+</h2>
+
+
+
+<div class="panel">
+
+
+<b>Publisher:</b>
+
+${app.Publisher}
+
+
+<br><br>
+
+
+<b>Platform:</b>
+
+${app.Platform || "Unknown"}
+
+
+<br><br>
+
+
+<b>Version:</b>
+
+${app.Version || "Unknown"}
+
+
+</div>
+
+
+
+`;
+
+
+
+}
+
+
+
+
+
+fetch(apiUrl)
+
+.then(r=>r.json())
+
+.then(data=>{
+
+
+let apps = [];
+
+
+apps =
+apps.concat(data.NeonStore || []);
+
+apps =
+apps.concat(data.OtherPlatforms || []);
+
+
+
+
+let app =
+apps.find(x=>x.Id == appId);
+
+
+
+if(app)
+
+{
+
+showApp(app);
+
+}
+
+else
+
+{
+
+document.getElementById("app").innerHTML =
+
+`
+
+<h1>
+Application Not Found
+</h1>
+
+
+<p>
+The requested application could not be found.
+</p>
+
+`;
+
+}
+
+
+
+})
+
+.catch(()=>{
+
+
+document.getElementById("app").innerHTML =
+
+`
+
+<h1>
+Error
+</h1>
+
+
+<p>
+Unable to load application information.
+</p>
+
+`;
+
+});
+
+
+
+</script>
+
+
+
+</body>
+
+</html>

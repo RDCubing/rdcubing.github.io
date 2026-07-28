@@ -5,7 +5,7 @@
 
 <meta charset="UTF-8">
 
-<title>Geek Devs Community - WebStore</title>
+<title>Geek Devs Community - Applications</title>
 
 
 <style>
@@ -110,9 +110,9 @@ h1 {
 
 h2 {
 
-    font-size:20px;
-
     color:#333;
+
+    font-size:20px;
 
     border-bottom:1px solid #ccc;
 
@@ -127,52 +127,6 @@ h2 {
 p {
 
     font-size:14px;
-
-    line-height:1.5;
-
-}
-
-
-
-.panel {
-
-    background:#f5f5f5;
-
-    border:1px solid #ccc;
-
-    padding:15px;
-
-    margin-top:15px;
-
-}
-
-
-
-.featured {
-
-    display:flex;
-
-    align-items:center;
-
-    background:#f5f5f5;
-
-    border:1px solid #ccc;
-
-    padding:20px;
-
-}
-
-
-
-.featured img {
-
-    width:64px;
-
-    height:64px;
-
-    margin-right:15px;
-
-    object-fit:contain;
 
 }
 
@@ -212,9 +166,9 @@ p {
 
     height:64px;
 
-    margin-right:15px;
-
     object-fit:contain;
+
+    margin-right:15px;
 
 }
 
@@ -237,26 +191,6 @@ p {
     color:#777;
 
     font-size:12px;
-
-}
-
-
-
-.button {
-
-    display:inline-block;
-
-    background:#0078d7;
-
-    color:white;
-
-    padding:8px 18px;
-
-    text-decoration:none;
-
-    margin-top:10px;
-
-    font-size:14px;
 
 }
 
@@ -302,25 +236,28 @@ Geek Devs Community
 
 <div class="nav">
 
-<a href="https://rdcubing.github.io/webstore">
+<a href="/webstore">
 Home
 </a>
 
-<a href="https://rdcubing.github.io/webstore/apps">
+
+<a href="/webstore/apps">
 All Apps
 </a>
 
-<a target="_blank" href="https://discord.gg/YBsVhkcHT4">Discord</a>
 
-<a href="https://rdcubing.github.io/services">
+<a href="/services">
 Services
 </a>
+
 
 <a href="https://github.com/RDCubing">
 GitHub
 </a>
 
+
 </div>
+
 
 
 
@@ -328,59 +265,23 @@ GitHub
 
 
 <h1>
-Geek Devs Community WebStore
+All Applications
 </h1>
 
 
 <p>
-Discover applications, tools, and projects created by Geek Devs Community members.
+Browse all applications and projects available through Geek Devs Community.
 </p>
 
 
 
+
 <h2>
-Featured Application
+NeonStore Applications
 </h2>
 
 
-<div class="featured">
-
-
-<img id="spotlightIcon">
-
-
-<div>
-
-<h3 id="spotlightTitle">
-Loading...
-</h3>
-
-
-<p id="spotlightPublisher"></p>
-
-<p id="spotlightSubtitle"></p>
-
-
-<a id="spotlightLink"
-class="button">
-View Details
-</a>
-
-
-</div>
-
-
-</div>
-
-
-
-
-<h2>
-Top Apps
-</h2>
-
-
-<div id="topApps">
+<div id="neonApps">
 
 Loading applications...
 
@@ -389,32 +290,22 @@ Loading applications...
 
 
 
+
 <h2>
-About NeonStore
+Other Platform Applications
 </h2>
 
 
-<div class="panel">
+<div id="otherApps">
 
-
-<b>NeonStore</b>
-
-<br><br>
-
-
-The official application platform for Geek Devs Community.
-
-<br><br>
-
-Browse projects, download software,
-and discover developer-created applications.
-
+Loading applications...
 
 </div>
 
 
 
 </div>
+
 
 
 
@@ -438,11 +329,6 @@ const apiUrl =
 
 
 
-let topApps=[];
-
-let spotlightIndex=0;
-
-
 
 function createApp(app)
 {
@@ -450,16 +336,19 @@ function createApp(app)
 
 let div=document.createElement("div");
 
+
 div.className="app";
+
 
 
 div.onclick=function(){
 
-location.href=
-"https://rdcubing.github.io/webstore/app?id="+
+location.href =
+"/webstore/app?id="+
 encodeURIComponent(app.Id);
 
 };
+
 
 
 
@@ -470,9 +359,13 @@ div.innerHTML=`
 
 <div>
 
+
 <div class="app-title">
+
 ${app.Title}
+
 </div>
+
 
 
 <div class="app-sub">
@@ -486,59 +379,14 @@ ${app.Subtitle}
 </div>
 
 
+
 </div>
 
 `;
 
 
+
 return div;
-
-
-}
-
-
-
-
-function updateSpotlight()
-{
-
-
-if(topApps.length===0)
-return;
-
-
-let app =
-topApps[spotlightIndex];
-
-
-spotlightIcon.src =
-app.ImagePath;
-
-
-spotlightTitle.innerHTML =
-app.Title;
-
-
-spotlightPublisher.innerHTML =
-app.Publisher;
-
-
-spotlightSubtitle.innerHTML =
-app.Subtitle;
-
-
-spotlightLink.href =
-"https://rdcubing.github.io/webstore/app?id="+
-encodeURIComponent(app.Id);
-
-
-
-spotlightIndex++;
-
-
-if(spotlightIndex>=topApps.length)
-
-spotlightIndex=0;
 
 
 }
@@ -553,44 +401,59 @@ fetch(apiUrl)
 .then(data=>{
 
 
-let container =
-document.getElementById("topApps");
+let neon =
+document.getElementById("neonApps");
 
 
-container.innerHTML="";
+let other =
+document.getElementById("otherApps");
+
+
+
+neon.innerHTML="";
+
+other.innerHTML="";
 
 
 
 data.NeonStore.forEach(app=>{
 
 
-if(app.TopApp==="Yes")
-
-{
-
-topApps.push(app);
-
-container.appendChild(
+neon.appendChild(
 createApp(app)
 );
 
-}
-
 
 });
 
 
 
-updateSpotlight();
+data.OtherPlatforms.forEach(app=>{
 
 
-setInterval(updateSpotlight,4000);
+other.appendChild(
+createApp(app)
+);
 
 
 });
+
+
+})
+
+.catch(()=>{
+
+
+document.getElementById("neonApps").innerHTML =
+"Unable to load applications.";
+
+
+});
+
 
 
 </script>
+
 
 
 </body>
