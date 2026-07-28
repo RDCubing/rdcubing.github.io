@@ -1,16 +1,697 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Geek Devs Community - REIMP</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-family: Tahoma, Arial, sans-serif;
+    color: #333;
+    background: white;
+}
+
+.header {
+    background: #005a9e;
+    color: white;
+    padding: 18px 40px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.header span {
+    font-size: 18px;
+    font-weight: normal;
+}
+
+
+.nav {
+    background: #eeeeee;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 40px;
+}
+
+.nav a {
+    color: #0066cc;
+    text-decoration: none;
+    margin-right: 25px;
+    font-size: 14px;
+}
+
+
+.container {
+    max-width: 900px;
+    width: 100%;
+    margin: 30px auto;
+    padding: 0 15px;
+    display: flex;
+    gap: 25px;
+}
+
+
+.sidebar {
+    width: 200px;
+    flex-shrink: 0;
+    background: #f2f2f2;
+    border: 1px solid #ccc;
+    padding: 15px;
+    height: fit-content;
+}
+
+
+.sidebar h3,
+.announcement h4 {
+    color: #005a9e;
+}
+
+
+.sidebar a {
+    display: block;
+    color: #0066cc;
+    text-decoration: none;
+    padding: 6px 0;
+    overflow-wrap: break-word;
+}
+
+
+.content {
+    flex: 1;
+    min-width: 0;
+}
+
+
+h1 {
+    color: #005a9e;
+    font-size: 30px;
+    font-weight: normal;
+}
+
+
+h2 {
+    color: #333;
+    font-size: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    margin-top: 35px;
+}
+
+
+p {
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-wrap: break-word;
+}
+
+
+.box {
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-top: 20px;
+    overflow-wrap: break-word;
+}
+
+
+.button {
+    display: inline-block;
+    background: #0078d7;
+    color: white;
+    padding: 8px 18px;
+    text-decoration: none;
+}
+
+
+.footer {
+    margin-top: 40px;
+    background: #eeeeee;
+    border-top: 1px solid #ccc;
+    padding: 15px 40px;
+    font-size: 12px;
+    color: #666;
+}
+
+
+/* Highlights */
+
+.announcement {
+    background: white;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+
+.announcement h4 {
+    margin: 0 0 10px;
+    font-size: 15px;
+}
+
+
+.announcement-item {
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+
+.announcement-title {
+    color: #0066cc;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+
+.announcement-date {
+    color: #777;
+    font-size: 11px;
+}
+
+
+.announcement-content {
+    font-size: 12px;
+    margin-top: 6px;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+}
+
+
+/* Mobile */
+
+@media(max-width:768px) {
+
+    .header {
+        padding: 15px 20px;
+        font-size: 22px;
+    }
+
+    .header span {
+        display:block;
+        margin-top:5px;
+        font-size:15px;
+    }
+
+
+    .nav {
+        padding:10px 20px;
+    }
+
+
+    .nav a {
+        display:inline-block;
+        margin-bottom:8px;
+        margin-right:15px;
+    }
+
+
+    .container {
+        flex-direction:column;
+        margin-top:20px;
+    }
+
+
+    .sidebar {
+        width:100%;
+    }
+
+
+    .content {
+        width:100%;
+    }
+
+
+    h1 {
+        font-size:26px;
+    }
+
+
+    h2 {
+        font-size:18px;
+    }
+
+
+    .button {
+        display:block;
+        text-align:center;
+    }
+
+}
+
+
+@media(max-width:400px) {
+
+    .header {
+        font-size:20px;
+    }
+
+    .container {
+        padding:10px;
+    }
+
+}
+
+</style>
 </head>
+
 <body>
-    <center>
-        <h1>Coming Soon</h1>
-        <p>This page is currently under construction.</p>
-        <p>Please check back later.</p>
-        <p><a href="https://rdcubing.github.io/webstore">Visit the WebStore</a></p>
-    </center>
+
+
+<div class="header">
+    Geek Devs Community
+    <span>| REIMP</span>
+</div>
+
+
+<div class="nav">
+    <a href="https://rdcubing.github.io">Home</a>
+    <a target="_blank" href="https://rdcubing.github.io/webstore">WebStore</a>
+    <a target="_blank" href="https://discord.gg/YBsVhkcHT4">Discord</a>
+    <a href="https://rdcubing.github.io/services">Services</a>
+</div>
+
+
+<div class="container">
+
+
+<div class="sidebar">
+
+<h3>Community</h3>
+
+<a href="#about">About Geek Devs Community</a>
+<a href="#mission">Mission & Goals</a>
+<a href="#reimp">REIMP Overview</a>
+<a href="#projects">Community Projects</a>
+<a href="#development">Development</a>
+<a href="#technology">Technology</a>
+<a href="#members">Values</a>
+<a href="#join">Get Involved</a>
+
+
+<div class="announcement">
+
+<h4>Latest Highlights</h4>
+
+<div id="highlights">
+Loading latest updates...
+</div>
+
+</div>
+
+
+<div class="announcement">
+
+<h4>Featured Links</h4>
+
+<a href="#">Services Hosted</a>
+<a target="_blank" href="https://github.com/RDCubing">GitHub</a>
+<a target="_blank" href="https://github.com/RDCubing/rdcubing.github.io">Website Source</a>
+
+</div>
+
+
+</div>
+
+
+<div class="content">
+
+
+<h1>Geek Devs Community</h1>
+
+
+<p>
+Welcome to Geek Devs Community (GDC), a developer-focused community
+dedicated to programming, software engineering, technology exploration,
+and collaboration.
+</p>
+
+
+<p>
+GDC provides a place where developers, programmers, designers, and
+technology enthusiasts can share ideas, build projects, experiment with
+new technologies, and learn from each other.
+</p>
+
+
+
+<h2 id="about">About Geek Devs Community</h2>
+
+<p>
+Geek Devs Community was created with the goal of bringing together
+people who enjoy creating software and exploring technology. The
+community focuses on practical development, experimentation, and
+innovation.
+</p>
+
+
+<p>
+From application development to operating system customization, GDC
+covers a wide range of technical interests. Members are encouraged to
+share knowledge, contribute to projects, and help others improve their
+skills.
+</p>
+
+
+
+<h2 id="mission">Our Mission</h2>
+
+<div class="box">
+
+<b>Building the future through development.</b>
+
+<br><br>
+
+Our mission is to create a friendly environment where developers can:
+
+<br><br>
+
+- Learn programming and software development<br>
+- Collaborate on open-source projects<br>
+- Explore operating systems and technology<br>
+- Create useful applications and tools<br>
+- Preserve and improve classic software experiences
+
+</div>
+
+
+
+<h2 id="reimp">REIMP - Reimplementation Project</h2>
+
+<div class="box">
+
+<h2 id="projects">Community Projects</h2>
+
+<br><br>
+
+REIMP focuses on recreating classic software experiences using modern
+development techniques.
+
+<br><br>
+
+The project explores how older software concepts, interfaces, and
+technologies can be redesigned for current platforms.
+
+<br><br>
+
+REIMP combines software engineering, user interface design, system
+development, and reverse engineering concepts to create modern
+alternatives inspired by classic software.
+
+</div>
+
+
+
+<h2>Why REIMP Exists</h2>
+
+<p>
+Many classic applications and experiences have disappeared over time.
+REIMP aims to preserve the ideas behind these technologies while
+adapting them for modern systems.
+</p>
+
+
+<p>
+The project encourages developers to study how software works, learn
+from older designs, and create improved implementations.
+</p>
+
+
+
+<h2>Community Projects</h2>
+
+<div class="box">
+
+<b>Software Development</b>
+
+<br>
+
+Creating applications, utilities, tools, and experimental software.
+
+<br><br>
+
+
+<b>Windows Customization</b>
+
+<br>
+
+Exploring Windows interfaces, system modifications, and classic UI
+experiences.
+
+<br><br>
+
+
+<b>Open Source Development</b>
+
+<br>
+
+Sharing code, collaborating on projects, and improving software through
+community contributions.
+
+<br><br>
+
+
+<b>Research and Experimentation</b>
+
+<br>
+
+Testing new technologies and exploring how software systems work.
+
+</div>
+
+
+
+<h2 id="technology">Technology Areas</h2>
+
+<p>
+Geek Devs Community explores many areas of technology including:
+</p>
+
+
+<div class="box">
+
+<b>Programming Languages</b><br>
+C#, C++, JavaScript, HTML, CSS, Python, and more.
+
+<br><br>
+
+<b>Application Development</b><br>
+Desktop applications, web applications, and mobile software.
+
+<br><br>
+
+<b>Operating Systems</b><br>
+Windows, Linux, system customization, and software compatibility.
+
+<br><br>
+
+<b>User Interface Design</b><br>
+Modern and classic interface design inspired by different generations
+of software.
+
+</div>
+
+
+
+<h2 id="members">Community Values</h2>
+
+<p>
+GDC believes that development is best achieved through collaboration
+and sharing knowledge.
+</p>
+
+
+<div class="box">
+
+<b>Respect</b><br>
+Treat all community members with respect.
+
+<br><br>
+
+<b>Learning</b><br>
+Help others improve their technical skills.
+
+<br><br>
+
+<b>Innovation</b><br>
+Experiment with new ideas and technologies.
+
+<br><br>
+
+<b>Collaboration</b><br>
+Work together to create better projects.
+
+</div>
+
+
+
+<h2 id="development">Development Roadmap</h2>
+
+<div class="box">
+
+<b>Phase 1 - Community Growth</b><br>
+Building the foundation of the developer community.
+
+<br><br>
+
+<b>Phase 2 - Project Expansion</b><br>
+Creating more open-source projects and tools.
+
+<br><br>
+
+<b>Phase 3 - REIMP Development</b><br>
+Expanding reimplementation projects and software research.
+
+<br><br>
+
+<b>Phase 4 - Long-Term Innovation</b><br>
+Continuing development and exploring future technologies.
+
+</div>
+
+
+
+<h2>Frequently Asked Questions</h2>
+
+<div class="box">
+
+<b>What is Geek Devs Community?</b>
+
+<br>
+
+GDC is a community for developers and technology enthusiasts.
+
+<br><br>
+
+
+<b>Who can join?</b>
+
+<br>
+
+Anyone interested in programming, technology, and software development.
+
+<br><br>
+
+
+<b>What is REIMP?</b>
+
+<br>
+
+REIMP is a project focused on recreating and improving classic software
+experiences.
+
+<br><br>
+
+
+<b>How can I contribute?</b>
+
+<br>
+
+Members can contribute through development, testing, documentation,
+ideas, and community support.
+
+</div>
+
+
+
+<h2 id="join">Join Geek Devs Community</h2>
+
+<p>
+Whether you are a beginner learning programming or an experienced
+developer, Geek Devs Community welcomes everyone interested in creating,
+learning, and exploring technology.
+</p>
+
+
+<br>
+
+
+<a class="button" href="https://discord.gg/YBsVhkcHT4" target="_blank">
+Join Community
+</a>
+
+
+</div>
+
+</div>
+
+
+
+<div class="footer">
+
+© 2026 Geek Devs Community<br>
+REIMP - Reimplementation Project<br>
+Powered by HTML
+
+</div>
+
+
+
+<script>
+
+fetch("https://gist.githubusercontent.com/RDCubing/44671b4e680aba470e4b96cff5eb5840/raw/highlights.json")
+
+.then(response => response.json())
+
+.then(data => {
+
+    const container = document.getElementById("highlights");
+
+    container.innerHTML = "";
+
+
+    data.items.slice(0, 5).forEach(item => {
+
+
+        const entry = document.createElement("div");
+
+        entry.className = "announcement-item";
+
+
+        entry.innerHTML = `
+
+        <div class="announcement-title">
+            ${item.title}
+        </div>
+
+        <div class="announcement-date">
+            ${item.date_added}
+        </div>
+
+        <div class="announcement-content">
+            ${item.content}
+        </div>
+
+        `;
+
+
+        container.appendChild(entry);
+
+
+    });
+
+
+})
+
+
+.catch(() => {
+
+    document.getElementById("highlights").innerHTML =
+        "Unable to load highlights.";
+
+});
+
+
+</script>
+
+
 </body>
 </html>
