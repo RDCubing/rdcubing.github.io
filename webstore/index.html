@@ -4,283 +4,267 @@
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Geek Devs Community - WebStore</title>
-
 
 <style>
 
 * {
-    box-sizing:border-box;
+    box-sizing: border-box;
 }
 
-
+html,
 body {
-
-    margin:0;
-
-    background:white;
-
-    color:#333;
-
-    font-family:
-    Tahoma,
-    Arial,
-    sans-serif;
-
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: white;
+    color: #333;
+    font-family: Tahoma, Arial, sans-serif;
 }
 
 
+/* Header */
 
 .header {
-
-    background:#005a9e;
-
-    color:white;
-
-    padding:18px 40px;
-
-    font-size:28px;
-
-    font-weight:bold;
-
+    background: #005a9e;
+    color: white;
+    padding: 18px 40px;
+    font-size: 28px;
+    font-weight: bold;
 }
-
 
 .header span {
-
-    font-size:18px;
-
-    font-weight:normal;
-
+    font-size: 18px;
+    font-weight: normal;
 }
 
 
+/* Navigation */
 
 .nav {
-
-    background:#eeeeee;
-
-    border-bottom:1px solid #ccc;
-
-    padding:10px 40px;
-
+    background: #eeeeee;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 40px;
 }
-
 
 .nav a {
-
-    color:#0066cc;
-
-    text-decoration:none;
-
-    margin-right:25px;
-
-    font-size:14px;
-
+    color: #0066cc;
+    text-decoration: none;
+    margin-right: 25px;
+    font-size: 14px;
 }
 
 
+/* Layout */
 
 .page {
-
-    width:900px;
-
-    max-width:100%;
-
-    margin:30px auto;
-
-    padding:0 15px;
-
+    max-width: 900px;
+    width: 100%;
+    margin: 30px auto;
+    padding: 0 15px;
 }
 
 
+/* Typography */
 
 h1 {
-
-    color:#005a9e;
-
-    font-size:30px;
-
-    font-weight:normal;
-
+    color: #005a9e;
+    font-size: 30px;
+    font-weight: normal;
 }
-
-
 
 h2 {
-
-    font-size:20px;
-
-    color:#333;
-
-    border-bottom:1px solid #ccc;
-
-    padding-bottom:5px;
-
-    margin-top:35px;
-
+    color: #333;
+    font-size: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    margin-top: 35px;
 }
-
-
 
 p {
-
-    font-size:14px;
-
-    line-height:1.5;
-
+    font-size: 14px;
+    line-height: 1.6;
 }
 
 
+/* Panels */
 
 .panel {
-
-    background:#f5f5f5;
-
-    border:1px solid #ccc;
-
-    padding:15px;
-
-    margin-top:15px;
-
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-top: 15px;
 }
 
 
+/* Featured */
 
 .featured {
-
-    display:flex;
-
-    align-items:center;
-
-    background:#f5f5f5;
-
-    border:1px solid #ccc;
-
-    padding:20px;
-
+    display: flex;
+    align-items: center;
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 20px;
 }
-
-
 
 .featured img {
-
-    width:64px;
-
-    height:64px;
-
-    margin-right:15px;
-
-    object-fit:contain;
-
+    width: 64px;
+    height: 64px;
+    margin-right: 15px;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 
+/* Applications */
 
 .app {
-
-    display:flex;
-
-    align-items:center;
-
-    background:#f5f5f5;
-
-    border:1px solid #ccc;
-
-    padding:12px;
-
-    margin-top:10px;
-
-    cursor:pointer;
-
+    display: flex;
+    align-items: center;
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 12px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background .15s;
 }
-
-
 
 .app:hover {
-
-    background:#e8e8e8;
-
+    background: #e8e8e8;
 }
-
-
 
 .app img {
-
-    width:64px;
-
-    height:64px;
-
-    margin-right:15px;
-
-    object-fit:contain;
-
+    width: 64px;
+    height: 64px;
+    margin-right: 15px;
+    object-fit: contain;
+    flex-shrink: 0;
 }
-
-
 
 .app-title {
-
-    color:#005a9e;
-
-    font-weight:bold;
-
-    font-size:17px;
-
+    color: #005a9e;
+    font-size: 17px;
+    font-weight: bold;
 }
-
-
 
 .app-sub {
-
-    color:#777;
-
-    font-size:12px;
-
+    color: #777;
+    font-size: 12px;
+    line-height: 1.4;
 }
 
 
+/* Buttons */
 
 .button {
+    display: inline-block;
+    background: #0078d7;
+    color: white;
+    padding: 8px 18px;
+    margin-top: 10px;
+    text-decoration: none;
+}
 
-    display:inline-block;
-
-    background:#0078d7;
-
-    color:white;
-
-    padding:8px 18px;
-
-    text-decoration:none;
-
-    margin-top:10px;
-
-    font-size:14px;
-
+.button:hover {
+    background: #006cc1;
 }
 
 
+/* Footer */
 
 .footer {
-
-    margin-top:40px;
-
-    background:#eeeeee;
-
-    border-top:1px solid #ccc;
-
-    padding:15px 40px;
-
-    font-size:12px;
-
-    color:#666;
-
+    margin-top: 40px;
+    background: #eeeeee;
+    border-top: 1px solid #ccc;
+    padding: 15px 40px;
+    font-size: 12px;
+    color: #666;
 }
 
 
+/* Mobile */
+
+@media (max-width:768px) {
+
+    .header {
+        padding: 15px 20px;
+        font-size: 22px;
+    }
+
+    .header span {
+        display: block;
+        margin-top: 5px;
+        font-size: 15px;
+    }
+
+    .nav {
+        padding: 10px 20px;
+    }
+
+    .nav a {
+        display: inline-block;
+        margin-right: 15px;
+        margin-bottom: 8px;
+    }
+
+    .page {
+        margin: 20px auto;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    .featured {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .featured img {
+        margin: 0 0 15px;
+    }
+
+    .button {
+        display: block;
+        text-align: center;
+    }
+
+    .footer {
+        padding: 15px 20px;
+    }
+
+}
+
+@media (max-width:480px) {
+
+    .header {
+        font-size: 20px;
+    }
+
+    .page {
+        padding: 0 10px;
+    }
+
+    .app {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .app img {
+        margin: 0 0 12px;
+    }
+
+}
 
 </style>
+
+</head>
 
 </head>
 
@@ -302,8 +286,12 @@ Geek Devs Community
 
 <div class="nav">
 
-<a href="https://rdcubing.github.io/webstore">
+<a href="https://rdcubing.github.io">
 Home
+</a>
+
+<a href="https://rdcubing.github.io/webstore">
+WebStore
 </a>
 
 <a href="https://rdcubing.github.io/webstore/apps">
