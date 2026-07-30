@@ -13,25 +13,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function getCssPath() {
 
-    const path = window.location.pathname;
+        const path = window.location.pathname;
 
-    if (path.includes("/downloads"))
-        return "../css/downloads/index/";
+        if (path.includes("/downloads"))
+            return "../css/downloads/index/";
 
-    if (path.includes("/services"))
-        return "../css/services/index/";
+        if (path.includes("/services"))
+            return "../css/services/index/";
 
-    if (path.includes("/webstore/apps"))
-        return "../css/webstore/apps/";
+        if (path.includes("/webstore/apps"))
+            return "../css/webstore/apps/";
 
-    if (path.includes("/webstore/app"))
-        return "../css/webstore/app/";
+        if (path.includes("/webstore/app"))
+            return "../css/webstore/app/";
 
-    if (path.includes("/webstore"))
-        return "../css/webstore/index/";
+        if (path.includes("/webstore"))
+            return "../css/webstore/index/";
 
-    return "css/index/";
-}
+        return "css/index/";
+    }
 
 
     function applyTheme(theme) {
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
         if (!option)
-            theme = "classic";
+            theme = "default";
 
 
         const cssPath = getCssPath();
@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             localStorage.setItem("theme", theme);
+
             console.log(
                 "Saved theme:",
                 localStorage.getItem("theme")
@@ -77,10 +78,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    let savedTheme = "classic";
+    let savedTheme = "default";
 
     try {
-        savedTheme = localStorage.getItem("theme") || "classic";
+        savedTheme = localStorage.getItem("theme") || "default";
     }
     catch (e) {
         console.log("Cannot read localStorage");
