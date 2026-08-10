@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (path.includes("/404"))
         return "/css/index/";
+	if (path.includes("/account"))
+        return "/css/index/";
 		
 		if (path.includes("/downloads"))
             return "/css/downloads/index/";
