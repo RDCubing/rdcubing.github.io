@@ -15,20 +15,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const path = window.location.pathname;
 
-        if (path.includes("/downloads"))
-            return "../css/downloads/index/";
+        if (path.includes("/404"))
+        return "/css/index/";
+		
+		if (path.includes("/downloads"))
+            return "/css/downloads/index/";
 
         if (path.includes("/services"))
-            return "../css/services/index/";
+            return "/css/services/index/";
 
         if (path.includes("/webstore/apps"))
-            return "../css/webstore/apps/";
+            return "/css/webstore/apps/";
 
         if (path.includes("/webstore/app"))
-            return "../css/webstore/app/";
+            return "/css/webstore/app/";
 
         if (path.includes("/webstore"))
-            return "../css/webstore/index/";
+            return "/css/webstore/index/";
 
         return "css/index/";
     }
