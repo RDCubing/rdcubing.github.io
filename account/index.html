@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Account - Geek Devs Community</title>
+
+<link rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicon-32x32.png">
+
+<link rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/favicon-16x16.png">
+
+<link rel="apple-touch-icon"
+      href="/apple-touch-icon.png">
+
+<link id="theme-style"
+      rel="stylesheet"
+      href="/css/index/classic.css">
+
+</head>
+
+<body>
+
+<div class="header">
+
+Geek Devs Community
+
+<span>| Account</span>
+
+</div>
+
+<div class="nav">
+
+<a href="/">Home</a>
+
+<a href="/webstore/">WebStore</a>
+
+<a href="/downloads/">Downloads</a>
+
+<a target="_blank"
+   href="https://discord.gg/YBsVhkcHT4">
+    Discord
+</a>
+
+<a href="/services/">Services</a>
+
+<a href="/account/">
+    Account
+</a>
+
+<a href="https://gdcr.dankassassin368.com/">
+    Subdomain
+</a>
+
+<a href="https://rdcubing.github.io/">
+    GitHub Pages
+</a>
+
+<a target="_blank"
+   href="https://github.com/RDCubing">
+    GitHub
+</a>
+
+</div>
+
+<div class="container">
+
+<div class="sidebar">
+
+<h3>Settings</h3>
+
+<select id="themeSelector">
+
+<option value="default">
+    Default
+</option>
+
+<option value="classic">
+    Classic
+</option>
+
+<option value="standard">
+    Standard
+</option>
+
+<option value="luna">
+    Luna
+</option>
+
+<option value="vista">
+    Vista
+</option>
+
+<option value="msdn">
+    MSDN
+</option>
+
+<option value="fluent">
+    Fluent
+</option>
+
+</select>
+
+<h3>Account</h3>
+
+<a href="#account">
+    Account
+</a>
+
+<a href="#signin">
+    Sign In
+</a>
+
+<a href="#register">
+    Register
+</a>
+
+<a href="#session">
+    Session
+</a>
+
+<div class="announcement">
+
+<h4>Account Status</h4>
+
+<div id="accountStatus">
+    Checking account...
+</div>
+
+</div>
+
+</div>
+
+<div class="content">
+
+<h1 id="account">
+    Account
+</h1>
+
+<div id="loggedOut">
+
+<h2 id="signin">
+    Sign In
+</h2>
+
+<div class="box">
+
+<p>
+Sign in to your Geek Devs Community account.
+</p>
+
+<label>
+Username
+</label>
+
+<br>
+
+<input
+id="loginUsername"
+type="text"
+autocomplete="username"
+
+>
+
+<br><br>
+
+<label>
+Password
+</label>
+
+<br>
+
+<input
+id="loginPassword"
+type="password"
+autocomplete="current-password"
+
+>
+
+<br><br>
+
+<button
+ class="button"
+ id="loginButton">
+Sign In </button>
+
+<div id="loginMessage"></div>
+
+</div>
+
+<h2 id="register">
+    Register
+</h2>
+
+<div class="box">
+
+<p>
+Create a Geek Devs Community account.
+</p>
+
+<label>
+Username
+</label>
+
+<br>
+
+<input
+id="registerUsername"
+type="text"
+autocomplete="username"
+
+>
+
+<br><br>
+
+<label>
+Email
+</label>
+
+<br>
+
+<input
+id="registerEmail"
+type="email"
+autocomplete="email"
+
+>
+
+<br><br>
+
+<label>
+Password
+</label>
+
+<br>
+
+<input
+id="registerPassword"
+type="password"
+autocomplete="new-password"
+
+>
+
+<br><br>
+
+<button
+ class="button"
+ id="registerButton">
+Register </button>
+
+<div id="registerMessage"></div>
+
+</div>
+
+</div>
+
+<div id="loggedIn"
+     style="display:none;">
+
+<h2>
+    Welcome
+</h2>
+
+<div class="box">
+
+<p>
+
+You are signed in as:
+
+<br><br>
+
+<b id="usernameDisplay">
+    Loading...
+</b>
+
+</p>
+
+</div>
+
+<h2 id="session">
+    Session
+</h2>
+
+<div class="box">
+
+<p>
+Your GDC account session is currently active.
+</p>
+
+<button
+ class="button"
+ id="logoutButton">
+
+Sign Out
+
+</button>
+
+<div id="logoutMessage"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="footer">
+
+© 2026 Geek Devs Community<br>
+
+REIMP - Reimplementation Project<br>
+
+Powered by HTML
+
+</div>
+
+<script src="/js/theme.js"></script>
+
+<script>
+
+const API =
+    "https://gdcr.dankassassin368.com/ns-status/auth";
+
+
+const token =
+    localStorage.getItem("token");
+
+
+const storedUsername =
+    localStorage.getItem("username");
+
+
+const loggedOut =
+    document.getElementById("loggedOut");
+
+
+const loggedIn =
+    document.getElementById("loggedIn");
+
+
+const accountStatus =
+    document.getElementById("accountStatus");
+
+
+const usernameDisplay =
+    document.getElementById("usernameDisplay");
+
+
+/*
+ * Check login state
+ */
+
+if (token) {
+
+    loggedOut.style.display = "none";
+
+    loggedIn.style.display = "block";
+
+    usernameDisplay.textContent =
+        storedUsername || "User";
+
+    accountStatus.textContent =
+        "Signed in as " +
+        (storedUsername || "User");
+
+}
+else {
+
+    loggedOut.style.display = "block";
+
+    loggedIn.style.display = "none";
+
+    accountStatus.textContent =
+        "Not signed in.";
+
+}
+
+
+/*
+ * LOGIN
+ */
+
+document
+    .getElementById("loginButton")
+    .addEventListener("click", async () => {
+
+        const username =
+            document
+                .getElementById("loginUsername")
+                .value
+                .trim();
+
+        const password =
+            document
+                .getElementById("loginPassword")
+                .value;
+
+
+        const message =
+            document.getElementById(
+                "loginMessage"
+            );
+
+
+        message.textContent =
+            "Signing in...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API}/login`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            username,
+                            password
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok || !data.token) {
+
+                message.textContent =
+                    data.error ||
+                    "Unable to sign in.";
+
+                return;
+
+            }
+
+
+            localStorage.setItem(
+                "token",
+                data.token
+            );
+
+
+            if (data.username) {
+
+                localStorage.setItem(
+                    "username",
+                    data.username
+                );
+
+            }
+            else {
+
+                localStorage.setItem(
+                    "username",
+                    username
+                );
+
+            }
+
+
+            location.reload();
+
+        }
+        catch (error) {
+
+            message.textContent =
+                "Unable to connect to the server.";
+
+            console.error(error);
+
+        }
+
+    });
+
+
+/*
+ * REGISTER
+ */
+
+document
+    .getElementById("registerButton")
+    .addEventListener("click", async () => {
+
+        const username =
+            document
+                .getElementById("registerUsername")
+                .value
+                .trim();
+
+        const email =
+            document
+                .getElementById("registerEmail")
+                .value
+                .trim();
+
+        const password =
+            document
+                .getElementById("registerPassword")
+                .value;
+
+
+        const message =
+            document.getElementById(
+                "registerMessage"
+            );
+
+
+        message.textContent =
+            "Creating account...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API}/register`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            username,
+                            email,
+                            password
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                message.textContent =
+                    data.error ||
+                    "Unable to create account.";
+
+                return;
+
+            }
+
+
+            message.textContent =
+                "Account created successfully. You can now sign in.";
+
+            document
+                .getElementById("registerUsername")
+                .value = "";
+
+            document
+                .getElementById("registerEmail")
+                .value = "";
+
+            document
+                .getElementById("registerPassword")
+                .value = "";
+
+        }
+        catch (error) {
+
+            message.textContent =
+                "Unable to connect to the server.";
+
+            console.error(error);
+
+        }
+
+    });
+
+
+/*
+ * SIGN OUT
+ */
+
+document
+    .getElementById("logoutButton")
+    .addEventListener("click", () => {
+
+        localStorage.removeItem("token");
+
+        localStorage.removeItem("username");
+
+        location.reload();
+
+    });
+
+</script>
+
+</body>
+
+</html>
