@@ -196,10 +196,6 @@ let newsData = [];
 let currentPage = 1;
 
 
-/*
- * Elements
- */
-
 const newsContainer =
     document.getElementById("newsContainer");
 
@@ -304,7 +300,7 @@ function formatNewsDate(newsId) {
 
 
 /*
- * Create news article
+ * Create clickable news article
  */
 
 function createNewsArticle(item) {
@@ -317,10 +313,35 @@ function createNewsArticle(item) {
         "box";
 
 
+    article.style.cursor =
+        "pointer";
+
+
+    article.setAttribute(
+        "role",
+        "link"
+    );
+
+
+    article.setAttribute(
+        "tabindex",
+        "0"
+    );
+
+
     article.innerHTML = `
 
         <h2>
-            ${escapeHtml(item.title)}
+
+            <a
+                href="/news/news.html?id=${encodeURIComponent(item.newsId)}"
+                style="text-decoration: none;"
+            >
+
+                ${escapeHtml(item.title)}
+
+            </a>
+
         </h2>
 
         <p>
@@ -341,11 +362,65 @@ function createNewsArticle(item) {
             ${escapeHtml(item.description)}
         </p>
 
-        <p>
-            ${escapeHtml(item.content)}
-        </p>
-
     `;
+
+
+    /*
+     * Clicking anywhere on the box
+     * opens the news article.
+     */
+
+    article.addEventListener(
+        "click",
+        event => {
+
+            /*
+             * Don't interfere with
+             * the title's actual link.
+             */
+
+            if (
+                event.target.closest("a")
+            ) {
+                return;
+            }
+
+
+            window.location.href =
+                "/news/news.html?id=" +
+                encodeURIComponent(
+                    item.newsId
+                );
+
+        }
+    );
+
+
+    /*
+     * Allow keyboard activation.
+     */
+
+    article.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter" ||
+                event.key === " "
+            ) {
+
+                event.preventDefault();
+
+                window.location.href =
+                    "/news/news.html?id=" +
+                    encodeURIComponent(
+                        item.newsId
+                    );
+
+            }
+
+        }
+    );
 
 
     return article;
@@ -414,7 +489,7 @@ function displayNews(page) {
 
 
 /*
- * Create pagination
+ * Pagination
  */
 
 function createPagination() {
@@ -438,20 +513,19 @@ function createPagination() {
         document.createElement("div");
 
 
-    /*
-     * Previous
-     */
-
     if (currentPage > 1) {
 
         const previous =
             document.createElement("button");
 
+
         previous.className =
             "button";
 
+
         previous.textContent =
             "Previous";
+
 
         previous.style.marginRight =
             "5px";
@@ -473,10 +547,6 @@ function createPagination() {
 
     }
 
-
-    /*
-     * Page numbers
-     */
 
     for (
         let page = 1;
@@ -521,10 +591,6 @@ function createPagination() {
 
     }
 
-
-    /*
-     * Next
-     */
 
     if (currentPage < totalPages) {
 
@@ -587,7 +653,13 @@ function displayLatestNews() {
 
                 <div class="announcement-title">
 
-                    ${escapeHtml(item.title)}
+                    <a
+                        href="/news/news.html?id=${encodeURIComponent(item.newsId)}"
+                    >
+
+                        ${escapeHtml(item.title)}
+
+                    </a>
 
                 </div>
 
@@ -620,7 +692,7 @@ function displayLatestNews() {
 
 
 /*
- * Load news JSON
+ * Load news
  */
 
 fetch(NEWS_URL)
@@ -650,13 +722,6 @@ fetch(NEWS_URL)
 
     }
 
-
-    /*
-     * Sort newest first.
-     *
-     * YYYYMMDD-HHMM sorts correctly
-     * as a string.
-     */
 
     newsData =
         data.sort((a, b) => {
