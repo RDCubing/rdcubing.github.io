@@ -443,44 +443,188 @@ Powered by HTML
 <script src="js/theme.js"></script>
 <script>
 
-fetch("https://gist.githubusercontent.com/RDCubing/44671b4e680aba470e4b96cff5eb5840/raw/highlights.json")
+const NEWS_URL =
+    "https://raw.githubusercontent.com/RDCubing/gdcr-news-reimp2026/main/news/news.json";
 
-.then(response => response.json())
+
+function escapeHtml(value) {
+
+    if (
+        value === undefined ||
+        value === null
+    ) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+function parseNewsDate(newsId) {
+
+    if (
+        !newsId ||
+        !/^\d{8}-\d{4}$/.test(newsId)
+    ) {
+        return null;
+    }
+
+    const year =
+        Number(newsId.substring(0, 4));
+
+    const month =
+        Number(newsId.substring(4, 6)) - 1;
+
+    const day =
+        Number(newsId.substring(6, 8));
+
+    const hour =
+        Number(newsId.substring(9, 11));
+
+    const minute =
+        Number(newsId.substring(11, 13));
+
+    return new Date(
+        year,
+        month,
+        day,
+        hour,
+        minute
+    );
+
+}
+
+
+function formatNewsDate(newsId) {
+
+    const date =
+        parseNewsDate(newsId);
+
+    if (!date) {
+        return newsId;
+    }
+
+    return date.toLocaleString(
+        undefined,
+        {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+fetch(NEWS_URL)
+
+.then(response => {
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load news."
+        );
+    }
+
+    return response.json();
+
+})
 
 .then(data => {
 
-    const container = document.getElementById("highlights");
+    const container =
+        document.getElementById("highlights");
+
+
+    if (!container) {
+        return;
+    }
+
+
+    if (!Array.isArray(data)) {
+
+        throw new Error(
+            "Invalid news data."
+        );
+
+    }
+
+
+    /*
+     * Newest news first
+     */
+
+    data.sort((a, b) => {
+
+        return String(b.newsId)
+            .localeCompare(
+                String(a.newsId)
+            );
+
+    });
+
 
     container.innerHTML = "";
 
 
-    data.items.slice(0, 5).forEach(item => {
+    /*
+     * Show latest 5 news articles
+     */
+
+    data.slice(0, 5).forEach(item => {
+
+        const entry =
+            document.createElement("div");
 
 
-        const entry = document.createElement("div");
-
-        entry.className = "announcement-item";
+        entry.className =
+            "announcement-item";
 
 
         entry.innerHTML = `
 
-        <div class="announcement-title">
-            ${item.title}
-        </div>
+            <div class="announcement-title">
 
-        <div class="announcement-date">
-            ${item.date_added}
-        </div>
+                <a href="/news/news.html?id=${encodeURIComponent(item.newsId)}">
 
-        <div class="announcement-content">
-            ${item.content}
-        </div>
+                    ${escapeHtml(item.title)}
+
+                </a>
+
+            </div>
+
+
+            <div class="announcement-date">
+
+                ${escapeHtml(
+                    formatNewsDate(
+                        item.newsId
+                    )
+                )}
+
+            </div>
+
+
+            <div class="announcement-content">
+
+                ${escapeHtml(
+                    item.description
+                )}
+
+            </div>
 
         `;
 
 
         container.appendChild(entry);
-
 
     });
 
@@ -488,15 +632,29 @@ fetch("https://gist.githubusercontent.com/RDCubing/44671b4e680aba470e4b96cff5eb5
 })
 
 
-.catch(() => {
+.catch(error => {
 
-    document.getElementById("highlights").innerHTML =
-        "Unable to load highlights.";
+    console.error(
+        "Unable to load highlights:",
+        error
+    );
+
+
+    const container =
+        document.getElementById("highlights");
+
+
+    if (container) {
+
+        container.innerHTML =
+            "Unable to load news.";
+
+    }
 
 });
 
-
 </script>
+
 
 
 </body>
