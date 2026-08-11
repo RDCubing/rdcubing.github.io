@@ -577,10 +577,8 @@ else {
                 </p>
 
                 <p>
-                    ${escapeHtml(
-                        item.content
-                    )}
-                </p>
+    ${escapeHtml(item.content).replace(/\n/g, "<br>")}
+</p>
 
             </div>
 
