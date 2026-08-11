@@ -51,9 +51,8 @@ Geek Devs Community
 </a>
 
 <a target="_blank"
-   href="https://discord.gg/YBsVhkcHT4">
-    Discord
-</a>
+href="https://discord.gg/YBsVhkcHT4">
+Discord </a>
 
 <a href="/services/">
     Services
@@ -76,9 +75,8 @@ Geek Devs Community
 </a>
 
 <a target="_blank"
-   href="https://github.com/RDCubing">
-    GitHub
-</a>
+href="https://github.com/RDCubing">
+GitHub </a>
 
 </div>
 
@@ -135,9 +133,7 @@ Geek Devs Community
 <h4>Latest News</h4>
 
 <div id="latestNews">
-
-Loading latest news...
-
+    Loading latest news...
 </div>
 
 </div>
@@ -188,13 +184,8 @@ Powered by HTML
 
 <script>
 
-
 const NEWS_URL =
     "https://raw.githubusercontent.com/RDCubing/gdcr-news-reimp2026/main/news/news.json";
-
-
-const NEWS_IMAGE_URL =
-    "https://raw.githubusercontent.com/RDCubing/gdcr-news-reimp2026/main/news/images/";
 
 
 const NEWS_PER_PAGE = 10;
@@ -313,7 +304,7 @@ function formatNewsDate(newsId) {
 
 
 /*
- * Create article
+ * Create news article
  */
 
 function createNewsArticle(item) {
@@ -322,29 +313,11 @@ function createNewsArticle(item) {
         document.createElement("div");
 
 
-    article.className = "box";
-
-
-    const imageUrl =
-        NEWS_IMAGE_URL +
-        encodeURIComponent(item.newsId) +
-        ".png";
+    article.className =
+        "box";
 
 
     article.innerHTML = `
-
-        <img
-            src="${imageUrl}"
-            alt="${escapeHtml(item.title)}"
-            style="
-                width: 100%;
-                max-width: 900px;
-                height: auto;
-                display: block;
-                margin-bottom: 15px;
-            "
-            onerror="this.style.display='none';"
-        >
 
         <h2>
             ${escapeHtml(item.title)}
@@ -388,7 +361,6 @@ function displayNews(page) {
 
     currentPage = page;
 
-
     newsContainer.innerHTML = "";
 
 
@@ -409,6 +381,8 @@ function displayNews(page) {
         newsContainer.innerHTML =
             "<p>No news articles found.</p>";
 
+        createPagination();
+
         return;
 
     }
@@ -425,11 +399,6 @@ function displayNews(page) {
 
     createPagination();
 
-
-    /*
-     * Scroll back to news heading
-     * when changing page.
-     */
 
     if (page > 1) {
 
@@ -487,14 +456,18 @@ function createPagination() {
         previous.style.marginRight =
             "5px";
 
+
         previous.addEventListener(
             "click",
             () => {
+
                 displayNews(
                     currentPage - 1
                 );
+
             }
         );
+
 
         wrapper.appendChild(previous);
 
@@ -729,7 +702,6 @@ fetch(NEWS_URL)
         "Unable to load news.";
 
 });
-
 
 </script>
 
