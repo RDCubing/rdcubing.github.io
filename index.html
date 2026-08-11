@@ -1,403 +1,966 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Geek Devs Community - REIMP</title>
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link id="theme-style" rel="stylesheet" href="css/index/classic.css">
+
+<link rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="favicon-32x32.png">
+
+<link rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="favicon-16x16.png">
+
+<link rel="apple-touch-icon"
+      href="apple-touch-icon.png">
+
+<link id="theme-style"
+      rel="stylesheet"
+      href="css/index/classic.css">
 
 </head>
+
 
 <body>
 
 
+<!-- =========================
+     HEADER
+========================= -->
+
 <div class="header">
+
     Geek Devs Community
-    <span>| REIMP</span>
+
+    <span>
+        | REIMP
+    </span>
+
 </div>
 
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
 
 <div class="nav">
-    <a href="/">Home</a>
-    <a href="/webstore/">WebStore</a>
-    <a href="/downloads/">Downloads</a>
-    <a target="_blank" href="https://discord.gg/YBsVhkcHT4">Discord</a>
-    <a href="/services/">Services</a>
-	<a href="/news/">
-    News
-</a>
-	<a href="/account/">
-    Account
-</a>
-	<a href="https://gdcr.dankassassin368.com/">Subdomain</a>
-	<a href="https://rdcubing.github.io/">GitHub Pages</a>
-    <a target="_blank" href="https://github.com/RDCubing">GitHub</a>
+
+    <a href="/">
+        Home
+    </a>
+
+    <a href="/webstore/">
+        WebStore
+    </a>
+
+    <a href="/downloads/">
+        Downloads
+    </a>
+
+    <a target="_blank"
+       href="https://discord.gg/YBsVhkcHT4">
+        Discord
+    </a>
+
+    <a href="/services/">
+        Services
+    </a>
+
+    <a href="/news/">
+        News
+    </a>
+
+    <a id="accountLink"
+       href="/account/">
+        Account
+    </a>
+
+    <a href="https://gdcr.dankassassin368.com/">
+        Subdomain
+    </a>
+
+    <a href="https://rdcubing.github.io/">
+        GitHub Pages
+    </a>
+
+    <a target="_blank"
+       href="https://github.com/RDCubing">
+        GitHub
+    </a>
+
 </div>
 
+
+
+<!-- =========================
+     MAIN CONTAINER
+========================= -->
 
 <div class="container">
 
 
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
 <div class="sidebar">
 
-<h3>Settings</h3>
 
-    <select id="themeSelector">
-        <option value="default">Default</option>
-		<option value="classic">Classic</option>
-        <option value="standard">Standard</option>
-        <option value="luna">Luna</option>
-		<option value="vista">Vista</option>
-		<option value="msdn">MSDN</option>
-		<option value="fluent">Fluent</option>
-    </select>
+<h3>
+    Settings
+</h3>
 
-<h3>Community</h3>
 
-<a href="#about">About Geek Devs Community</a>
-<a href="#mission">Mission & Goals</a>
-<a href="#reimp">REIMP Overview</a>
-<a href="#projects">Community Projects</a>
-<a href="#development">Development</a>
-<a href="#technology">Technology</a>
-<a href="#developer">Developer</a>
-<a href="#members">Values</a>
-<a href="#join">Get Involved</a>
+<select id="themeSelector">
 
+    <option value="default">
+        Default
+    </option>
+
+    <option value="classic">
+        Classic
+    </option>
+
+    <option value="standard">
+        Standard
+    </option>
+
+    <option value="luna">
+        Luna
+    </option>
+
+    <option value="vista">
+        Vista
+    </option>
+
+    <option value="msdn">
+        MSDN
+    </option>
+
+    <option value="fluent">
+        Fluent
+    </option>
+
+</select>
+
+
+
+<h3>
+    Community
+</h3>
+
+
+<a href="#about">
+    About Geek Devs Community
+</a>
+
+<a href="#mission">
+    Mission & Goals
+</a>
+
+<a href="#reimp">
+    REIMP Overview
+</a>
+
+<a href="#projects">
+    Community Projects
+</a>
+
+<a href="#technology">
+    Technology
+</a>
+
+<a href="#developer">
+    Developer
+</a>
+
+<a href="#members">
+    Values
+</a>
+
+<a href="#development">
+    Development
+</a>
+
+<a href="#join">
+    Get Involved
+</a>
+
+
+
+<!-- =========================
+     ACCOUNT STATUS
+========================= -->
 
 <div class="announcement">
 
-<h4>Latest Highlights</h4>
+<h4>
+    Account
+</h4>
+
+
+<div id="accountStatus">
+
+    Checking account...
+
+</div>
+
+</div>
+
+
+
+<!-- =========================
+     LATEST NEWS
+========================= -->
+
+<div class="announcement">
+
+<h4>
+    Latest Highlights
+</h4>
+
 
 <div id="highlights">
-Loading latest updates...
-</div>
+
+    Loading latest updates...
 
 </div>
 
 
 </div>
 
+
+</div>
+
+
+
+<!-- =========================
+     CONTENT
+========================= -->
 
 <div class="content">
 
 
-<h1>Geek Devs Community</h1>
+<h1>
+    Geek Devs Community
+</h1>
 
 
-<p>
+<p id="welcomeMessage">
+
 Welcome to Geek Devs Community (GDC), a developer-focused community
 dedicated to programming, software engineering, technology exploration,
 and collaboration.
+
 </p>
 
 
 <p>
+
 GDC provides a place where developers, programmers, designers, and
 technology enthusiasts can share ideas, build projects, experiment with
 new technologies, and learn from each other.
+
 </p>
 
 
 
-<h2 id="about">About Geek Devs Community</h2>
+<!-- =========================
+     LIVE COMMUNITY STATUS
+========================= -->
 
-<p>
-Geek Devs Community was created with the goal of bringing together
-people who enjoy creating software and exploring technology. The
-community focuses on practical development, experimentation, and
-innovation.
-</p>
-
-
-<p>
-From application development to operating system customization, GDC
-covers a wide range of technical interests. Members are encouraged to
-share knowledge, contribute to projects, and help others improve their
-skills.
-</p>
+<h2>
+    GDC at a Glance
+</h2>
 
 
+<div class="box"
+     id="communityStats">
 
-<h2 id="mission">Our Mission</h2>
-
-<div class="box">
-
-<b>Building the future through development.</b>
-
-<br><br>
-
-Our mission is to create a friendly environment where developers can:
-
-<br><br>
-
-- Learn programming and software development<br>
-- Collaborate on open-source projects<br>
-- Explore operating systems and technology<br>
-- Create useful applications and tools<br>
-- Preserve and improve classic software experiences
+    <b>
+        Loading GDC information...
+    </b>
 
 </div>
 
 
 
-<h2 id="reimp">REIMP - Reimplementation Project</h2>
+<!-- =========================
+     FEATURED NEWS
+========================= -->
+
+<h2>
+    Featured
+</h2>
+
+
+<div class="box"
+     id="featuredNews">
+
+    Loading featured news...
+
+</div>
+
+
+
+<!-- =========================
+     LATEST NEWS
+========================= -->
+
+<h2>
+    Latest News
+</h2>
+
+
+<div id="latestNewsMain">
+
+    Loading latest news...
+
+</div>
+
+
+<br>
+
+
+<a class="button"
+   href="/news/">
+
+    View All News
+
+</a>
+
+
+
+<!-- =========================
+     ABOUT
+========================= -->
+
+<h2 id="about">
+    About Geek Devs Community
+</h2>
+
+
+<p>
+
+Geek Devs Community was created with the goal of bringing together
+people who enjoy creating software and exploring technology. The
+community focuses on practical development, experimentation, and
+innovation.
+
+</p>
+
+
+<p>
+
+From application development to operating system customization, GDC
+covers a wide range of technical interests. Members are encouraged to
+share knowledge, contribute to projects, and help others improve their
+skills.
+
+</p>
+
+
+
+<!-- =========================
+     MISSION
+========================= -->
+
+<h2 id="mission">
+    Our Mission
+</h2>
+
 
 <div class="box">
 
-<h2 id="projects">Community Projects</h2>
+<b>
+    Building the future through development.
+</b>
+
 
 <br><br>
+
+
+Our mission is to create a friendly environment where developers can:
+
+
+<br><br>
+
+
+- Learn programming and software development<br>
+
+- Collaborate on open-source projects<br>
+
+- Explore operating systems and technology<br>
+
+- Create useful applications and tools<br>
+
+- Preserve and improve classic software experiences
+
+
+</div>
+
+
+
+<!-- =========================
+     REIMP
+========================= -->
+
+<h2 id="reimp">
+    REIMP - Reimplementation Project
+</h2>
+
+
+<div class="box">
+
+<b>
+    Reimplementation, research, and preservation.
+</b>
+
+
+<br><br>
+
 
 REIMP focuses on recreating classic software experiences using modern
 development techniques.
 
+
 <br><br>
+
 
 The project explores how older software concepts, interfaces, and
 technologies can be redesigned for current platforms.
 
+
 <br><br>
+
 
 REIMP combines software engineering, user interface design, system
 development, and reverse engineering concepts to create modern
 alternatives inspired by classic software.
 
+
 </div>
 
 
 
-<h2>Why REIMP Exists</h2>
+<h2>
+    Why REIMP Exists
+</h2>
+
 
 <p>
+
 Many classic applications and experiences have disappeared over time.
 REIMP aims to preserve the ideas behind these technologies while
 adapting them for modern systems.
+
 </p>
 
 
 <p>
+
 The project encourages developers to study how software works, learn
 from older designs, and create improved implementations.
+
 </p>
 
 
 
-<h2>Community Projects</h2>
+<!-- =========================
+     PROJECTS
+========================= -->
 
-<div class="box">
-
-<b>Software Development</b>
-
-<br>
-
-Creating applications, utilities, tools, and experimental software.
-
-<br><br>
+<h2 id="projects">
+    Community Projects
+</h2>
 
 
-<b>Windows Customization</b>
-
-<br>
-
-Exploring Windows interfaces, system modifications, and classic UI
-experiences.
-
-<br><br>
-
-
-<b>Open Source Development</b>
-
-<br>
-
-Sharing code, collaborating on projects, and improving software through
-community contributions.
-
-<br><br>
-
-
-<b>Research and Experimentation</b>
-
-<br>
-
-Testing new technologies and exploring how software systems work.
-
-</div>
-
-
-
-<h2 id="technology">Technology Areas</h2>
-
-<p>
-Geek Devs Community explores many areas of technology including:
-</p>
+<div id="projectList">
 
 
 <div class="box">
 
-<b>Programming Languages</b><br>
-C#, C++, JavaScript, HTML, CSS, Python, and more.
+<b>
+    NeonStore
+</b>
+
 
 <br><br>
 
-<b>Application Development</b><br>
-Desktop applications, web applications, and mobile software.
+
+A developer-focused application store inspired by the classic
+Windows 8.1 Store experience.
+
 
 <br><br>
 
-<b>Operating Systems</b><br>
-Windows, Linux, system customization, and software compatibility.
-
-<br><br>
-
-<b>User Interface Design</b><br>
-Modern and classic interface design inspired by different generations
-of software.
-
-</div>
-
-<h2 id="developer">About the Developer</h2>
-
-<div class="box">
-
-<b>Andrew Simson (RDCubing)</b>
-
-<br><br>
-
-Geek Devs Community and the REIMP project are maintained by
-Andrew Simson, also known online as <b>RDCubing</b>.
-
-<br><br>
-
-The project began as a way to explore software development,
-Windows customization, and classic user interface design while
-building open-source applications and tools for the community.
-
-<br><br>
-
-Areas of interest include:
-
-<br><br>
-
-• Windows desktop development<br>
-• Reimplementing classic Windows experiences<br>
-• C#, C++, HTML, CSS, and JavaScript<br>
-• Open-source software and community projects<br>
-• User interface design inspired by classic operating systems
-
-<br><br>
-
-Development takes place through public repositories on GitHub,
-where community members can view source code, report issues,
-and contribute to ongoing projects.
-
-<br><br>
 
 <a class="button"
-href="https://github.com/RDCubing"
-target="_blank">
-Visit GitHub
+   href="/webstore/">
+
+    Explore NeonStore
+
 </a>
 
 </div>
 
 
 
-<h2 id="members">Community Values</h2>
+<div class="box">
+
+<b>
+    GDC Website
+</b>
+
+
+<br><br>
+
+
+The central website for Geek Devs Community, including news,
+accounts, services, downloads, projects, and community information.
+
+
+<br><br>
+
+
+<a class="button"
+   href="/news/">
+
+    Explore GDC
+
+</a>
+
+</div>
+
+
+
+<div class="box">
+
+<b>
+    REIMP
+</b>
+
+
+<br><br>
+
+
+A collection of projects focused on recreating and improving
+classic software experiences.
+
+
+<br><br>
+
+
+<a class="button"
+   href="#reimp">
+
+    Learn About REIMP
+
+</a>
+
+</div>
+
+
+
+<div class="box">
+
+<b>
+    Community Infrastructure
+</b>
+
+
+<br><br>
+
+
+Backend services, APIs, authentication systems, bots, and other
+infrastructure supporting the GDC ecosystem.
+
+
+<br><br>
+
+
+<a class="button"
+   href="/services/">
+
+    View Services
+
+</a>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =========================
+     TECHNOLOGY
+========================= -->
+
+<h2 id="technology">
+    Technology Areas
+</h2>
+
 
 <p>
-GDC believes that development is best achieved through collaboration
-and sharing knowledge.
+
+Geek Devs Community explores many areas of technology including:
+
 </p>
 
 
 <div class="box">
 
-<b>Respect</b><br>
+<b>
+    Programming Languages
+</b>
+
+<br>
+
+C#, C++, JavaScript, HTML, CSS, Python, and more.
+
+
+<br><br>
+
+
+<b>
+    Application Development
+</b>
+
+<br>
+
+Desktop applications, web applications, and mobile software.
+
+
+<br><br>
+
+
+<b>
+    Operating Systems
+</b>
+
+<br>
+
+Windows, Linux, system customization, and software compatibility.
+
+
+<br><br>
+
+
+<b>
+    User Interface Design
+</b>
+
+<br>
+
+Modern and classic interface design inspired by different generations
+of software.
+
+
+<br><br>
+
+
+<b>
+    Web Development
+</b>
+
+<br>
+
+Websites, APIs, backend services, databases, authentication systems,
+and community platforms.
+
+</div>
+
+
+
+<!-- =========================
+     DEVELOPER
+========================= -->
+
+<h2 id="developer">
+    About the Developer
+</h2>
+
+
+<div class="box">
+
+<b>
+    Andrew Simson (RDCubing)
+</b>
+
+
+<br><br>
+
+
+Geek Devs Community and the REIMP project are maintained by
+Andrew Simson, also known online as <b>RDCubing</b>.
+
+
+<br><br>
+
+
+The project began as a way to explore software development,
+Windows customization, and classic user interface design while
+building open-source applications and tools for the community.
+
+
+<br><br>
+
+
+Areas of interest include:
+
+
+<br><br>
+
+
+• Windows desktop development<br>
+
+• Reimplementing classic Windows experiences<br>
+
+• C#, C++, HTML, CSS, and JavaScript<br>
+
+• Open-source software and community projects<br>
+
+• User interface design inspired by classic operating systems
+
+
+<br><br>
+
+
+Development takes place through public repositories on GitHub,
+where community members can view source code, report issues,
+and contribute to ongoing projects.
+
+
+<br><br>
+
+
+<a class="button"
+   href="https://github.com/RDCubing"
+   target="_blank">
+
+    Visit GitHub
+
+</a>
+
+</div>
+
+
+
+<!-- =========================
+     VALUES
+========================= -->
+
+<h2 id="members">
+    Community Values
+</h2>
+
+
+<p>
+
+GDC believes that development is best achieved through collaboration
+and sharing knowledge.
+
+</p>
+
+
+<div class="box">
+
+<b>
+    Respect
+</b>
+
+<br>
+
 Treat all community members with respect.
 
+
 <br><br>
 
-<b>Learning</b><br>
+
+<b>
+    Learning
+</b>
+
+<br>
+
 Help others improve their technical skills.
 
+
 <br><br>
 
-<b>Innovation</b><br>
+
+<b>
+    Innovation
+</b>
+
+<br>
+
 Experiment with new ideas and technologies.
 
+
 <br><br>
 
-<b>Collaboration</b><br>
+
+<b>
+    Collaboration
+</b>
+
+<br>
+
 Work together to create better projects.
 
 </div>
 
 
 
-<h2 id="development">Development Roadmap</h2>
+<!-- =========================
+     ROADMAP
+========================= -->
+
+<h2 id="development">
+    Development Roadmap
+</h2>
+
 
 <div class="box">
 
-<b>Phase 1 - Community Growth</b><br>
+<b>
+    Phase 1 - Community Growth
+</b>
+
+<br>
+
 Building the foundation of the developer community.
 
+
 <br><br>
 
-<b>Phase 2 - Project Expansion</b><br>
+
+<b>
+    Phase 2 - Project Expansion
+</b>
+
+<br>
+
 Creating more open-source projects and tools.
 
+
 <br><br>
 
-<b>Phase 3 - REIMP Development</b><br>
+
+<b>
+    Phase 3 - REIMP Development
+</b>
+
+<br>
+
 Expanding reimplementation projects and software research.
 
+
 <br><br>
 
-<b>Phase 4 - Long-Term Innovation</b><br>
+
+<b>
+    Phase 4 - Long-Term Innovation
+</b>
+
+<br>
+
 Continuing development and exploring future technologies.
 
 </div>
 
 
 
-<h2>Frequently Asked Questions</h2>
+<!-- =========================
+     FAQ
+========================= -->
+
+<h2>
+    Frequently Asked Questions
+</h2>
+
 
 <div class="box">
 
-<b>What is Geek Devs Community?</b>
+<b>
+    What is Geek Devs Community?
+</b>
 
 <br>
 
 GDC is a community for developers and technology enthusiasts.
 
+
 <br><br>
 
 
-<b>Who can join?</b>
+<b>
+    Who can join?
+</b>
 
 <br>
 
 Anyone interested in programming, technology, and software development.
 
+
 <br><br>
 
 
-<b>What is REIMP?</b>
+<b>
+    What is REIMP?
+</b>
 
 <br>
 
 REIMP is a project focused on recreating and improving classic software
 experiences.
 
+
 <br><br>
 
 
-<b>How can I contribute?</b>
+<b>
+    What is NeonStore?
+</b>
+
+<br>
+
+NeonStore is a developer-focused application store for discovering,
+showcasing, and downloading community-made software.
+
+
+<br><br>
+
+
+<b>
+    Does NeonStore use GDC accounts?
+</b>
+
+<br>
+
+Yes. NeonStore currently uses the same unified account system used
+by supported GDC services.
+
+
+<br><br>
+
+
+<b>
+    How can I contribute?
+</b>
 
 <br>
 
@@ -408,20 +971,33 @@ ideas, and community support.
 
 
 
-<h2 id="join">Join Geek Devs Community</h2>
+<!-- =========================
+     JOIN
+========================= -->
+
+<h2 id="join">
+    Join Geek Devs Community
+</h2>
+
 
 <p>
+
 Whether you are a beginner learning programming or an experienced
 developer, Geek Devs Community welcomes everyone interested in creating,
 learning, and exploring technology.
+
 </p>
 
 
 <br>
 
 
-<a class="button" href="https://discord.gg/YBsVhkcHT4" target="_blank">
-Join Community
+<a class="button"
+   href="https://discord.gg/YBsVhkcHT4"
+   target="_blank">
+
+    Join Community
+
 </a>
 
 
@@ -431,21 +1007,89 @@ Join Community
 
 
 
+<!-- =========================
+     FOOTER
+========================= -->
+
 <div class="footer">
 
 © 2026 Geek Devs Community<br>
+
 REIMP - Reimplementation Project<br>
+
 Powered by HTML
 
 </div>
 
 
+
 <script src="js/theme.js"></script>
+
+
 <script>
+
+
+/* =========================
+   CONFIGURATION
+========================= */
 
 const NEWS_URL =
     "https://raw.githubusercontent.com/RDCubing/gdcr-news-reimp2026/main/news/news.json";
 
+
+const NEWS_PER_SIDEBAR =
+    5;
+
+
+const NEWS_PER_MAIN =
+    3;
+
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const highlights =
+    document.getElementById(
+        "highlights"
+    );
+
+
+const latestNewsMain =
+    document.getElementById(
+        "latestNewsMain"
+    );
+
+
+const featuredNews =
+    document.getElementById(
+        "featuredNews"
+    );
+
+
+const communityStats =
+    document.getElementById(
+        "communityStats"
+    );
+
+
+const accountStatus =
+    document.getElementById(
+        "accountStatus"
+    );
+
+
+const accountLink =
+    document.getElementById(
+        "accountLink"
+    );
+
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
 
 function escapeHtml(value) {
 
@@ -453,18 +1097,46 @@ function escapeHtml(value) {
         value === undefined ||
         value === null
     ) {
+
         return "";
+
     }
 
+
     return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
+
+
+/* =========================
+   PARSE NEWS DATE
+========================= */
 
 function parseNewsDate(newsId) {
 
@@ -472,23 +1144,56 @@ function parseNewsDate(newsId) {
         !newsId ||
         !/^\d{8}-\d{4}$/.test(newsId)
     ) {
+
         return null;
+
     }
 
+
     const year =
-        Number(newsId.substring(0, 4));
+        Number(
+            newsId.substring(
+                0,
+                4
+            )
+        );
+
 
     const month =
-        Number(newsId.substring(4, 6)) - 1;
+        Number(
+            newsId.substring(
+                4,
+                6
+            )
+        ) - 1;
+
 
     const day =
-        Number(newsId.substring(6, 8));
+        Number(
+            newsId.substring(
+                6,
+                8
+            )
+        );
+
 
     const hour =
-        Number(newsId.substring(9, 11));
+        Number(
+            newsId.substring(
+                9,
+                11
+            )
+        );
+
 
     const minute =
-        Number(newsId.substring(11, 13));
+        Number(
+            newsId.substring(
+                11,
+                13
+            )
+        );
+
 
     return new Date(
         year,
@@ -501,161 +1206,660 @@ function parseNewsDate(newsId) {
 }
 
 
+
+/* =========================
+   FORMAT DATE
+========================= */
+
 function formatNewsDate(newsId) {
 
     const date =
-        parseNewsDate(newsId);
+        parseNewsDate(
+            newsId
+        );
+
 
     if (!date) {
+
         return newsId;
+
     }
+
 
     return date.toLocaleString(
         undefined,
         {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit"
+            year:
+                "numeric",
+
+            month:
+                "long",
+
+            day:
+                "numeric",
+
+            hour:
+                "2-digit",
+
+            minute:
+                "2-digit"
         }
     );
 
 }
 
 
-fetch(NEWS_URL)
 
-.then(response => {
+/* =========================
+   CREATE NEWS LINK
+========================= */
 
-    if (!response.ok) {
-        throw new Error(
-            "Unable to load news."
+function getNewsUrl(newsId) {
+
+    return (
+        "/news/news.html?id=" +
+        encodeURIComponent(
+            newsId
+        )
+    );
+
+}
+
+
+
+/* =========================
+   ACCOUNT STATUS
+========================= */
+
+function loadAccountStatus() {
+
+    const token =
+        localStorage.getItem(
+            "token"
         );
+
+
+    const username =
+        localStorage.getItem(
+            "username"
+        );
+
+
+    if (
+        token &&
+        username
+    ) {
+
+        accountStatus.innerHTML = `
+
+            <b>
+                Signed in
+            </b>
+
+            <br><br>
+
+            Welcome back,
+            <b>
+                ${escapeHtml(username)}
+            </b>
+
+            <br><br>
+
+            <a class="button"
+               href="/account/">
+
+                My Account
+
+            </a>
+
+        `;
+
+
+        accountLink.textContent =
+            "My Account";
+
+
+    }
+    else {
+
+        accountStatus.innerHTML = `
+
+            <b>
+                Not signed in
+            </b>
+
+            <br><br>
+
+            Sign in to access your
+            GDC account and supported
+            community services.
+
+            <br><br>
+
+            <a class="button"
+               href="/account/">
+
+                Sign In
+
+            </a>
+
+        `;
+
+
+        accountLink.textContent =
+            "Account";
+
     }
 
-    return response.json();
-
-})
-
-.then(data => {
-
-    const container =
-        document.getElementById("highlights");
+}
 
 
-    if (!container) {
+
+/* =========================
+   FEATURED NEWS
+========================= */
+
+function displayFeaturedNews(item) {
+
+    if (!item) {
+
+        featuredNews.innerHTML =
+            "No featured news is available.";
+
         return;
+
     }
 
 
-    if (!Array.isArray(data)) {
+    featuredNews.innerHTML = `
 
-        throw new Error(
-            "Invalid news data."
+        <h2>
+
+            ${escapeHtml(
+                item.title
+            )}
+
+        </h2>
+
+
+        <p>
+
+            <b>
+                ${escapeHtml(
+                    item.author
+                )}
+            </b>
+
+            &nbsp;|&nbsp;
+
+            ${escapeHtml(
+                formatNewsDate(
+                    item.newsId
+                )
+            )}
+
+        </p>
+
+
+        <p>
+
+            ${escapeHtml(
+                item.description
+            )}
+
+        </p>
+
+
+        <br>
+
+
+        <a class="button"
+           href="${getNewsUrl(
+               item.newsId
+           )}">
+
+            Read Article
+
+        </a>
+
+    `;
+
+}
+
+
+
+/* =========================
+   LATEST NEWS SIDEBAR
+========================= */
+
+function displaySidebarNews(data) {
+
+    highlights.innerHTML =
+        "";
+
+
+    data
+        .slice(
+            0,
+            NEWS_PER_SIDEBAR
+        )
+        .forEach(
+            item => {
+
+                const entry =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                entry.className =
+                    "announcement-item";
+
+
+                entry.innerHTML = `
+
+                    <div class="announcement-title">
+
+                        <a href="${getNewsUrl(
+                            item.newsId
+                        )}">
+
+                            ${escapeHtml(
+                                item.title
+                            )}
+
+                        </a>
+
+                    </div>
+
+
+                    <div class="announcement-date">
+
+                        ${escapeHtml(
+                            formatNewsDate(
+                                item.newsId
+                            )
+                        )}
+
+                    </div>
+
+
+                    <div class="announcement-content">
+
+                        ${escapeHtml(
+                            item.description
+                        )}
+
+                    </div>
+
+                `;
+
+
+                highlights.appendChild(
+                    entry
+                );
+
+            }
         );
 
+
+    if (
+        data.length === 0
+    ) {
+
+        highlights.textContent =
+            "No news available.";
+
     }
 
+}
 
-    /*
-     * Newest news first
-     */
 
-    data.sort((a, b) => {
 
-        return String(b.newsId)
-            .localeCompare(
-                String(a.newsId)
+/* =========================
+   MAIN LATEST NEWS
+========================= */
+
+function displayMainNews(data) {
+
+    latestNewsMain.innerHTML =
+        "";
+
+
+    data
+        .slice(
+            0,
+            NEWS_PER_MAIN
+        )
+        .forEach(
+            item => {
+
+                const box =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                box.className =
+                    "box";
+
+
+                box.style.marginBottom =
+                    "15px";
+
+
+                box.innerHTML = `
+
+                    <h2>
+
+                        <a href="${getNewsUrl(
+                            item.newsId
+                        )}">
+
+                            ${escapeHtml(
+                                item.title
+                            )}
+
+                        </a>
+
+                    </h2>
+
+
+                    <p>
+
+                        <b>
+                            ${escapeHtml(
+                                item.author
+                            )}
+                        </b>
+
+                        &nbsp;|&nbsp;
+
+                        ${escapeHtml(
+                            formatNewsDate(
+                                item.newsId
+                            )
+                        )}
+
+                    </p>
+
+
+                    <p>
+
+                        ${escapeHtml(
+                            item.description
+                        )}
+
+                    </p>
+
+
+                    <a class="button"
+                       href="${getNewsUrl(
+                           item.newsId
+                       )}">
+
+                        Read More
+
+                    </a>
+
+                `;
+
+
+                latestNewsMain.appendChild(
+                    box
+                );
+
+            }
+        );
+
+
+    if (
+        data.length === 0
+    ) {
+
+        latestNewsMain.innerHTML =
+            "<p>No news is currently available.</p>";
+
+    }
+
+}
+
+
+
+/* =========================
+   COMMUNITY STATISTICS
+========================= */
+
+function displayStats(data) {
+
+    const latest =
+        data[0];
+
+
+    let latestDate =
+        "No news yet";
+
+
+    if (latest) {
+
+        latestDate =
+            formatNewsDate(
+                latest.newsId
             );
 
-    });
+    }
 
 
-    container.innerHTML = "";
+    communityStats.innerHTML = `
+
+        <b>
+            News Articles
+        </b>
+
+        <br>
+
+        ${data.length}
 
 
-    /*
-     * Show latest 5 news articles
-     */
-
-    data.slice(0, 5).forEach(item => {
-
-        const entry =
-            document.createElement("div");
+        <br><br>
 
 
-        entry.className =
-            "announcement-item";
+        <b>
+            Latest Update
+        </b>
+
+        <br>
+
+        ${escapeHtml(
+            latestDate
+        )}
 
 
-        entry.innerHTML = `
-
-            <div class="announcement-title">
-
-                <a href="/news/news.html?id=${encodeURIComponent(item.newsId)}">
-
-                    ${escapeHtml(item.title)}
-
-                </a>
-
-            </div>
+        <br><br>
 
 
-            <div class="announcement-date">
+        <b>
+            Active Projects
+        </b>
 
-                ${escapeHtml(
-                    formatNewsDate(
-                        item.newsId
+        <br>
+
+        4+
+
+
+        <br><br>
+
+
+        <b>
+            GDC Services
+        </b>
+
+        <br>
+
+        Multiple community services
+
+
+        <br><br>
+
+
+        <b>
+            Ecosystem
+        </b>
+
+        <br>
+
+        GDC Website · NeonStore · REIMP · Community
+
+    `;
+
+}
+
+
+
+/* =========================
+   LOAD NEWS
+========================= */
+
+async function loadNews() {
+
+    try {
+
+        const response =
+            await fetch(
+                NEWS_URL
+            );
+
+
+        if (
+            !response.ok
+        ) {
+
+            throw new Error(
+                "Unable to load news."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !Array.isArray(
+                data
+            )
+        ) {
+
+            throw new Error(
+                "Invalid news data."
+            );
+
+        }
+
+
+        data.sort(
+            (
+                a,
+                b
+            ) => {
+
+                return String(
+                    b.newsId
+                ).localeCompare(
+                    String(
+                        a.newsId
                     )
-                )}
+                );
 
-            </div>
+            }
+        );
 
 
-            <div class="announcement-content">
+        displaySidebarNews(
+            data
+        );
 
-                ${escapeHtml(
-                    item.description
-                )}
+
+        displayMainNews(
+            data
+        );
+
+
+        displayFeaturedNews(
+            data[0]
+        );
+
+
+        displayStats(
+            data
+        );
+
+    }
+    catch (
+        error
+    ) {
+
+        console.error(
+            "Unable to load GDC news:",
+            error
+        );
+
+
+        highlights.textContent =
+            "Unable to load news.";
+
+
+        latestNewsMain.innerHTML = `
+
+            <div class="box">
+
+                Unable to load the latest news.
 
             </div>
 
         `;
 
 
-        container.appendChild(entry);
+        featuredNews.innerHTML = `
 
-    });
+            <div class="box">
 
+                Featured news is currently
+                unavailable.
 
-})
+            </div>
 
-
-.catch(error => {
-
-    console.error(
-        "Unable to load highlights:",
-        error
-    );
+        `;
 
 
-    const container =
-        document.getElementById("highlights");
+        communityStats.innerHTML = `
 
+            <b>
+                GDC information unavailable.
+            </b>
 
-    if (container) {
-
-        container.innerHTML =
-            "Unable to load news.";
+        `;
 
     }
 
-});
+}
+
+
+
+/* =========================
+   INITIALIZE
+========================= */
+
+loadAccountStatus();
+
+loadNews();
+
 
 </script>
 
 
-
 </body>
+
 </html>
+
