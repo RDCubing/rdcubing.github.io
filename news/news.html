@@ -1,3 +1,4 @@
+html
 <!DOCTYPE html>
 
 <html lang="en">
@@ -5,7 +6,8 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>News - Geek Devs Community</title>
 
@@ -32,18 +34,18 @@
 
 <div class="header">
 
-```
 Geek Devs Community
 
 <span>| News</span>
-```
 
 </div>
 
+
 <div class="nav">
 
-```
-<a href="/">Home</a>
+<a href="/">
+    Home
+</a>
 
 <a href="/webstore/">
     WebStore
@@ -82,19 +84,21 @@ Geek Devs Community
    href="https://github.com/RDCubing">
     GitHub
 </a>
-```
 
 </div>
 
+
 <div class="container">
+
 
 <div class="sidebar">
 
+
 <h3>Settings</h3>
+
 
 <select id="themeSelector">
 
-```
 <option value="default">
     Default
 </option>
@@ -122,11 +126,12 @@ Geek Devs Community
 <option value="fluent">
     Fluent
 </option>
-```
 
 </select>
 
+
 <h3>News</h3>
+
 
 <a href="/news/">
     All News
@@ -136,33 +141,48 @@ Geek Devs Community
     Latest News
 </a>
 
+<a href="#comments">
+    Comments
+</a>
+
+
 <div class="announcement">
 
 <h4>Latest News</h4>
 
+
 <div id="latestNews">
-    Loading...
-</div>
+
+Loading...
 
 </div>
 
+
 </div>
+
+
+</div>
+
 
 <div class="content">
 
+
 <div id="article">
 
-```
+
 <h1>
     Loading news...
 </h1>
-```
+
 
 </div>
 
-</div>
 
 </div>
+
+
+</div>
+
 
 <div class="footer">
 
@@ -174,10 +194,16 @@ Powered by HTML
 
 </div>
 
+
 <script src="/js/theme.js"></script>
+
 
 <script>
 
+
+/*
+ * API endpoints
+ */
 
 const NEWS_URL =
     "https://raw.githubusercontent.com/RDCubing/gdcr-news-reimp2026/main/news/news.json";
@@ -187,12 +213,43 @@ const NEWS_IMAGE_URL =
     "https://raw.githubusercontent.com/RDCubing/gdcr-news-reimp2026/main/news/images/";
 
 
+const COMMENTS_URL =
+    "https://gdcr.dankassassin368.com/ns-status/comments";
+
+
+/*
+ * Comments per page
+ */
+
+const COMMENTS_PER_PAGE = 5;
+
+
+/*
+ * Elements
+ */
+
 const article =
     document.getElementById("article");
 
 
 const latestNews =
     document.getElementById("latestNews");
+
+
+/*
+ * Current article
+ */
+
+let currentNews = null;
+
+
+/*
+ * Comments
+ */
+
+let commentsData = [];
+
+let currentCommentPage = 1;
 
 
 /*
@@ -208,11 +265,17 @@ function escapeHtml(value) {
         return "";
     }
 
+
     return String(value)
+
         .replace(/&/g, "&amp;")
+
         .replace(/</g, "&lt;")
+
         .replace(/>/g, "&gt;")
+
         .replace(/"/g, "&quot;")
+
         .replace(/'/g, "&#039;");
 
 }
@@ -233,19 +296,33 @@ function parseNewsDate(newsId) {
 
 
     const year =
-        Number(newsId.substring(0, 4));
+        Number(
+            newsId.substring(0, 4)
+        );
+
 
     const month =
-        Number(newsId.substring(4, 6)) - 1;
+        Number(
+            newsId.substring(4, 6)
+        ) - 1;
+
 
     const day =
-        Number(newsId.substring(6, 8));
+        Number(
+            newsId.substring(6, 8)
+        );
+
 
     const hour =
-        Number(newsId.substring(9, 11));
+        Number(
+            newsId.substring(9, 11)
+        );
+
 
     const minute =
-        Number(newsId.substring(11, 13));
+        Number(
+            newsId.substring(11, 13)
+        );
 
 
     return new Date(
@@ -260,7 +337,7 @@ function parseNewsDate(newsId) {
 
 
 /*
- * Format date
+ * Format news date
  */
 
 function formatNewsDate(newsId) {
@@ -271,6 +348,40 @@ function formatNewsDate(newsId) {
 
     if (!date) {
         return newsId;
+    }
+
+
+    return date.toLocaleString(
+        undefined,
+        {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+/*
+ * Format comment timestamp
+ */
+
+function formatCommentDate(timestamp) {
+
+    if (!timestamp) {
+        return "";
+    }
+
+
+    const date =
+        new Date(timestamp);
+
+
+    if (isNaN(date.getTime())) {
+        return timestamp;
     }
 
 
@@ -305,14 +416,16 @@ const newsId =
 
 
 /*
- * No ID
+ * Load article
  */
 
 if (!newsId) {
 
     article.innerHTML = `
 
-        <h1>News</h1>
+        <h1>
+            News
+        </h1>
 
         <div class="box">
 
@@ -333,7 +446,7 @@ if (!newsId) {
 
 
 /*
- * Load news
+ * Fetch article
  */
 
 else {
@@ -372,7 +485,9 @@ else {
 
             article.innerHTML = `
 
-                <h1>News Article Not Found</h1>
+                <h1>
+                    News Article Not Found
+                </h1>
 
                 <div class="box">
 
@@ -395,18 +510,13 @@ else {
         }
 
 
-        /*
-         * Update page title
-         */
+        currentNews = item;
+
 
         document.title =
             item.title +
             " - Geek Devs Community";
 
-
-        /*
-         * Image URL
-         */
 
         const imageUrl =
             NEWS_IMAGE_URL +
@@ -415,10 +525,6 @@ else {
             ) +
             ".png";
 
-
-        /*
-         * Display article
-         */
 
         article.innerHTML = `
 
@@ -482,12 +588,41 @@ else {
 
             <br>
 
+
             <a class="button"
                href="/news/">
                 ← Back to News
             </a>
 
+
+            <h2 id="comments">
+                Comments
+            </h2>
+
+
+            <div id="commentFormContainer">
+
+            </div>
+
+
+            <div id="commentsContainer">
+
+                Loading comments...
+
+            </div>
+
+
+            <div id="commentPagination"
+                 style="margin-top: 20px;">
+
+            </div>
+
         `;
+
+
+        setupCommentForm();
+
+        loadComments();
 
     })
 
@@ -495,9 +630,12 @@ else {
 
         console.error(error);
 
+
         article.innerHTML = `
 
-            <h1>Unable to Load News</h1>
+            <h1>
+                Unable to Load News
+            </h1>
 
             <div class="box">
 
@@ -510,11 +648,743 @@ else {
                     Back to News
                 </a>
 
-            </div>
+                </div>
 
         `;
 
     });
+
+}
+
+
+/*
+ * Setup comment form
+ */
+
+function setupCommentForm() {
+
+    const container =
+        document.getElementById(
+            "commentFormContainer"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    const token =
+        localStorage.getItem("token");
+
+
+    const username =
+        localStorage.getItem("username");
+
+
+    /*
+     * Not signed in
+     */
+
+    if (!token || !username) {
+
+        container.innerHTML = `
+
+            <div class="box">
+
+                <p>
+                    You must be signed in to
+                    leave a comment.
+                </p>
+
+                <a class="button"
+                   href="/account/">
+                    Sign In
+                </a>
+
+            </div>
+
+            <br>
+
+        `;
+
+        return;
+
+    }
+
+
+    /*
+     * Signed in
+     */
+
+    container.innerHTML = `
+
+        <div class="box">
+
+            <p>
+
+                Commenting as:
+
+                <b>
+                    ${escapeHtml(username)}
+                </b>
+
+            </p>
+
+
+            <label for="commentText">
+                Comment
+            </label>
+
+            <br><br>
+
+
+            <textarea
+                id="commentText"
+                rows="5"
+                style="
+                    width: 100%;
+                    max-width: 700px;
+                    box-sizing: border-box;
+                "
+                placeholder="Write a comment..."
+            ></textarea>
+
+
+            <br><br>
+
+
+            <button
+                class="button"
+                id="postCommentButton">
+
+                Post Comment
+
+            </button>
+
+
+            <div id="commentMessage"
+                 style="margin-top: 10px;">
+
+            </div>
+
+        </div>
+
+        <br>
+
+    `;
+
+
+    document
+        .getElementById("postCommentButton")
+        .addEventListener(
+            "click",
+            postComment
+        );
+
+}
+
+
+/*
+ * Post comment
+ */
+
+async function postComment() {
+
+    const token =
+        localStorage.getItem("token");
+
+
+    const username =
+        localStorage.getItem("username");
+
+
+    const textarea =
+        document.getElementById(
+            "commentText"
+        );
+
+
+    const message =
+        document.getElementById(
+            "commentMessage"
+        );
+
+
+    if (!token || !username) {
+
+        message.textContent =
+            "Please sign in first.";
+
+        return;
+
+    }
+
+
+    const comment =
+        textarea.value.trim();
+
+
+    if (!comment) {
+
+        message.textContent =
+            "Please enter a comment.";
+
+        return;
+
+    }
+
+
+    message.textContent =
+        "Posting comment...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                COMMENTS_URL,
+                {
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            "Bearer " + token
+
+                    },
+
+                    body: JSON.stringify({
+
+                        newsId:
+                            currentNews.newsId,
+
+                        username:
+                            username,
+
+                        comment:
+                            comment
+
+                    })
+
+                }
+            );
+
+
+        let data = null;
+
+
+        try {
+
+            data =
+                await response.json();
+
+        }
+        catch (e) {
+
+            data = null;
+
+        }
+
+
+        if (!response.ok) {
+
+            message.textContent =
+                (
+                    data &&
+                    data.error
+                ) ||
+                "Unable to post comment.";
+
+            return;
+
+        }
+
+
+        textarea.value = "";
+
+
+        message.textContent =
+            "Comment posted successfully.";
+
+
+        /*
+         * Reload comments so the
+         * new comment appears.
+         */
+
+        await loadComments();
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+
+        message.textContent =
+            "Unable to connect to the server.";
+
+    }
+
+}
+
+
+/*
+ * Load comments
+ */
+
+async function loadComments() {
+
+    const commentsContainer =
+        document.getElementById(
+            "commentsContainer"
+        );
+
+
+    if (!commentsContainer) {
+        return;
+    }
+
+
+    commentsContainer.textContent =
+        "Loading comments...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                COMMENTS_URL +
+                "?newsId=" +
+                encodeURIComponent(
+                    currentNews.newsId
+                )
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to load comments."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!Array.isArray(data)) {
+
+            throw new Error(
+                "Invalid comments data."
+            );
+
+        }
+
+
+        commentsData = data;
+
+
+        /*
+         * Newest comments first.
+         *
+         * If timestamp is available,
+         * sort by timestamp.
+         */
+
+        commentsData.sort(
+            (a, b) => {
+
+                return new Date(
+                    b.timestamp
+                ) -
+                new Date(
+                    a.timestamp
+                );
+
+            }
+        );
+
+
+        currentCommentPage = 1;
+
+
+        displayComments(
+            currentCommentPage
+        );
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+
+        commentsContainer.innerHTML = `
+
+            <div class="box">
+
+                <p>
+                    Unable to load comments.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/*
+ * Display comments
+ */
+
+function displayComments(page) {
+
+    const commentsContainer =
+        document.getElementById(
+            "commentsContainer"
+        );
+
+
+    const commentPagination =
+        document.getElementById(
+            "commentPagination"
+        );
+
+
+    if (!commentsContainer) {
+        return;
+    }
+
+
+    currentCommentPage =
+        page;
+
+
+    commentsContainer.innerHTML = "";
+
+
+    const start =
+        (page - 1) *
+        COMMENTS_PER_PAGE;
+
+
+    const end =
+        start +
+        COMMENTS_PER_PAGE;
+
+
+    const pageComments =
+        commentsData.slice(
+            start,
+            end
+        );
+
+
+    /*
+     * No comments
+     */
+
+    if (pageComments.length === 0) {
+
+        commentsContainer.innerHTML = `
+
+            <div class="box">
+
+                <p>
+                    No comments yet.
+                </p>
+
+            </div>
+
+        `;
+
+        createCommentPagination();
+
+        return;
+
+    }
+
+
+    /*
+     * Create comments
+     */
+
+    pageComments.forEach(
+        comment => {
+
+            const box =
+                document.createElement(
+                    "div"
+                );
+
+
+            box.className =
+                "box";
+
+
+            box.style.marginBottom =
+                "15px";
+
+
+            box.innerHTML = `
+
+                <p>
+
+                    <b>
+                        ${escapeHtml(
+                            comment.username
+                        )}
+                    </b>
+
+                    &nbsp;|&nbsp;
+
+                    ${escapeHtml(
+                        formatCommentDate(
+                            comment.timestamp
+                        )
+                    )}
+
+                </p>
+
+
+                <hr>
+
+
+                <p>
+                    ${escapeHtml(
+                        comment.comment
+                    )}
+                </p>
+
+            `;
+
+
+            commentsContainer.appendChild(
+                box
+            );
+
+        }
+    );
+
+
+    createCommentPagination();
+
+}
+
+
+/*
+ * Comment pagination
+ */
+
+function createCommentPagination() {
+
+    const commentPagination =
+        document.getElementById(
+            "commentPagination"
+        );
+
+
+    if (!commentPagination) {
+        return;
+    }
+
+
+    commentPagination.innerHTML =
+        "";
+
+
+    const totalPages =
+        Math.ceil(
+            commentsData.length /
+            COMMENTS_PER_PAGE
+        );
+
+
+    if (totalPages <= 1) {
+        return;
+    }
+
+
+    const wrapper =
+        document.createElement(
+            "div"
+        );
+
+
+    /*
+     * Previous
+     */
+
+    if (currentCommentPage > 1) {
+
+        const previous =
+            document.createElement(
+                "button"
+            );
+
+
+        previous.className =
+            "button";
+
+
+        previous.textContent =
+            "Previous";
+
+
+        previous.style.marginRight =
+            "5px";
+
+
+        previous.addEventListener(
+            "click",
+            () => {
+
+                displayComments(
+                    currentCommentPage - 1
+                );
+
+            }
+        );
+
+
+        wrapper.appendChild(
+            previous
+        );
+
+    }
+
+
+    /*
+     * Page numbers
+     */
+
+    for (
+        let page = 1;
+        page <= totalPages;
+        page++
+    ) {
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+
+        button.className =
+            "button";
+
+
+        button.textContent =
+            page;
+
+
+        button.style.marginRight =
+            "5px";
+
+
+        if (
+            page ===
+            currentCommentPage
+        ) {
+
+            button.disabled =
+                true;
+
+        }
+
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                displayComments(
+                    page
+                );
+
+
+                document
+                    .getElementById(
+                        "comments"
+                    )
+                    .scrollIntoView({
+                        behavior:
+                            "smooth"
+                    });
+
+            }
+        );
+
+
+        wrapper.appendChild(
+            button
+        );
+
+    }
+
+
+    /*
+     * Next
+     */
+
+    if (
+        currentCommentPage <
+        totalPages
+    ) {
+
+        const next =
+            document.createElement(
+                "button"
+            );
+
+
+        next.className =
+            "button";
+
+
+        next.textContent =
+            "Next";
+
+
+        next.addEventListener(
+            "click",
+            () => {
+
+                displayComments(
+                    currentCommentPage + 1
+                );
+
+
+                document
+                    .getElementById(
+                        "comments"
+                    )
+                    .scrollIntoView({
+                        behavior:
+                            "smooth"
+                    });
+
+            }
+        );
+
+
+        wrapper.appendChild(
+            next
+        );
+
+    }
+
+
+    commentPagination.appendChild(
+        wrapper
+    );
 
 }
 
@@ -525,59 +1395,81 @@ else {
 
 fetch(NEWS_URL)
 
-.then(response => response.json())
+.then(response => {
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Unable to load news."
+        );
+
+    }
+
+    return response.json();
+
+})
 
 .then(data => {
 
-    data.sort((a, b) =>
-        String(b.newsId)
-            .localeCompare(
-                String(a.newsId)
-            )
+    data.sort(
+        (a, b) =>
+            String(b.newsId)
+                .localeCompare(
+                    String(a.newsId)
+                )
     );
 
 
     latestNews.innerHTML = "";
 
 
-    data.slice(0, 5).forEach(item => {
+    data
+        .slice(0, 5)
+        .forEach(item => {
 
-        const entry =
-            document.createElement("div");
-
-
-        entry.className =
-            "announcement-item";
-
-
-        entry.innerHTML = `
-
-            <div class="announcement-title">
-
-                <a href="/news/news.html?id=${encodeURIComponent(item.newsId)}">
-
-                    ${escapeHtml(item.title)}
-
-                </a>
-
-            </div>
-
-            <div class="announcement-date">
-
-                ${escapeHtml(
-                    formatNewsDate(
-                        item.newsId
-                    )
-                )}
-
-            </div>
-
-        `;
+            const entry =
+                document.createElement(
+                    "div"
+                );
 
 
-        latestNews.appendChild(entry);
+            entry.className =
+                "announcement-item";
 
-    });
+
+            entry.innerHTML = `
+
+                <div class="announcement-title">
+
+                    <a href="/news/news.html?id=${encodeURIComponent(item.newsId)}">
+
+                        ${escapeHtml(
+                            item.title
+                        )}
+
+                    </a>
+
+                </div>
+
+
+                <div class="announcement-date">
+
+                    ${escapeHtml(
+                        formatNewsDate(
+                            item.newsId
+                        )
+                    )}
+
+                </div>
+
+            `;
+
+
+            latestNews.appendChild(
+                entry
+            );
+
+        });
 
 })
 
