@@ -938,63 +938,81 @@ async function postComment() {
 async function loadComments() {
 
     const commentsContainer =
-        document.getElementById(
-            "commentsContainer"
-        );
-
+        document.getElementById("commentsContainer");
 
     if (!commentsContainer) {
         return;
     }
 
-
     commentsContainer.textContent =
         "Loading comments...";
 
+    const url =
+        COMMENTS_URL +
+        "?newsId=" +
+        encodeURIComponent(currentNews.newsId);
+
+    console.log("Loading comments from:", url);
 
     try {
 
         const response =
-            await fetch(
-                COMMENTS_URL +
-                "?newsId=" +
-                encodeURIComponent(
-                    currentNews.newsId
-                )
-            );
+            await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
 
+        console.log(
+            "Comments response:",
+            response.status,
+            response.statusText
+        );
+
+        const text =
+            await response.text();
+
+        console.log(
+            "Comments response body:",
+            text
+        );
 
         if (!response.ok) {
 
             throw new Error(
-                "Unable to load comments."
+                "HTTP " +
+                response.status +
+                ": " +
+                text
             );
 
         }
 
+        let data;
 
-        const data =
-            await response.json();
+        try {
 
+            data = JSON.parse(text);
+
+        }
+        catch (error) {
+
+            throw new Error(
+                "Server did not return valid JSON."
+            );
+
+        }
 
         if (!Array.isArray(data)) {
 
             throw new Error(
-                "Invalid comments data."
+                "Comments response is not an array."
             );
 
         }
 
-
         commentsData = data;
-
-
-        /*
-         * Newest comments first.
-         *
-         * If timestamp is available,
-         * sort by timestamp.
-         */
 
         commentsData.sort(
             (a, b) => {
@@ -1009,19 +1027,17 @@ async function loadComments() {
             }
         );
 
-
         currentCommentPage = 1;
 
-
-        displayComments(
-            currentCommentPage
-        );
+        displayComments(1);
 
     }
     catch (error) {
 
-        console.error(error);
-
+        console.error(
+            "Comments error:",
+            error
+        );
 
         commentsContainer.innerHTML = `
 
@@ -1029,6 +1045,11 @@ async function loadComments() {
 
                 <p>
                     Unable to load comments.
+                </p>
+
+                <p>
+                    <b>Error:</b>
+                    ${escapeHtml(error.message)}
                 </p>
 
             </div>
