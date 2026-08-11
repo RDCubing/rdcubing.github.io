@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>News - Geek Devs Community</title>
+
+<link rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicon-32x32.png">
+
+<link rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/favicon-16x16.png">
+
+<link rel="apple-touch-icon"
+      href="/apple-touch-icon.png">
+
+<link id="theme-style"
+      rel="stylesheet"
+      href="/css/index/classic.css">
+
+</head>
+
+<body>
+
+<div class="header">
+
+```
+Geek Devs Community
+
+<span>| News</span>
+```
+
+</div>
+
+<div class="nav">
+
+```
+<a href="/">Home</a>
+
+<a href="/webstore/">
+    WebStore
+</a>
+
+<a href="/downloads/">
+    Downloads
+</a>
+
+<a target="_blank"
+   href="https://discord.gg/YBsVhkcHT4">
+    Discord
+</a>
+
+<a href="/services/">
+    Services
+</a>
+
+<a href="/news/">
+    News
+</a>
+
+<a href="/account/">
+    Account
+</a>
+
+<a href="https://gdcr.dankassassin368.com/">
+    Subdomain
+</a>
+
+<a href="https://rdcubing.github.io/">
+    GitHub Pages
+</a>
+
+<a target="_blank"
+   href="https://github.com/RDCubing">
+    GitHub
+</a>
+```
+
+</div>
+
+<div class="container">
+
+<div class="sidebar">
+
+<h3>Settings</h3>
+
+<select id="themeSelector">
+
+```
+<option value="default">
+    Default
+</option>
+
+<option value="classic">
+    Classic
+</option>
+
+<option value="standard">
+    Standard
+</option>
+
+<option value="luna">
+    Luna
+</option>
+
+<option value="vista">
+    Vista
+</option>
+
+<option value="msdn">
+    MSDN
+</option>
+
+<option value="fluent">
+    Fluent
+</option>
+```
+
+</select>
+
+<h3>News</h3>
+
+<a href="/news/">
+    All News
+</a>
+
+<a href="/news/#latest">
+    Latest News
+</a>
+
+<div class="announcement">
+
+<h4>Latest News</h4>
+
+<div id="latestNews">
+    Loading...
+</div>
+
+</div>
+
+</div>
+
+<div class="content">
+
+<div id="article">
+
+```
+<h1>
+    Loading news...
+</h1>
+```
+
+</div>
+
+</div>
+
+</div>
+
+<div class="footer">
+
+© 2026 Geek Devs Community<br>
+
+REIMP - Reimplementation Project<br>
+
+Powered by HTML
+
+</div>
+
+<script src="/js/theme.js"></script>
+
+<script>
+
+
+const NEWS_URL =
+    "https://raw.githubusercontent.com/RDCubing/gdcr-news-reimp2026/main/news/news.json";
+
+
+const NEWS_IMAGE_URL =
+    "https://raw.githubusercontent.com/RDCubing/gdcr-news-reimp2026/main/news/images/";
+
+
+const article =
+    document.getElementById("article");
+
+
+const latestNews =
+    document.getElementById("latestNews");
+
+
+/*
+ * Escape HTML
+ */
+
+function escapeHtml(value) {
+
+    if (
+        value === undefined ||
+        value === null
+    ) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/*
+ * Parse YYYYMMDD-HHMM
+ */
+
+function parseNewsDate(newsId) {
+
+    if (
+        !newsId ||
+        !/^\d{8}-\d{4}$/.test(newsId)
+    ) {
+        return null;
+    }
+
+
+    const year =
+        Number(newsId.substring(0, 4));
+
+    const month =
+        Number(newsId.substring(4, 6)) - 1;
+
+    const day =
+        Number(newsId.substring(6, 8));
+
+    const hour =
+        Number(newsId.substring(9, 11));
+
+    const minute =
+        Number(newsId.substring(11, 13));
+
+
+    return new Date(
+        year,
+        month,
+        day,
+        hour,
+        minute
+    );
+
+}
+
+
+/*
+ * Format date
+ */
+
+function formatNewsDate(newsId) {
+
+    const date =
+        parseNewsDate(newsId);
+
+
+    if (!date) {
+        return newsId;
+    }
+
+
+    return date.toLocaleString(
+        undefined,
+        {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+/*
+ * Get news ID from URL
+ *
+ * /news/news.html?id=20260811-0830
+ */
+
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+const newsId =
+    params.get("id");
+
+
+/*
+ * No ID
+ */
+
+if (!newsId) {
+
+    article.innerHTML = `
+
+        <h1>News</h1>
+
+        <div class="box">
+
+            <p>
+                No news article was specified.
+            </p>
+
+            <a class="button"
+               href="/news/">
+                Back to News
+            </a>
+
+        </div>
+
+    `;
+
+}
+
+
+/*
+ * Load news
+ */
+
+else {
+
+    fetch(NEWS_URL)
+
+    .then(response => {
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to load news."
+            );
+
+        }
+
+        return response.json();
+
+    })
+
+    .then(data => {
+
+        const item =
+            data.find(
+                news =>
+                    String(news.newsId) ===
+                    String(newsId)
+            );
+
+
+        /*
+         * Article not found
+         */
+
+        if (!item) {
+
+            article.innerHTML = `
+
+                <h1>News Article Not Found</h1>
+
+                <div class="box">
+
+                    <p>
+                        The requested news article
+                        could not be found.
+                    </p>
+
+                    <a class="button"
+                       href="/news/">
+                        Back to News
+                    </a>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        /*
+         * Update page title
+         */
+
+        document.title =
+            item.title +
+            " - Geek Devs Community";
+
+
+        /*
+         * Image URL
+         */
+
+        const imageUrl =
+            NEWS_IMAGE_URL +
+            encodeURIComponent(
+                item.newsId
+            ) +
+            ".png";
+
+
+        /*
+         * Display article
+         */
+
+        article.innerHTML = `
+
+            <h1>
+                ${escapeHtml(item.title)}
+            </h1>
+
+            <div class="box">
+
+                <img
+                    src="${imageUrl}"
+                    alt="${escapeHtml(item.title)}"
+                    style="
+                        width: 100%;
+                        max-width: 1000px;
+                        height: auto;
+                        display: block;
+                        margin-bottom: 20px;
+                    "
+                    onerror="
+                        this.style.display='none';
+                    "
+                >
+
+                <p>
+
+                    <b>
+                        ${escapeHtml(item.author)}
+                    </b>
+
+                    &nbsp;|&nbsp;
+
+                    ${escapeHtml(
+                        formatNewsDate(
+                            item.newsId
+                        )
+                    )}
+
+                </p>
+
+                <hr>
+
+                <p>
+
+                    <b>
+                        ${escapeHtml(
+                            item.description
+                        )}
+                    </b>
+
+                </p>
+
+                <p>
+                    ${escapeHtml(
+                        item.content
+                    )}
+                </p>
+
+            </div>
+
+
+            <br>
+
+            <a class="button"
+               href="/news/">
+                ← Back to News
+            </a>
+
+        `;
+
+    })
+
+    .catch(error => {
+
+        console.error(error);
+
+        article.innerHTML = `
+
+            <h1>Unable to Load News</h1>
+
+            <div class="box">
+
+                <p>
+                    The news service could not be reached.
+                </p>
+
+                <a class="button"
+                   href="/news/">
+                    Back to News
+                </a>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+/*
+ * Load latest news sidebar
+ */
+
+fetch(NEWS_URL)
+
+.then(response => response.json())
+
+.then(data => {
+
+    data.sort((a, b) =>
+        String(b.newsId)
+            .localeCompare(
+                String(a.newsId)
+            )
+    );
+
+
+    latestNews.innerHTML = "";
+
+
+    data.slice(0, 5).forEach(item => {
+
+        const entry =
+            document.createElement("div");
+
+
+        entry.className =
+            "announcement-item";
+
+
+        entry.innerHTML = `
+
+            <div class="announcement-title">
+
+                <a href="/news/news.html?id=${encodeURIComponent(item.newsId)}">
+
+                    ${escapeHtml(item.title)}
+
+                </a>
+
+            </div>
+
+            <div class="announcement-date">
+
+                ${escapeHtml(
+                    formatNewsDate(
+                        item.newsId
+                    )
+                )}
+
+            </div>
+
+        `;
+
+
+        latestNews.appendChild(entry);
+
+    });
+
+})
+
+.catch(() => {
+
+    latestNews.textContent =
+        "Unable to load news.";
+
+});
+
+
+</script>
+
+</body>
+
+</html>
