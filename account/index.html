@@ -508,104 +508,141 @@ document
 
 
 /*
- * REGISTER
- */
+
+* REGISTER
+  */
 
 document
-    .getElementById("registerButton")
-    .addEventListener("click", async () => {
+.getElementById("registerButton")
+.addEventListener("click", async () => {
 
-        const username =
-            document
-                .getElementById("registerUsername")
-                .value
-                .trim();
+    const username =
+        document
+            .getElementById("registerUsername")
+            .value
+            .trim();
 
-        const email =
-            document
-                .getElementById("registerEmail")
-                .value
-                .trim();
+    const email =
+        document
+            .getElementById("registerEmail")
+            .value
+            .trim();
 
-        const password =
-            document
-                .getElementById("registerPassword")
-                .value;
+    const password =
+        document
+            .getElementById("registerPassword")
+            .value;
+
+    const passwordVerify =
+        document
+            .getElementById("registerPasswordVerify")
+            .value;
 
 
-        const message =
-            document.getElementById(
-                "registerMessage"
+    const message =
+        document.getElementById(
+            "registerMessage"
+        );
+
+
+    /*
+     * Verify passwords
+     */
+
+    if (password !== passwordVerify) {
+
+        message.textContent =
+            "Passwords do not match.";
+
+        return;
+
+    }
+
+
+    if (!username || !email || !password) {
+
+        message.textContent =
+            "Please fill in all fields.";
+
+        return;
+
+    }
+
+
+    message.textContent =
+        "Creating account...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/register`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        username,
+                        email,
+                        password
+                    })
+                }
             );
 
 
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            message.textContent =
+                data.error ||
+                "Unable to create account.";
+
+            return;
+
+        }
+
+
         message.textContent =
-            "Creating account...";
+            "Account created successfully. You can now sign in.";
 
 
-        try {
+        document
+            .getElementById("registerUsername")
+            .value = "";
 
-            const response =
-                await fetch(
-                    `${API}/register`,
-                    {
-                        method: "POST",
+        document
+            .getElementById("registerEmail")
+            .value = "";
 
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
+        document
+            .getElementById("registerPassword")
+            .value = "";
 
-                        body: JSON.stringify({
-                            username,
-                            email,
-                            password
-                        })
-                    }
-                );
+        document
+            .getElementById("registerPasswordVerify")
+            .value = "";
 
+    }
+    catch (error) {
 
-            const data =
-                await response.json();
+        message.textContent =
+            "Unable to connect to the server.";
 
+        console.error(error);
 
-            if (!response.ok) {
+    }
 
-                message.textContent =
-                    data.error ||
-                    "Unable to create account.";
-
-                return;
-
-            }
+});
 
 
-            message.textContent =
-                "Account created successfully. You can now sign in.";
-
-            document
-                .getElementById("registerUsername")
-                .value = "";
-
-            document
-                .getElementById("registerEmail")
-                .value = "";
-
-            document
-                .getElementById("registerPassword")
-                .value = "";
-
-        }
-        catch (error) {
-
-            message.textContent =
-                "Unable to connect to the server.";
-
-            console.error(error);
-
-        }
-
-    });
 
 
 /*
