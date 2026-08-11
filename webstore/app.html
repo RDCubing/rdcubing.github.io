@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -29,203 +28,207 @@
 
 </head>
 
+
 <body>
+
 
 <div class="header">
 
+    Geek Devs Community
 
-Geek Devs Community
-
-<span>| WebStore</span>
-
+    <span>| WebStore</span>
 
 </div>
+
+
 
 <div class="nav">
 
+    <a href="/">Home</a>
 
-<a href="/">Home</a>
+    <a href="/webstore/">WebStore</a>
 
-<a href="/webstore/">
-    WebStore
-</a>
+    <a href="/webstore/apps/">All Apps</a>
 
-<a href="/webstore/apps/">
-    All Apps
-</a>
+    <a href="/downloads/">Downloads</a>
 
-<a href="/downloads/">
-    Downloads
-</a>
+    <a target="_blank"
+       href="https://discord.gg/YBsVhkcHT4">
+        Discord
+    </a>
 
-<a target="_blank"
-   href="https://discord.gg/YBsVhkcHT4">
-    Discord
-</a>
+    <a href="/services/">
+        Services
+    </a>
 
-<a href="/services/">
-    Services
-</a>
+    <a href="/news/">
+        News
+    </a>
 
-<a href="/news/">
-    News
-</a>
+    <a href="/account/">
+        Account
+    </a>
 
-<a href="/account/">
-    Account
-</a>
+    <a href="https://gdcr.dankassassin368.com/">
+        Subdomain
+    </a>
 
-<a href="https://gdcr.dankassassin368.com/">
-    Subdomain
-</a>
+    <a href="https://rdcubing.github.io/">
+        GitHub Pages
+    </a>
 
-<a href="https://rdcubing.github.io/">
-    GitHub Pages
-</a>
-
-<a target="_blank"
-   href="https://github.com/RDCubing">
-    GitHub
-</a>
-
+    <a target="_blank"
+       href="https://github.com/RDCubing">
+        GitHub
+    </a>
 
 </div>
+
+
 
 <div class="container">
 
-<div class="sidebar">
 
-<h3>
-    Settings
-</h3>
-
-<select id="themeSelector">
+    <div class="sidebar">
 
 
-<option value="default">
-    Default
-</option>
-
-<option value="classic">
-    Classic
-</option>
-
-<option value="standard">
-    Standard
-</option>
-
-<option value="luna">
-    Luna
-</option>
-
-<option value="vista">
-    Vista
-</option>
-
-<option value="msdn">
-    MSDN
-</option>
-
-<option value="fluent">
-    Fluent
-</option>
+        <h3>Settings</h3>
 
 
-</select>
+        <select id="themeSelector">
 
-<h3>
-    Application
-</h3>
+            <option value="default">
+                Default
+            </option>
 
-<a href="#details">
-    Details
-</a>
+            <option value="classic">
+                Classic
+            </option>
 
-<a href="#description">
-    Description
-</a>
+            <option value="standard">
+                Standard
+            </option>
 
-<a href="#information">
-    Information
-</a>
+            <option value="luna">
+                Luna
+            </option>
 
-<a href="#reviews">
-    Reviews
-</a>
+            <option value="vista">
+                Vista
+            </option>
 
-<h3 style="margin-top:24px;">
-    Resources
-</h3>
+            <option value="msdn">
+                MSDN
+            </option>
 
-<a href="/webstore/">
-    WebStore Home
-</a>
+            <option value="fluent">
+                Fluent
+            </option>
 
-<a href="/webstore/apps/">
-    All Applications
-</a>
+        </select>
 
-<a href="/downloads/">
-    Downloads
-</a>
 
-<a href="https://github.com/RDCubing"
-target="_blank">
-GitHub </a>
+
+        <h3>Application</h3>
+
+        <a href="#details">
+            Details
+        </a>
+
+        <a href="#description">
+            Description
+        </a>
+
+        <a href="#information">
+            Information
+        </a>
+
+        <a href="#reviews">
+            Reviews
+        </a>
+
+
+
+        <h3 style="margin-top:24px;">
+            Resources
+        </h3>
+
+        <a href="/webstore/">
+            WebStore Home
+        </a>
+
+        <a href="/webstore/apps/">
+            All Applications
+        </a>
+
+        <a href="/downloads/">
+            Downloads
+        </a>
+
+        <a href="https://github.com/RDCubing"
+           target="_blank">
+            GitHub
+        </a>
+
+
+    </div>
+
+
+
+    <div class="content">
+
+
+        <div id="app">
+
+            Loading application...
+
+        </div>
+
+
+    </div>
+
 
 </div>
 
-<div class="content">
 
-<div id="app">
-
-
-Loading application...
-
-
-</div>
-
-</div>
-
-</div>
 
 <div class="footer">
 
+    © 2026 Geek Devs Community<br>
 
-© 2026 Geek Devs Community<br>
-
-NeonStore WebStore
-
+    NeonStore WebStore
 
 </div>
 
+
+
 <script src="/js/theme.js"></script>
+
 
 <script>
 
 
-/*
- * API endpoints
- */
+/* =========================
+   API
+========================= */
 
-const APPS_URL =
+const API_URL =
+    "https://gdcr.dankassassin368.com/ns-status/reviews";
+
+const PROJECTS_URL =
     "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/projects.json";
 
 
-const REVIEWS_URL =
-    "https://gdcr.dankassassin368.com/ns-status/reviews/";
-
-
-/*
- * Reviews per page
- */
+/* =========================
+   SETTINGS
+========================= */
 
 const REVIEWS_PER_PAGE = 5;
 
 
-/*
- * URL parameters
- */
+/* =========================
+   URL
+========================= */
 
 const params =
     new URLSearchParams(
@@ -237,43 +240,37 @@ const appId =
     params.get("id");
 
 
-/*
- * State
- */
+/* =========================
+   STATE
+========================= */
 
 let currentApp = null;
 
-let reviewsData = [];
+let reviews = [];
 
 let currentReviewPage = 1;
 
 
-
-/*
- * Elements
- */
+/* =========================
+   ELEMENT
+========================= */
 
 const appContainer =
     document.getElementById("app");
 
 
+/* =========================
+   ESCAPE HTML
+========================= */
 
-/*
- * Escape HTML
- */
-
-function escapeHtml(value)
-{
+function escapeHtml(value) {
 
     if (
         value === undefined ||
         value === null
     ) {
-
         return "";
-
     }
-
 
     return String(value)
 
@@ -290,33 +287,55 @@ function escapeHtml(value)
 }
 
 
+/* =========================
+   STARS
+========================= */
 
-/*
- * Format date
- */
+function getStars(rating) {
 
-function formatReviewDate(value)
-{
+    const value =
+        Number(rating) || 0;
 
-    if (!value) {
+    let result = "";
+
+    for (
+        let i = 1;
+        i <= 5;
+        i++
+    ) {
+
+        result +=
+            i <= value
+                ? "★"
+                : "☆";
+
+    }
+
+    return result;
+
+}
+
+
+/* =========================
+   DATE
+========================= */
+
+function formatReviewDate(dateValue) {
+
+    if (!dateValue) {
         return "";
     }
 
-
     const date =
-        new Date(value);
-
+        new Date(dateValue);
 
     if (
         isNaN(
             date.getTime()
         )
     ) {
-
-        return value;
-
+        return "";
     }
-
 
     return date.toLocaleString(
         undefined,
@@ -332,102 +351,166 @@ function formatReviewDate(value)
 }
 
 
+/* =========================
+   LOAD APP
+========================= */
 
-/*
- * Generate stars
- */
+async function loadApp() {
 
-function renderStars(rating)
-{
+    if (!appId) {
 
-    const value =
-        Number(rating) || 0;
+        appContainer.innerHTML = `
 
+            <h1>
+                Application
+            </h1>
 
-    let stars = "";
+            <div class="panel">
 
+                <p>
+                    No application was specified.
+                </p>
 
-    for (
-        let i = 1;
-        i <= 5;
-        i++
-    ) {
+                <a class="button"
+                   href="/webstore/apps/">
+                    Back to Applications
+                </a>
 
-        stars +=
-            i <= value
-                ? "★"
-                : "☆";
+            </div>
 
-    }
+        `;
 
-
-    return stars;
-
-}
-
-
-
-/*
- * Calculate average rating
- */
-
-function getAverageRating()
-{
-
-    if (
-        !reviewsData.length
-    ) {
-
-        return 0;
+        return;
 
     }
 
 
-    const total =
-        reviewsData.reduce(
-            (
-                sum,
-                review
-            ) =>
-                sum +
-                Number(
-                    review.rating
-                ),
-            0
+    try {
+
+        const response =
+            await fetch(
+                PROJECTS_URL
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to load applications."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const apps = [
+
+            ...(data.NeonStore || []),
+
+            ...(data.OtherPlatforms || [])
+
+        ];
+
+
+        currentApp =
+            apps.find(
+                app =>
+                    String(app.Id) ===
+                    String(appId)
+            );
+
+
+        if (!currentApp) {
+
+            appContainer.innerHTML = `
+
+                <h1>
+                    Application Not Found
+                </h1>
+
+                <div class="panel">
+
+                    <p>
+                        The requested application
+                        could not be found.
+                    </p>
+
+                    <a class="button"
+                       href="/webstore/apps/">
+                        Back to Applications
+                    </a>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        document.title =
+            currentApp.Title +
+            " - Geek Devs Community WebStore";
+
+
+        displayApp();
+
+
+        await loadReviews();
+
+    }
+    catch (error) {
+
+        console.error(
+            "Application loading error:",
+            error
         );
 
 
-    return (
-        total /
-        reviewsData.length
-    );
+        appContainer.innerHTML = `
+
+            <h1>
+                Error
+            </h1>
+
+            <div class="panel">
+
+                <p>
+                    Unable to load application
+                    information.
+                </p>
+
+                <p>
+                    ${escapeHtml(
+                        error.message
+                    )}
+                </p>
+
+            </div>
+
+        `;
+
+    }
 
 }
 
 
+/* =========================
+   DISPLAY APP
+========================= */
 
-/*
- * Show application
- */
-
-function showApp(app)
-{
-
-    currentApp =
-        app;
-
-
-    document.title =
-        app.Title +
-        " - Geek Devs Community WebStore";
-
+function displayApp() {
 
     appContainer.innerHTML = `
 
         <h1 id="details">
 
             ${escapeHtml(
-                app.Title
+                currentApp.Title
             )}
 
         </h1>
@@ -435,26 +518,28 @@ function showApp(app)
 
         <div class="panel">
 
+
             <div class="app-header">
 
 
                 <img
                     class="app-icon"
                     src="${escapeHtml(
-                        app.ImagePath
+                        currentApp.ImagePath
                     )}"
                     alt="${escapeHtml(
-                        app.Title
+                        currentApp.Title
                     )}"
                 >
 
 
                 <div>
 
+
                     <div class="title">
 
                         ${escapeHtml(
-                            app.Title
+                            currentApp.Title
                         )}
 
                     </div>
@@ -463,13 +548,15 @@ function showApp(app)
                     <div class="subtitle">
 
                         ${escapeHtml(
-                            app.Publisher
+                            currentApp.Publisher ||
+                            "Unknown Publisher"
                         )}
 
                         <br>
 
                         ${escapeHtml(
-                            app.Subtitle
+                            currentApp.Subtitle ||
+                            ""
                         )}
 
                     </div>
@@ -481,7 +568,7 @@ function showApp(app)
                     <a
                         class="button"
                         href="${escapeHtml(
-                            app.DownloadUrl
+                            currentApp.DownloadUrl
                         )}"
                         target="_blank"
                         rel="noopener"
@@ -497,46 +584,41 @@ function showApp(app)
 
             </div>
 
+
         </div>
 
 
 
         <h2 id="description">
-
             Description
-
         </h2>
 
 
         <div class="panel">
 
-            ${escapeHtml(
-                app.Description ||
+            ${
+                currentApp.Description ||
                 "No description available."
-            ).replace(
-                /\n/g,
-                "<br>"
-            )}
+            }
 
         </div>
 
 
 
         <h2 id="information">
-
             Information
-
         </h2>
 
 
         <div class="panel">
+
 
             <b>
                 Publisher:
             </b>
 
             ${escapeHtml(
-                app.Publisher ||
+                currentApp.Publisher ||
                 "Unknown"
             )}
 
@@ -549,7 +631,7 @@ function showApp(app)
             </b>
 
             ${escapeHtml(
-                app.Platform ||
+                currentApp.Platform ||
                 "Unknown"
             )}
 
@@ -562,18 +644,17 @@ function showApp(app)
             </b>
 
             ${escapeHtml(
-                app.Version ||
+                currentApp.Version ||
                 "Unknown"
             )}
+
 
         </div>
 
 
 
         <h2 id="reviews">
-
             Reviews
-
         </h2>
 
 
@@ -584,54 +665,338 @@ function showApp(app)
         </div>
 
 
-        <div
-            id="reviewFormContainer"
-            style="margin-top: 15px;"
-        >
+        <div id="reviewForm">
+
         </div>
 
 
-        <div
-            id="reviewsContainer"
-            style="margin-top: 15px;"
-        >
+        <div id="reviewsContainer">
 
             Loading reviews...
 
         </div>
 
 
-        <div
-            id="reviewPagination"
-            style="margin-top: 20px;"
-        >
+        <div id="reviewPagination"
+             style="margin-top:20px;">
+
         </div>
 
     `;
 
-
-    setupReviewForm();
-
-    loadReviews();
-
 }
 
 
+/* =========================
+   LOAD REVIEWS
+========================= */
 
-/*
- * Setup review form
- */
-
-function setupReviewForm()
-{
+async function loadReviews() {
 
     const container =
         document.getElementById(
-            "reviewFormContainer"
+            "reviewsContainer"
         );
 
 
     if (!container) {
+        return;
+    }
+
+
+    container.innerHTML =
+        "Loading reviews...";
+
+
+    /*
+     * IMPORTANT:
+     *
+     * The API route is:
+     *
+     * GET /ns-status/reviews/:appId
+     *
+     * NOT:
+     *
+     * GET /ns-status/reviews?appId=...
+     */
+
+    const url =
+        API_URL +
+        "/" +
+        encodeURIComponent(
+            currentApp.Id
+        );
+
+
+    console.log(
+        "Loading reviews from:",
+        url
+    );
+
+
+    try {
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method: "GET",
+                    headers: {
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        const text =
+            await response.text();
+
+
+        console.log(
+            "Reviews response:",
+            response.status,
+            text
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+
+        let data;
+
+
+        try {
+
+            data =
+                JSON.parse(text);
+
+        }
+        catch {
+
+            throw new Error(
+                "Reviews API returned invalid JSON."
+            );
+
+        }
+
+
+        if (!Array.isArray(data)) {
+
+            throw new Error(
+                "Reviews API did not return an array."
+            );
+
+        }
+
+
+        reviews =
+            data;
+
+
+        /*
+         * Newest updated reviews first
+         */
+
+        reviews.sort(
+            (a, b) => {
+
+                return new Date(
+                    b.updatedAt ||
+                    b.createdAt
+                ) -
+                new Date(
+                    a.updatedAt ||
+                    a.createdAt
+                );
+
+            }
+        );
+
+
+        currentReviewPage = 1;
+
+
+        displayReviewSummary();
+
+
+        displayReviewForm();
+
+
+        displayReviews(
+            1
+        );
+
+
+    }
+    catch (error) {
+
+        console.error(
+            "Reviews error:",
+            error
+        );
+
+
+        document.getElementById(
+            "reviewSummary"
+        ).innerHTML = `
+
+            <div class="panel">
+
+                <b>
+                    Reviews
+                </b>
+
+                <p>
+                    Unable to load reviews.
+                </p>
+
+            </div>
+
+        `;
+
+
+        container.innerHTML = `
+
+            <div class="panel">
+
+                <b>
+                    Error:
+                </b>
+
+                ${escapeHtml(
+                    error.message
+                )}
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================
+   REVIEW SUMMARY
+========================= */
+
+function displayReviewSummary() {
+
+    const summary =
+        document.getElementById(
+            "reviewSummary"
+        );
+
+
+    if (!summary) {
+        return;
+    }
+
+
+    if (reviews.length === 0) {
+
+        summary.innerHTML = `
+
+            <div class="panel">
+
+                <b>
+                    No reviews yet.
+                </b>
+
+                <p>
+                    Be the first to review
+                    this application.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const total =
+        reviews.reduce(
+            (
+                sum,
+                review
+            ) =>
+                sum +
+                Number(
+                    review.rating
+                ),
+            0
+        );
+
+
+    const average =
+        total /
+        reviews.length;
+
+
+    summary.innerHTML = `
+
+        <div class="panel">
+
+            <div style="font-size:24px;">
+
+                ${getStars(
+                    Math.round(
+                        average
+                    )
+                )}
+
+            </div>
+
+
+            <div>
+
+                <b>
+                    ${average.toFixed(1)}
+                    out of 5
+                </b>
+
+                &nbsp;
+
+                (${reviews.length}
+                ${
+                    reviews.length === 1
+                        ? "review"
+                        : "reviews"
+                })
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================
+   REVIEW FORM
+========================= */
+
+function displayReviewForm() {
+
+    const form =
+        document.getElementById(
+            "reviewForm"
+        );
+
+
+    if (!form) {
         return;
     }
 
@@ -652,33 +1017,26 @@ function setupReviewForm()
      * Not signed in
      */
 
-    if (
-        !token ||
-        !username
-    ) {
+    if (!token || !username) {
 
-        container.innerHTML = `
+        form.innerHTML = `
 
-            <div class="box">
+            <div class="panel">
 
                 <p>
-
-                    You must be signed in
-                    to leave a review.
-
+                    Sign in to leave a review.
                 </p>
 
-
-                <a
-                    class="button"
-                    href="/account/"
-                >
+                <a class="button"
+                   href="/account/">
 
                     Sign In
 
                 </a>
 
             </div>
+
+            <br>
 
         `;
 
@@ -688,12 +1046,49 @@ function setupReviewForm()
 
 
     /*
-     * Signed in
+     * Check if this user
+     * already has a review.
      */
 
-    container.innerHTML = `
+    const existingReview =
+        reviews.find(
+            review =>
+                String(
+                    review.username
+                ) ===
+                String(username)
+        );
 
-        <div class="box">
+
+    const existingRating =
+        existingReview
+            ? existingReview.rating
+            : 5;
+
+
+    const existingComment =
+        existingReview
+            ? existingReview.comment
+            : "";
+
+
+    form.innerHTML = `
+
+        <div class="panel">
+
+
+            <p>
+
+                <b>
+                    ${
+                        existingReview
+                            ? "Your Review"
+                            : "Write a Review"
+                    }
+                </b>
+
+            </p>
+
 
             <p>
 
@@ -708,36 +1103,63 @@ function setupReviewForm()
             </p>
 
 
-            <label for="reviewRating">
+            <label
+                for="reviewRating">
 
                 Rating
 
             </label>
 
 
-            <br>
+            <br><br>
 
 
-            <select id="reviewRating">
+            <select
+                id="reviewRating">
 
-                <option value="5">
-                    5 - Excellent
+                <option value="5"
+                    ${
+                        Number(existingRating) === 5
+                            ? "selected"
+                            : ""
+                    }>
+                    ★★★★★ - 5
                 </option>
 
-                <option value="4">
-                    4 - Good
+                <option value="4"
+                    ${
+                        Number(existingRating) === 4
+                            ? "selected"
+                            : ""
+                    }>
+                    ★★★★☆ - 4
                 </option>
 
-                <option value="3">
-                    3 - Average
+                <option value="3"
+                    ${
+                        Number(existingRating) === 3
+                            ? "selected"
+                            : ""
+                    }>
+                    ★★★☆☆ - 3
                 </option>
 
-                <option value="2">
-                    2 - Poor
+                <option value="2"
+                    ${
+                        Number(existingRating) === 2
+                            ? "selected"
+                            : ""
+                    }>
+                    ★★☆☆☆ - 2
                 </option>
 
-                <option value="1">
-                    1 - Terrible
+                <option value="1"
+                    ${
+                        Number(existingRating) === 1
+                            ? "selected"
+                            : ""
+                    }>
+                    ★☆☆☆☆ - 1
                 </option>
 
             </select>
@@ -746,7 +1168,8 @@ function setupReviewForm()
             <br><br>
 
 
-            <label for="reviewComment">
+            <label
+                for="reviewComment">
 
                 Review
 
@@ -761,965 +1184,782 @@ function setupReviewForm()
                 rows="5"
                 maxlength="500"
                 style="
-                    width: 100%;
-                    max-width: 700px;
-                    box-sizing: border-box;
+                    width:100%;
+                    max-width:700px;
+                    box-sizing:border-box;
                 "
                 placeholder="Write your review..."
-            ></textarea>
+            >${escapeHtml(
+                existingComment
+            )}</textarea>
 
 
-        <br><br>
+            <br><br>
 
 
-        <button
-            class="button"
-            id="postReviewButton"
-        >
+            <button
+                class="button"
+                id="submitReviewButton">
 
-            Submit Review
+                ${
+                    existingReview
+                        ? "Update Review"
+                        : "Post Review"
+                }
 
-        </button>
+            </button>
 
 
-        <div
-            id="reviewMessage"
-            style="margin-top: 10px;"
-        >
+            ${
+                existingReview
+                    ? `
+                        <button
+                            class="button"
+                            id="deleteReviewButton"
+                            style="margin-left:5px;">
+
+                            Delete Review
+
+                        </button>
+                    `
+                    : ""
+            }
+
+
+            <div
+                id="reviewMessage"
+                style="margin-top:10px;">
+
+            </div>
+
+
         </div>
 
-    </div>
 
-`;
+        <br>
 
-
-document
-    .getElementById(
-        "postReviewButton"
-    )
-    .addEventListener(
-        "click",
-        postReview
-    );
+    `;
 
 
-}
-
-/*
-
-* Post review
-  */
-
-async function postReview()
-{
-
-
-const token =
-    localStorage.getItem(
-        "token"
-    );
-
-
-const username =
-    localStorage.getItem(
-        "username"
-    );
-
-
-const rating =
-    Number(
-        document.getElementById(
-            "reviewRating"
-        ).value
-    );
-
-
-const textarea =
-    document.getElementById(
-        "reviewComment"
-    );
-
-
-const message =
-    document.getElementById(
-        "reviewMessage"
-    );
-
-
-if (
-    !token ||
-    !username
-) {
-
-    message.textContent =
-        "Please sign in first.";
-
-    return;
-
-}
-
-
-const comment =
-    textarea.value.trim();
-
-
-if (!comment) {
-
-    message.textContent =
-        "Please enter a review.";
-
-    return;
-
-}
-
-
-if (
-    comment.length > 500
-) {
-
-    message.textContent =
-        "Review must be 500 characters or less.";
-
-    return;
-
-}
-
-
-message.textContent =
-    "Submitting review...";
-
-
-try {
-
-    const response =
-        await fetch(
-            REVIEWS_URL,
-            {
-                method: "POST",
-
-                headers: {
-
-                    "Content-Type":
-                        "application/json",
-
-                    "Authorization":
-                        "Bearer " +
-                        token
-
-                },
-
-                body:
-                    JSON.stringify({
-
-                        appId:
-                            currentApp.Id,
-
-                        rating:
-                            rating,
-
-                        comment:
-                            comment
-
-                    })
-
-            }
+    document
+        .getElementById(
+            "submitReviewButton"
+        )
+        .addEventListener(
+            "click",
+            submitReview
         );
 
 
-    let data = null;
+    if (existingReview) {
 
-
-    try {
-
-        data =
-            await response.json();
-
-    }
-    catch (error) {
-
-        data = null;
+        document
+            .getElementById(
+                "deleteReviewButton"
+            )
+            .addEventListener(
+                "click",
+                deleteReview
+            );
 
     }
 
+}
 
-    if (!response.ok) {
+
+/* =========================
+   SUBMIT REVIEW
+========================= */
+
+async function submitReview() {
+
+    const token =
+        localStorage.getItem(
+            "token"
+        );
+
+
+    if (!token) {
+        return;
+    }
+
+
+    const rating =
+        Number(
+            document.getElementById(
+                "reviewRating"
+            ).value
+        );
+
+
+    const comment =
+        document.getElementById(
+            "reviewComment"
+        ).value.trim();
+
+
+    const message =
+        document.getElementById(
+            "reviewMessage"
+        );
+
+
+    if (
+        rating < 1 ||
+        rating > 5
+    ) {
 
         message.textContent =
-            (
-                data &&
-                data.error
-            ) ||
-            "Unable to submit review.";
+            "Please select a valid rating.";
 
         return;
 
     }
 
 
-    textarea.value = "";
+    if (!comment) {
+
+        message.textContent =
+            "Please write a review.";
+
+        return;
+
+    }
+
+
+    if (comment.length > 500) {
+
+        message.textContent =
+            "Review must be 500 characters or less.";
+
+        return;
+
+    }
 
 
     message.textContent =
-        "Review submitted successfully.";
+        "Posting review...";
 
 
-    await loadReviews();
+    try {
 
-}
-catch (error) {
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
 
-    console.error(
-        error
-    );
+                    headers: {
 
+                        "Content-Type":
+                            "application/json",
 
-    message.textContent =
-        "Unable to connect to the server.";
+                        "Authorization":
+                            "Bearer " +
+                            token
 
-}
+                    },
 
+                    body:
+                        JSON.stringify({
 
-}
+                            appId:
+                                currentApp.Id,
 
-/*
+                            rating:
+                                rating,
 
-* Load reviews
-  */
+                            comment:
+                                comment
 
-async function loadReviews()
-{
+                        })
 
-
-const container =
-    document.getElementById(
-        "reviewsContainer"
-    );
-
-
-if (!container) {
-    return;
-}
-
-
-container.textContent =
-    "Loading reviews...";
-
-
-try {
-
-    const response =
-        await fetch(
-            REVIEWS_URL +
-            "?appId=" +
-            encodeURIComponent(
-                currentApp.Id
-            ),
-            {
-                method: "GET",
-
-                headers: {
-                    "Accept":
-                        "application/json"
                 }
-            }
-        );
-
-
-    if (!response.ok) {
-
-        throw new Error(
-            "HTTP " +
-            response.status
-        );
-
-    }
-
-
-    const data =
-        await response.json();
-
-
-    if (
-        !Array.isArray(data)
-    ) {
-
-        throw new Error(
-            "Invalid reviews response."
-        );
-
-    }
-
-
-    reviewsData =
-        data;
-
-
-    /*
-     * Newest reviews first
-     */
-
-    reviewsData.sort(
-        (a, b) =>
-            new Date(
-                b.createdAt
-            ) -
-            new Date(
-                a.createdAt
-            )
-    );
-
-
-    currentReviewPage =
-        1;
-
-
-    updateReviewSummary();
-
-    displayReviews(1);
-
-}
-catch (error) {
-
-    console.error(
-        "Reviews error:",
-        error
-    );
-
-
-    container.innerHTML = `
-
-        <div class="box">
-
-            <p>
-                Unable to load reviews.
-            </p>
-
-        </div>
-
-    `;
-
-}
-
-
-}
-
-/*
-
-* Review summary
-  */
-
-function updateReviewSummary()
-{
-
-
-const summary =
-    document.getElementById(
-        "reviewSummary"
-    );
-
-
-if (!summary) {
-    return;
-}
-
-
-const count =
-    reviewsData.length;
-
-
-if (!count) {
-
-    summary.innerHTML = `
-
-        <div class="panel">
-
-            <b>
-                No reviews yet.
-            </b>
-
-            <br>
-
-            Be the first to review
-            this application.
-
-        </div>
-
-    `;
-
-    return;
-
-}
-
-
-const average =
-    getAverageRating();
-
-
-summary.innerHTML = `
-
-    <div class="panel">
-
-        <div style="font-size: 24px;">
-
-            ${renderStars(
-                Math.round(
-                    average
-                )
-            )}
-
-        </div>
-
-
-        <b>
-            ${average.toFixed(1)}
-            / 5
-        </b>
-
-
-        &nbsp;
-
-
-        (${count}
-        ${count === 1
-            ? "review"
-            : "reviews"})
-
-    </div>
-
-`;
-
-
-}
-
-/*
-
-* Display reviews
-  */
-
-function displayReviews(page)
-{
-
-
-const container =
-    document.getElementById(
-        "reviewsContainer"
-    );
-
-
-if (!container) {
-    return;
-}
-
-
-currentReviewPage =
-    page;
-
-
-container.innerHTML = "";
-
-
-const start =
-    (
-        page - 1
-    ) *
-    REVIEWS_PER_PAGE;
-
-
-const end =
-    start +
-    REVIEWS_PER_PAGE;
-
-
-const pageReviews =
-    reviewsData.slice(
-        start,
-        end
-    );
-
-
-if (
-    pageReviews.length === 0
-) {
-
-    container.innerHTML = `
-
-        <div class="box">
-
-            <p>
-                No reviews yet.
-            </p>
-
-        </div>
-
-    `;
-
-
-    createReviewPagination();
-
-    return;
-
-}
-
-
-pageReviews.forEach(
-    review => {
-
-        const box =
-            document.createElement(
-                "div"
             );
 
 
-        box.className =
-            "box";
+        let data = null;
 
 
-        box.style.marginBottom =
-            "15px";
+        try {
 
-
-        box.innerHTML = `
-
-            <div
-                style="
-                    font-size: 20px;
-                    margin-bottom: 5px;
-                "
-            >
-
-                ${renderStars(
-                    review.rating
-                )}
-
-            </div>
-
-
-            <p>
-
-                <b>
-
-                    ${escapeHtml(
-                        review.username ||
-                        "Unknown User"
-                    )}
-
-                </b>
-
-
-                &nbsp;|&nbsp;
-
-
-                ${escapeHtml(
-                    formatReviewDate(
-                        review.createdAt
-                    )
-                )}
-
-            </p>
-
-
-            <hr>
-
-
-            <p>
-
-                ${escapeHtml(
-                    review.comment
-                )}
-
-            </p>
-
-        `;
-
-
-        container.appendChild(
-            box
-        );
-
-    }
-);
-
-
-createReviewPagination();
-
-
-}
-
-/*
-
-* Review pagination
-  */
-
-function createReviewPagination()
-{
-
-
-const pagination =
-    document.getElementById(
-        "reviewPagination"
-    );
-
-
-if (!pagination) {
-    return;
-}
-
-
-pagination.innerHTML =
-    "";
-
-
-const totalPages =
-    Math.ceil(
-        reviewsData.length /
-        REVIEWS_PER_PAGE
-    );
-
-
-if (
-    totalPages <= 1
-) {
-
-    return;
-
-}
-
-
-const wrapper =
-    document.createElement(
-        "div"
-    );
-
-
-/*
- * Previous
- */
-
-if (
-    currentReviewPage > 1
-) {
-
-    const previous =
-        document.createElement(
-            "button"
-        );
-
-
-    previous.className =
-        "button";
-
-
-    previous.textContent =
-        "Previous";
-
-
-    previous.style.marginRight =
-        "5px";
-
-
-    previous.addEventListener(
-        "click",
-        () => {
-
-            displayReviews(
-                currentReviewPage -
-                1
-            );
-
-
-            document
-                .getElementById(
-                    "reviews"
-                )
-                .scrollIntoView({
-                    behavior:
-                        "smooth"
-                });
+            data =
+                await response.json();
 
         }
-    );
-
-
-    wrapper.appendChild(
-        previous
-    );
-
-}
-
-
-/*
- * Page numbers
- */
-
-for (
-    let page = 1;
-    page <= totalPages;
-    page++
-) {
-
-    const button =
-        document.createElement(
-            "button"
-        );
-
-
-    button.className =
-        "button";
-
-
-    button.textContent =
-        page;
-
-
-    button.style.marginRight =
-        "5px";
-
-
-    if (
-        page ===
-        currentReviewPage
-    ) {
-
-        button.disabled =
-            true;
-
-    }
-
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            displayReviews(
-                page
-            );
-
-
-            document
-                .getElementById(
-                    "reviews"
-                )
-                .scrollIntoView({
-                    behavior:
-                        "smooth"
-                });
-
+        catch {
+            data = null;
         }
-    );
 
-
-    wrapper.appendChild(
-        button
-    );
-
-}
-
-
-/*
- * Next
- */
-
-if (
-    currentReviewPage <
-    totalPages
-) {
-
-    const next =
-        document.createElement(
-            "button"
-        );
-
-
-    next.className =
-        "button";
-
-
-    next.textContent =
-        "Next";
-
-
-    next.addEventListener(
-        "click",
-        () => {
-
-            displayReviews(
-                currentReviewPage +
-                1
-            );
-
-
-            document
-                .getElementById(
-                    "reviews"
-                )
-                .scrollIntoView({
-                    behavior:
-                        "smooth"
-                });
-
-        }
-    );
-
-
-    wrapper.appendChild(
-        next
-    );
-
-}
-
-
-pagination.appendChild(
-    wrapper
-);
-
-
-}
-
-/*
-
-* Load application data
-  */
-
-if (!appId) {
-
-
-appContainer.innerHTML = `
-
-    <h1>
-        Application Not Found
-    </h1>
-
-
-    <p>
-        No application ID was specified.
-    </p>
-
-
-    <a
-        class="button"
-        href="/webstore/apps/"
-    >
-
-        Back to Applications
-
-    </a>
-
-`;
-
-
-}
-else {
-
-
-fetch(
-    APPS_URL
-)
-
-.then(
-    response => {
 
         if (!response.ok) {
 
-            throw new Error(
-                "Unable to load applications."
-            );
-
-        }
-
-
-        return response.json();
-
-    }
-)
-
-.then(
-    data => {
-
-        const apps = [
-
-            ...(data.NeonStore || []),
-
-            ...(data.OtherPlatforms || [])
-
-        ];
-
-
-        const app =
-            apps.find(
-                item =>
-                    String(item.Id) ===
-                    String(appId)
-            );
-
-
-        if (!app) {
-
-            appContainer.innerHTML = `
-
-                <h1>
-                    Application Not Found
-                </h1>
-
-
-                <p>
-                    The requested application
-                    could not be found.
-                </p>
-
-
-                <a
-                    class="button"
-                    href="/webstore/apps/"
-                >
-
-                    Back to Applications
-
-                </a>
-
-            `;
+            message.textContent =
+                (
+                    data &&
+                    data.error
+                ) ||
+                "Unable to post review.";
 
             return;
 
         }
 
 
-        showApp(
-            app
-        );
+        message.textContent =
+            "Review saved successfully.";
+
+
+        /*
+         * Reload reviews so:
+         *
+         * - average updates
+         * - count updates
+         * - review appears
+         * - form updates
+         */
+
+        await loadReviews();
 
     }
-)
-
-.catch(
-    error => {
+    catch (error) {
 
         console.error(
             error
         );
 
 
-        appContainer.innerHTML = `
-
-            <h1>
-                Error
-            </h1>
-
-
-            <p>
-                Unable to load application
-                information.
-            </p>
-
-        `;
+        message.textContent =
+            "Unable to connect to the review server.";
 
     }
-);
-
 
 }
 
+
+/* =========================
+   DELETE REVIEW
+========================= */
+
+async function deleteReview() {
+
+    const token =
+        localStorage.getItem(
+            "token"
+        );
+
+
+    if (!token) {
+        return;
+    }
+
+
+    if (
+        !confirm(
+            "Delete your review?"
+        )
+    ) {
+        return;
+    }
+
+
+    const message =
+        document.getElementById(
+            "reviewMessage"
+        );
+
+
+    message.textContent =
+        "Deleting review...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL +
+                "/" +
+                encodeURIComponent(
+                    currentApp.Id
+                ),
+                {
+                    method: "DELETE",
+
+                    headers: {
+
+                        "Authorization":
+                            "Bearer " +
+                            token
+
+                    }
+
+                }
+            );
+
+
+        let data = null;
+
+
+        try {
+
+            data =
+                await response.json();
+
+        }
+        catch {
+            data = null;
+        }
+
+
+        if (!response.ok) {
+
+            message.textContent =
+                (
+                    data &&
+                    data.error
+                ) ||
+                "Unable to delete review.";
+
+            return;
+
+        }
+
+
+        await loadReviews();
+
+    }
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        message.textContent =
+            "Unable to connect to the review server.";
+
+    }
+
+}
+
+
+/* =========================
+   DISPLAY REVIEWS
+========================= */
+
+function displayReviews(page) {
+
+    const container =
+        document.getElementById(
+            "reviewsContainer"
+        );
+
+
+    const pagination =
+        document.getElementById(
+            "reviewPagination"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    currentReviewPage =
+        page;
+
+
+    container.innerHTML =
+        "";
+
+
+    const start =
+        (
+            page - 1
+        ) *
+        REVIEWS_PER_PAGE;
+
+
+    const end =
+        start +
+        REVIEWS_PER_PAGE;
+
+
+    const pageReviews =
+        reviews.slice(
+            start,
+            end
+        );
+
+
+    /*
+     * No reviews
+     */
+
+    if (
+        pageReviews.length === 0
+    ) {
+
+        container.innerHTML = `
+
+            <div class="panel">
+
+                <p>
+                    No reviews yet.
+                </p>
+
+            </div>
+
+        `;
+
+
+        createReviewPagination();
+
+        return;
+
+    }
+
+
+    /*
+     * Create review boxes
+     */
+
+    pageReviews.forEach(
+        review => {
+
+            const box =
+                document.createElement(
+                    "div"
+                );
+
+
+            box.className =
+                "panel";
+
+
+            box.style.marginBottom =
+                "15px";
+
+
+            const rating =
+                Number(
+                    review.rating
+                );
+
+
+            const date =
+                formatReviewDate(
+                    review.updatedAt ||
+                    review.createdAt
+                );
+
+
+            box.innerHTML = `
+
+                <div>
+
+                    <b>
+                        ${escapeHtml(
+                            review.username
+                        )}
+                    </b>
+
+                    &nbsp;|&nbsp;
+
+                    <span>
+                        ${getStars(
+                            rating
+                        )}
+                    </span>
+
+                    &nbsp;
+
+                    <span>
+                        ${rating}/5
+                    </span>
+
+                </div>
+
+
+                ${
+                    date
+                        ? `
+                            <div
+                                style="
+                                    margin-top:5px;
+                                    font-size:smaller;
+                                ">
+
+                                ${escapeHtml(
+                                    date
+                                )}
+
+                            </div>
+                        `
+                        : ""
+                }
+
+
+                <hr>
+
+
+                <p>
+
+                    ${escapeHtml(
+                        review.comment
+                    )}
+
+                </p>
+
+            `;
+
+
+            container.appendChild(
+                box
+            );
+
+        }
+    );
+
+
+    createReviewPagination();
+
+}
+
+
+/* =========================
+   REVIEW PAGINATION
+========================= */
+
+function createReviewPagination() {
+
+    const pagination =
+        document.getElementById(
+            "reviewPagination"
+        );
+
+
+    if (!pagination) {
+        return;
+    }
+
+
+    pagination.innerHTML =
+        "";
+
+
+    const totalPages =
+        Math.ceil(
+            reviews.length /
+            REVIEWS_PER_PAGE
+        );
+
+
+    if (totalPages <= 1) {
+        return;
+    }
+
+
+    const wrapper =
+        document.createElement(
+            "div"
+        );
+
+
+    /*
+     * Previous
+     */
+
+    if (
+        currentReviewPage > 1
+    ) {
+
+        const previous =
+            document.createElement(
+                "button"
+            );
+
+
+        previous.className =
+            "button";
+
+
+        previous.textContent =
+            "Previous";
+
+
+        previous.style.marginRight =
+            "5px";
+
+
+        previous.addEventListener(
+            "click",
+            () => {
+
+                displayReviews(
+                    currentReviewPage - 1
+                );
+
+
+                document
+                    .getElementById(
+                        "reviews"
+                    )
+                    .scrollIntoView({
+                        behavior:
+                            "smooth"
+                    });
+
+            }
+        );
+
+
+        wrapper.appendChild(
+            previous
+        );
+
+    }
+
+
+    /*
+     * Page numbers
+     */
+
+    for (
+        let page = 1;
+        page <= totalPages;
+        page++
+    ) {
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+
+        button.className =
+            "button";
+
+
+        button.textContent =
+            page;
+
+
+        button.style.marginRight =
+            "5px";
+
+
+        if (
+            page ===
+            currentReviewPage
+        ) {
+
+            button.disabled =
+                true;
+
+        }
+
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                displayReviews(
+                    page
+                );
+
+
+                document
+                    .getElementById(
+                        "reviews"
+                    )
+                    .scrollIntoView({
+                        behavior:
+                            "smooth"
+                    });
+
+            }
+        );
+
+
+        wrapper.appendChild(
+            button
+        );
+
+    }
+
+
+    /*
+     * Next
+     */
+
+    if (
+        currentReviewPage <
+        totalPages
+    ) {
+
+        const next =
+            document.createElement(
+                "button"
+            );
+
+
+        next.className =
+            "button";
+
+
+        next.textContent =
+            "Next";
+
+
+        next.addEventListener(
+            "click",
+            () => {
+
+                displayReviews(
+                    currentReviewPage + 1
+                );
+
+
+                document
+                    .getElementById(
+                        "reviews"
+                    )
+                    .scrollIntoView({
+                        behavior:
+                            "smooth"
+                    });
+
+            }
+        );
+
+
+        wrapper.appendChild(
+            next
+        );
+
+    }
+
+
+    pagination.appendChild(
+        wrapper
+    );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadApp();
+
+
 </script>
+
 
 </body>
 
 </html>
+
