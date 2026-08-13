@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>App Uploader - Geek Devs Community</title>
+
+<link rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicon-32x32.png">
+
+<link rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/favicon-16x16.png">
+
+<link rel="apple-touch-icon"
+      href="/apple-touch-icon.png">
+
+<link id="theme-style"
+      rel="stylesheet"
+      href="/css/index/classic.css">
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+Geek Devs Community
+
+<span>| WebStore</span>
+
+</div>
+
+
+<div class="nav">
+
+<a href="/">
+    Home
+</a>
+
+<a href="/webstore/">
+    WebStore
+</a>
+
+<a href="/webstore/apps/">
+    All Apps
+</a>
+
+<a href="/webstore/uploader/">
+    Upload App
+</a>
+
+<a href="/downloads/">
+    Downloads
+</a>
+
+<a target="_blank"
+   href="https://discord.gg/YBsVhkcHT4">
+    Discord
+</a>
+
+<a href="/services/">
+    Services
+</a>
+
+<a href="/news/">
+    News
+</a>
+
+<a href="/account/">
+    Account
+</a>
+
+<a href="https://gdcr.dankassassin368.com/">
+    Subdomain
+</a>
+
+<a href="https://rdcubing.github.io/">
+    GitHub Pages
+</a>
+
+<a target="_blank"
+   href="https://github.com/RDCubing">
+    GitHub
+</a>
+
+</div>
+
+
+<div class="container">
+
+
+<div class="sidebar">
+
+
+<h3>
+    Settings
+</h3>
+
+
+<select id="themeSelector">
+
+<option value="default">
+    Default
+</option>
+
+<option value="classic">
+    Classic
+</option>
+
+<option value="standard">
+    Standard
+</option>
+
+<option value="luna">
+    Luna
+</option>
+
+<option value="vista">
+    Vista
+</option>
+
+<option value="msdn">
+    MSDN
+</option>
+
+<option value="fluent">
+    Fluent
+</option>
+
+</select>
+
+
+<h3>
+    WebStore
+</h3>
+
+
+<a href="/webstore/">
+    WebStore Home
+</a>
+
+<a href="/webstore/apps/">
+    All Applications
+</a>
+
+<a href="/webstore/uploader/">
+    Upload Application
+</a>
+
+
+<h3>
+    Application
+</h3>
+
+
+<a href="#upload">
+    Submit Application
+</a>
+
+<a href="#requirements">
+    Requirements
+</a>
+
+
+<div class="announcement">
+
+<h4>
+    Account
+</h4>
+
+<div id="accountStatus">
+    Checking account...
+</div>
+
+</div>
+
+
+</div>
+
+
+<div class="content">
+
+
+<div id="loading">
+
+<h1>
+    App Uploader
+</h1>
+
+<p>
+    Checking your account...
+</p>
+
+</div>
+
+
+<div id="notSignedIn"
+     style="display:none;">
+
+<h1>
+    App Uploader
+</h1>
+
+
+<div class="box">
+
+<h3>
+    Sign In Required
+</h3>
+
+<p>
+You must be signed in to submit an application
+to the Geek Devs Community WebStore.
+</p>
+
+
+<a class="button"
+   href="/account/">
+
+    Sign In
+
+</a>
+
+</div>
+
+</div>
+
+
+<div id="pendingSubmission"
+     style="display:none;">
+
+<h1>
+    App Uploader
+</h1>
+
+
+<div class="box">
+
+<h3>
+    Submission Pending
+</h3>
+
+
+<p>
+You already have an application waiting for
+review.
+</p>
+
+
+<p>
+You can submit another application after your
+current submission has been approved or removed.
+</p>
+
+
+<div id="pendingDetails">
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="uploader"
+     style="display:none;">
+
+
+<h1 id="upload">
+    Submit an Application
+</h1>
+
+
+<p>
+Submit an application for consideration on the
+Geek Devs Community WebStore.
+</p>
+
+
+<div class="box">
+
+
+<p>
+
+<b>
+Submitting as:
+</b>
+
+<span id="usernameDisplay">
+    Loading...
+</span>
+
+</p>
+
+
+</div>
+
+
+<br>
+
+
+<div class="box">
+
+
+<h3>
+    Application Information
+</h3>
+
+
+<label for="Title">
+    Application Name
+</label>
+
+<br>
+
+<input
+    id="Title"
+    type="text"
+    maxlength="100"
+    style="width:100%;max-width:700px;"
+    placeholder="Example: Aero Quotes">
+
+<br><br>
+
+
+<label for="Category">
+    Category
+</label>
+
+<br>
+
+<input
+    id="Category"
+    type="text"
+    maxlength="100"
+    style="width:100%;max-width:700px;"
+    placeholder="Example: Books/Reference">
+
+<br><br>
+
+
+<label for="Subtitle">
+    Subtitle
+</label>
+
+<br>
+
+<input
+    id="Subtitle"
+    type="text"
+    maxlength="200"
+    style="width:100%;max-width:700px;"
+    placeholder="Example: Quotes, Aerofied">
+
+<br><br>
+
+
+<label for="Publisher">
+    Publisher
+</label>
+
+<br>
+
+<input
+    id="Publisher"
+    type="text"
+    maxlength="100"
+    style="width:100%;max-width:700px;"
+    placeholder="Example: ChrisRLillo">
+
+<br><br>
+
+
+<label for="Version">
+    Version
+</label>
+
+<br>
+
+<input
+    id="Version"
+    type="text"
+    maxlength="50"
+    style="width:100%;max-width:700px;"
+    placeholder="Example: Release 1">
+
+<br><br>
+
+
+<label for="Framework">
+    Framework / Technology
+</label>
+
+<br>
+
+<input
+    id="Framework"
+    type="text"
+    maxlength="100"
+    style="width:100%;max-width:700px;"
+    placeholder="Example: AutoHotkey v2">
+
+<br><br>
+
+
+<label for="ImagePath">
+    Application Icon URL
+</label>
+
+<br>
+
+<input
+    id="ImagePath"
+    type="url"
+    style="width:100%;max-width:700px;"
+    placeholder="https://example.com/icon.png">
+
+<br><br>
+
+
+<label for="DetailImagePath">
+    Detail Image URL
+</label>
+
+<br>
+
+<input
+    id="DetailImagePath"
+    type="url"
+    style="width:100%;max-width:700px;"
+    placeholder="https://example.com/screenshot.png">
+
+<br><br>
+
+
+<label for="DownloadUrl">
+    Download URL
+</label>
+
+<br>
+
+<input
+    id="DownloadUrl"
+    type="url"
+    style="width:100%;max-width:700px;"
+    placeholder="https://example.com/application.exe">
+
+<br><br>
+
+
+<label for="Description">
+    Description
+</label>
+
+<br>
+
+<textarea
+    id="Description"
+    rows="10"
+    maxlength="5000"
+    style="
+        width:100%;
+        max-width:700px;
+        box-sizing:border-box;
+    "
+    placeholder="Describe your application..."
+></textarea>
+
+
+</div>
+
+
+<br>
+
+
+<div class="box"
+     id="requirements">
+
+<h3>
+    Submission Requirements
+</h3>
+
+
+<p>
+Please make sure your submission:
+</p>
+
+
+<ul>
+
+<li>
+Contains accurate application information.
+</li>
+
+<li>
+Uses working URLs for the application icon
+and download.
+</li>
+
+<li>
+Contains a clear and useful description.
+</li>
+
+<li>
+Does not contain malicious or harmful software.
+</li>
+
+<li>
+Does not impersonate another developer or
+application.
+</li>
+
+<li>
+Is ready for review before being submitted.
+</li>
+
+</ul>
+
+
+<p>
+Applications are manually reviewed by GDC
+administrators.
+</p>
+
+</div>
+
+
+<br>
+
+
+<button
+    class="button"
+    id="submitButton">
+
+    Submit Application
+
+</button>
+
+
+<div id="message"
+     style="margin-top:15px;">
+
+</div>
+
+
+</div>
+
+
+<div id="success"
+     style="display:none;">
+
+
+<h1>
+    Application Submitted
+</h1>
+
+
+<div class="box">
+
+<h3>
+    Submission Received
+</h3>
+
+
+<p>
+Your application has been submitted successfully
+and is now waiting for review.
+</p>
+
+
+<p>
+You will be able to submit another application
+after this submission has been approved or removed.
+</p>
+
+
+<a class="button"
+   href="/webstore/">
+
+    Return to WebStore
+
+</a>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<div class="footer">
+
+© 2026 Geek Devs Community<br>
+
+NeonStore WebStore
+
+</div>
+
+
+<script src="/js/theme.js"></script>
+
+
+<script>
+
+
+/*
+ * API
+ */
+
+const API =
+    "https://gdcr.dankassassin368.com/ns-status/apps";
+
+
+/*
+ * Authentication
+ */
+
+const token =
+    localStorage.getItem("token");
+
+
+const username =
+    localStorage.getItem("username");
+
+
+/*
+ * Elements
+ */
+
+const loading =
+    document.getElementById(
+        "loading"
+    );
+
+
+const notSignedIn =
+    document.getElementById(
+        "notSignedIn"
+    );
+
+
+const pendingSubmission =
+    document.getElementById(
+        "pendingSubmission"
+    );
+
+
+const uploader =
+    document.getElementById(
+        "uploader"
+    );
+
+
+const success =
+    document.getElementById(
+        "success"
+    );
+
+
+const accountStatus =
+    document.getElementById(
+        "accountStatus"
+    );
+
+
+const usernameDisplay =
+    document.getElementById(
+        "usernameDisplay"
+    );
+
+
+const message =
+    document.getElementById(
+        "message"
+    );
+
+
+const submitButton =
+    document.getElementById(
+        "submitButton"
+    );
+
+
+/*
+ * Escape HTML
+ */
+
+function escapeHtml(value)
+{
+
+    if (
+        value === undefined ||
+        value === null
+    )
+    {
+        return "";
+    }
+
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/*
+ * Show element
+ */
+
+function show(element)
+{
+    element.style.display =
+        "block";
+}
+
+
+/*
+ * Hide element
+ */
+
+function hide(element)
+{
+    element.style.display =
+        "none";
+}
+
+
+/*
+ * Initialize
+ */
+
+async function initialize()
+{
+
+    hide(loading);
+
+
+    /*
+     * Not signed in
+     */
+
+    if (!token)
+    {
+
+        accountStatus.textContent =
+            "Not signed in.";
+
+        show(notSignedIn);
+
+        return;
+
+    }
+
+
+    accountStatus.textContent =
+        "Signed in as " +
+        (username || "User");
+
+
+    usernameDisplay.textContent =
+        username || "User";
+
+
+    /*
+     * Check current submissions
+     */
+
+    try
+    {
+
+        const response =
+            await fetch(
+                `${API}/mine`,
+                {
+                    headers:
+                    {
+                        "Authorization":
+                            "Bearer " + token,
+
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        if (!response.ok)
+        {
+
+            throw new Error(
+                "Unable to check submissions."
+            );
+
+        }
+
+
+        const submissions =
+            await response.json();
+
+
+        /*
+         * Find pending submission
+         */
+
+        const pending =
+            submissions.find(
+                submission =>
+                    submission.status ===
+                    "pending"
+            );
+
+
+        if (pending)
+        {
+
+            const details =
+                document.getElementById(
+                    "pendingDetails"
+                );
+
+
+            details.innerHTML = `
+
+                <hr>
+
+                <p>
+                    <b>Application:</b>
+                    ${escapeHtml(
+                        pending.Title
+                    )}
+                </p>
+
+                <p>
+                    <b>Version:</b>
+                    ${escapeHtml(
+                        pending.Version
+                    )}
+                </p>
+
+                <p>
+                    <b>Submitted:</b>
+                    ${new Date(
+                        pending.createdAt
+                    ).toLocaleString()}
+                </p>
+
+                <p>
+                    <b>Status:</b>
+                    Pending Review
+                </p>
+
+            `;
+
+
+            show(pendingSubmission);
+
+            return;
+
+        }
+
+
+        /*
+         * No pending submission
+         */
+
+        show(uploader);
+
+    }
+    catch (error)
+    {
+
+        console.error(error);
+
+
+        message.textContent =
+            "Unable to check your submission status.";
+
+        show(uploader);
+
+    }
+
+}
+
+
+/*
+ * Submit application
+ */
+
+submitButton.addEventListener(
+    "click",
+    async () =>
+{
+
+    message.textContent =
+        "";
+
+
+    /*
+     * Read fields
+     */
+
+    const Title =
+        document.getElementById(
+            "Title"
+        ).value.trim();
+
+
+    const Category =
+        document.getElementById(
+            "Category"
+        ).value.trim();
+
+
+    const Subtitle =
+        document.getElementById(
+            "Subtitle"
+        ).value.trim();
+
+
+    const Publisher =
+        document.getElementById(
+            "Publisher"
+        ).value.trim();
+
+
+    const Version =
+        document.getElementById(
+            "Version"
+        ).value.trim();
+
+
+    const Framework =
+        document.getElementById(
+            "Framework"
+        ).value.trim();
+
+
+    const ImagePath =
+        document.getElementById(
+            "ImagePath"
+        ).value.trim();
+
+
+    const DetailImagePath =
+        document.getElementById(
+            "DetailImagePath"
+        ).value.trim();
+
+
+    const DownloadUrl =
+        document.getElementById(
+            "DownloadUrl"
+        ).value.trim();
+
+
+    const Description =
+        document.getElementById(
+            "Description"
+        ).value.trim();
+
+
+    /*
+     * Client-side validation
+     */
+
+    if (
+        !Title ||
+        !Category ||
+        !Subtitle ||
+        !Publisher ||
+        !Version ||
+        !Framework ||
+        !ImagePath ||
+        !DownloadUrl ||
+        !Description
+    )
+    {
+
+        message.textContent =
+            "Please fill in all required fields.";
+
+        return;
+
+    }
+
+
+    /*
+     * Disable button
+     */
+
+    submitButton.disabled =
+        true;
+
+
+    submitButton.textContent =
+        "Submitting...";
+
+
+    message.textContent =
+        "Submitting application for review...";
+
+
+    try
+    {
+
+        const response =
+            await fetch(
+                `${API}/submit`,
+                {
+                    method:
+                        "POST",
+
+                    headers:
+                    {
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            "Bearer " + token,
+
+                        "Accept":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            Title,
+                            Category,
+                            Subtitle,
+                            Publisher,
+                            ImagePath,
+                            DetailImagePath,
+                            Version,
+                            Framework,
+                            Description,
+                            DownloadUrl
+
+                        })
+                }
+            );
+
+
+        let data = null;
+
+
+        try
+        {
+
+            data =
+                await response.json();
+
+        }
+        catch
+        {
+
+            data = null;
+
+        }
+
+
+        if (!response.ok)
+        {
+
+            message.textContent =
+                (
+                    data &&
+                    data.error
+                ) ||
+                "Unable to submit application.";
+
+            submitButton.disabled =
+                false;
+
+            submitButton.textContent =
+                "Submit Application";
+
+            return;
+
+        }
+
+
+        /*
+         * Successful submission
+         */
+
+        hide(uploader);
+
+        show(success);
+
+    }
+    catch (error)
+    {
+
+        console.error(error);
+
+
+        message.textContent =
+            "Unable to connect to the GDC server.";
+
+
+        submitButton.disabled =
+            false;
+
+
+        submitButton.textContent =
+            "Submit Application";
+
+    }
+
+});
+
+
+/*
+ * Start
+ */
+
+initialize();
+
+
+</script>
+
+
+</body>
+
+</html>

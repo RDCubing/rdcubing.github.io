@@ -15,7 +15,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const path = window.location.pathname;
 
-        if ( path.includes("/404") || path.includes("/account") || path.includes("/news") ) { return "/css/index/"; }
+        if (
+    path.startsWith("/404") ||
+    path.startsWith("/account") ||
+    path.startsWith("/news") ||
+    path.startsWith("/webstore/uploader")
+) {
+    return "/css/index/";
+}
 		
 		if (path.includes("/downloads"))
             return "/css/downloads/index/";
