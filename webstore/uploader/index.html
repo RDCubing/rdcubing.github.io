@@ -277,6 +277,30 @@ current submission has been approved or removed.
      style="display:none;">
 
 
+<div class="box">
+
+<h3>
+    WebStore Submissions
+</h3>
+
+<p>
+    <b>Approved Applications:</b>
+    <span id="approvedCount">
+        Loading...
+    </span>
+</p>
+
+<p>
+    <b>Pending Applications:</b>
+    <span id="pendingCount">
+        Loading...
+    </span>
+</p>
+
+</div>
+
+<br>
+
 <h1 id="upload">
     Submit an Application
 </h1>
@@ -624,7 +648,6 @@ NeonStore WebStore
 
 <script>
 
-
 /*
  * API
  */
@@ -640,7 +663,6 @@ const API =
 const token =
     localStorage.getItem("token");
 
-
 const username =
     localStorage.getItem("username");
 
@@ -654,52 +676,54 @@ const loading =
         "loading"
     );
 
-
 const notSignedIn =
     document.getElementById(
         "notSignedIn"
     );
-
 
 const pendingSubmission =
     document.getElementById(
         "pendingSubmission"
     );
 
-
 const uploader =
     document.getElementById(
         "uploader"
     );
-
 
 const success =
     document.getElementById(
         "success"
     );
 
-
 const accountStatus =
     document.getElementById(
         "accountStatus"
     );
-
 
 const usernameDisplay =
     document.getElementById(
         "usernameDisplay"
     );
 
-
 const message =
     document.getElementById(
         "message"
     );
 
-
 const submitButton =
     document.getElementById(
         "submitButton"
+    );
+
+const approvedCount =
+    document.getElementById(
+        "approvedCount"
+    );
+
+const pendingCount =
+    document.getElementById(
+        "pendingCount"
     );
 
 
@@ -709,7 +733,6 @@ const submitButton =
 
 function escapeHtml(value)
 {
-
     if (
         value === undefined ||
         value === null
@@ -717,7 +740,6 @@ function escapeHtml(value)
     {
         return "";
     }
-
 
     return String(value)
 
@@ -745,7 +767,6 @@ function escapeHtml(value)
             /'/g,
             "&#039;"
         );
-
 }
 
 
@@ -772,13 +793,90 @@ function hide(element)
 
 
 /*
+ * Load global submission statistics
+ */
+
+async function loadSubmissionStats()
+{
+    if (
+        !approvedCount ||
+        !pendingCount
+    )
+    {
+        return;
+    }
+
+
+    approvedCount.textContent =
+        "Loading...";
+
+    pendingCount.textContent =
+        "Loading...";
+
+
+    try
+    {
+        const response =
+            await fetch(
+                `${API}/stats`,
+                {
+                    headers:
+                    {
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        if (!response.ok)
+        {
+            throw new Error(
+                "Unable to load submission statistics."
+            );
+        }
+
+
+        const stats =
+            await response.json();
+
+
+        approvedCount.textContent =
+            stats.approved ?? 0;
+
+        pendingCount.textContent =
+            stats.pending ?? 0;
+    }
+    catch (error)
+    {
+        console.error(error);
+
+        approvedCount.textContent =
+            "Unavailable";
+
+        pendingCount.textContent =
+            "Unavailable";
+    }
+}
+
+
+/*
  * Initialize
  */
 
 async function initialize()
 {
-
     hide(loading);
+
+
+    /*
+     * Load global statistics.
+     *
+     * This is public and does not
+     * require authentication.
+     */
+
+    await loadSubmissionStats();
 
 
     /*
@@ -787,21 +885,22 @@ async function initialize()
 
     if (!token)
     {
-
         accountStatus.textContent =
             "Not signed in.";
 
         show(notSignedIn);
 
         return;
-
     }
 
+
+    /*
+     * Signed in
+     */
 
     accountStatus.textContent =
         "Signed in as " +
         (username || "User");
-
 
     usernameDisplay.textContent =
         username || "User";
@@ -813,7 +912,6 @@ async function initialize()
 
     try
     {
-
         const response =
             await fetch(
                 `${API}/mine`,
@@ -832,11 +930,9 @@ async function initialize()
 
         if (!response.ok)
         {
-
             throw new Error(
                 "Unable to check submissions."
             );
-
         }
 
 
@@ -858,7 +954,6 @@ async function initialize()
 
         if (pending)
         {
-
             const details =
                 document.getElementById(
                     "pendingDetails"
@@ -901,7 +996,6 @@ async function initialize()
             show(pendingSubmission);
 
             return;
-
         }
 
 
@@ -910,11 +1004,9 @@ async function initialize()
          */
 
         show(uploader);
-
     }
     catch (error)
     {
-
         console.error(error);
 
 
@@ -922,9 +1014,7 @@ async function initialize()
             "Unable to check your submission status.";
 
         show(uploader);
-
     }
-
 }
 
 
@@ -936,7 +1026,6 @@ submitButton.addEventListener(
     "click",
     async () =>
 {
-
     message.textContent =
         "";
 
@@ -950,54 +1039,45 @@ submitButton.addEventListener(
             "Title"
         ).value.trim();
 
-
     const Category =
         document.getElementById(
             "Category"
         ).value.trim();
-
 
     const Subtitle =
         document.getElementById(
             "Subtitle"
         ).value.trim();
 
-
     const Publisher =
         document.getElementById(
             "Publisher"
         ).value.trim();
-
 
     const Version =
         document.getElementById(
             "Version"
         ).value.trim();
 
-
     const Framework =
         document.getElementById(
             "Framework"
         ).value.trim();
-
 
     const ImagePath =
         document.getElementById(
             "ImagePath"
         ).value.trim();
 
-
     const DetailImagePath =
         document.getElementById(
             "DetailImagePath"
         ).value.trim();
 
-
     const DownloadUrl =
         document.getElementById(
             "DownloadUrl"
         ).value.trim();
-
 
     const Description =
         document.getElementById(
@@ -1017,16 +1097,15 @@ submitButton.addEventListener(
         !Version ||
         !Framework ||
         !ImagePath ||
+        !DetailImagePath ||
         !DownloadUrl ||
         !Description
     )
     {
-
         message.textContent =
             "Please fill in all required fields.";
 
         return;
-
     }
 
 
@@ -1037,10 +1116,8 @@ submitButton.addEventListener(
     submitButton.disabled =
         true;
 
-
     submitButton.textContent =
         "Submitting...";
-
 
     message.textContent =
         "Submitting application for review...";
@@ -1048,7 +1125,6 @@ submitButton.addEventListener(
 
     try
     {
-
         const response =
             await fetch(
                 `${API}/submit`,
@@ -1092,28 +1168,28 @@ submitButton.addEventListener(
 
         try
         {
-
             data =
                 await response.json();
-
         }
         catch
         {
-
             data = null;
-
         }
 
 
+        /*
+         * Submission failed
+         */
+
         if (!response.ok)
         {
-
             message.textContent =
                 (
                     data &&
                     data.error
                 ) ||
                 "Unable to submit application.";
+
 
             submitButton.disabled =
                 false;
@@ -1122,7 +1198,6 @@ submitButton.addEventListener(
                 "Submit Application";
 
             return;
-
         }
 
 
@@ -1134,10 +1209,28 @@ submitButton.addEventListener(
 
         show(success);
 
+
+        /*
+         * Update pending count
+         * immediately after submission.
+         */
+
+        if (pendingCount)
+        {
+            const current =
+                Number(
+                    pendingCount.textContent
+                );
+
+            if (!Number.isNaN(current))
+            {
+                pendingCount.textContent =
+                    current + 1;
+            }
+        }
     }
     catch (error)
     {
-
         console.error(error);
 
 
@@ -1148,12 +1241,9 @@ submitButton.addEventListener(
         submitButton.disabled =
             false;
 
-
         submitButton.textContent =
             "Submit Application";
-
     }
-
 });
 
 
@@ -1162,7 +1252,6 @@ submitButton.addEventListener(
  */
 
 initialize();
-
 
 </script>
 
