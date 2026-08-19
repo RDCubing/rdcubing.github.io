@@ -698,11 +698,6 @@ const notSignedIn =
         "notSignedIn"
     );
 
-const pendingSubmission =
-    document.getElementById(
-        "pendingSubmission"
-    );
-
 const uploader =
     document.getElementById(
         "uploader"
@@ -758,6 +753,7 @@ function escapeHtml(value)
         return "";
     }
 
+
     return String(value)
 
         .replace(
@@ -793,6 +789,9 @@ function escapeHtml(value)
 
 function show(element)
 {
+    if (!element)
+        return;
+
     element.style.display =
         "block";
 }
@@ -804,6 +803,9 @@ function show(element)
 
 function hide(element)
 {
+    if (!element)
+        return;
+
     element.style.display =
         "none";
 }
@@ -837,6 +839,9 @@ async function loadSubmissionStats()
             await fetch(
                 `${API}/stats`,
                 {
+                    method:
+                        "GET",
+
                     headers:
                     {
                         "Accept":
@@ -866,7 +871,11 @@ async function loadSubmissionStats()
     }
     catch (error)
     {
-        console.error(error);
+        console.error(
+            "Submission statistics error:",
+            error
+        );
+
 
         approvedCount.textContent =
             "Unavailable";
@@ -878,54 +887,18 @@ async function loadSubmissionStats()
 
 
 /*
- * Initialize
+ * Load user's submissions
+ *
+ * Multiple submissions are allowed.
  */
 
-async function initialize()
+async function loadMySubmissions()
 {
-    hide(loading);
-
-
-    /*
-     * Load global statistics.
-     *
-     * This is public and does not
-     * require authentication.
-     */
-
-    await loadSubmissionStats();
-
-
-    /*
-     * Not signed in
-     */
-
     if (!token)
     {
-        accountStatus.textContent =
-            "Not signed in.";
-
-        show(notSignedIn);
-
-        return;
+        return [];
     }
 
-
-    /*
-     * Signed in
-     */
-
-    accountStatus.textContent =
-        "Signed in as " +
-        (username || "User");
-
-    usernameDisplay.textContent =
-        username || "User";
-
-
-    /*
-     * Check current submissions
-     */
 
     try
     {
@@ -933,6 +906,9 @@ async function initialize()
             await fetch(
                 `${API}/mine`,
                 {
+                    method:
+                        "GET",
+
                     headers:
                     {
                         "Authorization":
@@ -948,7 +924,7 @@ async function initialize()
         if (!response.ok)
         {
             throw new Error(
-                "Unable to check submissions."
+                "Unable to load your submissions."
             );
         }
 
@@ -957,81 +933,99 @@ async function initialize()
             await response.json();
 
 
-        /*
-         * Find pending submission
-         */
-
-        const pending =
-            submissions.find(
-                submission =>
-                    submission.status ===
-                    "pending"
-            );
+        console.log(
+            "My submissions:",
+            submissions
+        );
 
 
-        if (pending)
-        {
-            const details =
-                document.getElementById(
-                    "pendingDetails"
-                );
-
-
-            details.innerHTML = `
-
-                <hr>
-
-                <p>
-                    <b>Application:</b>
-                    ${escapeHtml(
-                        pending.Title
-                    )}
-                </p>
-
-                <p>
-                    <b>Version:</b>
-                    ${escapeHtml(
-                        pending.Version
-                    )}
-                </p>
-
-                <p>
-                    <b>Submitted:</b>
-                    ${new Date(
-                        pending.createdAt
-                    ).toLocaleString()}
-                </p>
-
-                <p>
-                    <b>Status:</b>
-                    Pending Review
-                </p>
-
-            `;
-
-
-            show(pendingSubmission);
-
-            return;
-        }
-
-
-        /*
-         * No pending submission
-         */
-
-        show(uploader);
+        return Array.isArray(
+            submissions
+        )
+            ? submissions
+            : [];
     }
     catch (error)
     {
-        console.error(error);
+        console.error(
+            "My submissions error:",
+            error
+        );
 
 
-        message.textContent =
-            "Unable to check your submission status.";
-
-        show(uploader);
+        return [];
     }
+}
+
+
+/*
+ * Initialize
+ */
+
+async function initialize()
+{
+    /*
+     * Hide loading screen
+     */
+
+    hide(loading);
+
+
+    /*
+     * Load global statistics
+     */
+
+    await loadSubmissionStats();
+
+
+    /*
+     * Not signed in
+     */
+
+    if (!token)
+    {
+        accountStatus.textContent =
+            "Not signed in.";
+
+
+        show(notSignedIn);
+
+        return;
+    }
+
+
+    /*
+     * Signed in
+     */
+
+    accountStatus.textContent =
+        "Signed in as " +
+        (username || "User");
+
+
+    usernameDisplay.textContent =
+        username || "User";
+
+
+    /*
+     * Load submission history.
+     *
+     * This does NOT prevent the user
+     * from submitting another app.
+     */
+
+    await loadMySubmissions();
+
+
+    /*
+     * Always show uploader.
+     *
+     * Users can submit multiple apps,
+     * including while other submissions
+     * are pending review.
+     */
+
+    show(uploader);
 }
 
 
@@ -1048,6 +1042,20 @@ submitButton.addEventListener(
 
 
     /*
+     * Make sure the user
+     * is authenticated.
+     */
+
+    if (!token)
+    {
+        message.textContent =
+            "Please sign in before submitting an application.";
+
+        return;
+    }
+
+
+    /*
      * Read fields
      */
 
@@ -1056,45 +1064,54 @@ submitButton.addEventListener(
             "Title"
         ).value.trim();
 
+
     const Category =
         document.getElementById(
             "Category"
         ).value.trim();
+
 
     const Subtitle =
         document.getElementById(
             "Subtitle"
         ).value.trim();
 
+
     const Publisher =
         document.getElementById(
             "Publisher"
         ).value.trim();
+
 
     const Version =
         document.getElementById(
             "Version"
         ).value.trim();
 
+
     const Framework =
         document.getElementById(
             "Framework"
         ).value.trim();
+
 
     const ImagePath =
         document.getElementById(
             "ImagePath"
         ).value.trim();
 
+
     const DetailImagePath =
         document.getElementById(
             "DetailImagePath"
         ).value.trim();
 
+
     const DownloadUrl =
         document.getElementById(
             "DownloadUrl"
         ).value.trim();
+
 
     const Description =
         document.getElementById(
@@ -1127,14 +1144,83 @@ submitButton.addEventListener(
 
 
     /*
+     * Validate URL format
+     * before sending to server.
+     */
+
+    try
+    {
+        const urls =
+        [
+            {
+                name:
+                    "Application icon",
+
+                value:
+                    ImagePath
+            },
+
+            {
+                name:
+                    "Screenshot",
+
+                value:
+                    DetailImagePath
+            },
+
+            {
+                name:
+                    "Download",
+
+                value:
+                    DownloadUrl
+            }
+        ];
+
+
+        for (
+            const item of urls
+        )
+        {
+            const url =
+                new URL(
+                    item.value
+                );
+
+
+            if (
+                url.protocol !== "http:" &&
+                url.protocol !== "https:"
+            )
+            {
+                throw new Error(
+                    item.name +
+                    " URL must use HTTP or HTTPS."
+                );
+            }
+        }
+    }
+    catch (error)
+    {
+        message.textContent =
+            error.message ||
+            "One or more URLs are invalid.";
+
+        return;
+    }
+
+
+    /*
      * Disable button
      */
 
     submitButton.disabled =
         true;
 
+
     submitButton.textContent =
         "Submitting...";
+
 
     message.textContent =
         "Submitting application for review...";
@@ -1165,14 +1251,23 @@ submitButton.addEventListener(
                         JSON.stringify({
 
                             Title,
+
                             Category,
+
                             Subtitle,
+
                             Publisher,
+
                             ImagePath,
+
                             DetailImagePath,
+
                             Version,
+
                             Framework,
+
                             Description,
+
                             DownloadUrl
 
                         })
@@ -1180,7 +1275,12 @@ submitButton.addEventListener(
             );
 
 
-        let data = null;
+        /*
+         * Read response
+         */
+
+        let data =
+            null;
 
 
         try
@@ -1190,7 +1290,8 @@ submitButton.addEventListener(
         }
         catch
         {
-            data = null;
+            data =
+                null;
         }
 
 
@@ -1211,15 +1312,17 @@ submitButton.addEventListener(
             submitButton.disabled =
                 false;
 
+
             submitButton.textContent =
                 "Submit Application";
+
 
             return;
         }
 
 
         /*
-         * Successful submission
+         * Submission successful
          */
 
         hide(uploader);
@@ -1229,7 +1332,6 @@ submitButton.addEventListener(
 
         /*
          * Update pending count
-         * immediately after submission.
          */
 
         if (pendingCount)
@@ -1239,16 +1341,96 @@ submitButton.addEventListener(
                     pendingCount.textContent
                 );
 
-            if (!Number.isNaN(current))
+
+            if (
+                !Number.isNaN(current)
+            )
             {
                 pendingCount.textContent =
                     current + 1;
             }
         }
+
+
+        /*
+         * Clear form
+         */
+
+        document
+            .getElementById(
+                "Title"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "Category"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "Subtitle"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "Publisher"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "Version"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "Framework"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "ImagePath"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "DetailImagePath"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "DownloadUrl"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "Description"
+            )
+            .value = "";
     }
     catch (error)
     {
-        console.error(error);
+        console.error(
+            "Submission error:",
+            error
+        );
 
 
         message.textContent =
@@ -1257,6 +1439,7 @@ submitButton.addEventListener(
 
         submitButton.disabled =
             false;
+
 
         submitButton.textContent =
             "Submit Application";
