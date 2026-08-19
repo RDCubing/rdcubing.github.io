@@ -254,42 +254,6 @@ to the Geek Devs Community WebStore.
 </div>
 
 
-<div id="pendingSubmission"
-     style="display:none;">
-
-<h1>
-    App Uploader
-</h1>
-
-
-<div class="box">
-
-<h3>
-    Submission Pending
-</h3>
-
-
-<p>
-You already have an application waiting for
-review.
-</p>
-
-
-<p>
-You can submit another application after your
-current submission has been approved or removed.
-</p>
-
-
-<div id="pendingDetails">
-
-</div>
-
-</div>
-
-</div>
-
-
 <div id="uploader"
      style="display:none;">
 
@@ -666,7 +630,9 @@ NeonStore WebStore
 <script>
 
 /*
+ * =========================
  * API
+ * =========================
  */
 
 const API =
@@ -674,7 +640,9 @@ const API =
 
 
 /*
- * Authentication
+ * =========================
+ * AUTHENTICATION
+ * =========================
  */
 
 const token =
@@ -685,62 +653,46 @@ const username =
 
 
 /*
- * Elements
+ * =========================
+ * ELEMENTS
+ * =========================
  */
 
 const loading =
-    document.getElementById(
-        "loading"
-    );
+    document.getElementById("loading");
 
 const notSignedIn =
-    document.getElementById(
-        "notSignedIn"
-    );
+    document.getElementById("notSignedIn");
 
 const uploader =
-    document.getElementById(
-        "uploader"
-    );
+    document.getElementById("uploader");
 
 const success =
-    document.getElementById(
-        "success"
-    );
+    document.getElementById("success");
 
 const accountStatus =
-    document.getElementById(
-        "accountStatus"
-    );
+    document.getElementById("accountStatus");
 
 const usernameDisplay =
-    document.getElementById(
-        "usernameDisplay"
-    );
+    document.getElementById("usernameDisplay");
 
 const message =
-    document.getElementById(
-        "message"
-    );
+    document.getElementById("message");
 
 const submitButton =
-    document.getElementById(
-        "submitButton"
-    );
+    document.getElementById("submitButton");
 
 const approvedCount =
-    document.getElementById(
-        "approvedCount"
-    );
+    document.getElementById("approvedCount");
 
 const pendingCount =
-    document.getElementById(
-        "pendingCount"
-    );
+    document.getElementById("pendingCount");
 
 
 /*
- * Escape HTML
+ * =========================
+ * ESCAPE HTML
+ * =========================
  */
 
 function escapeHtml(value)
@@ -753,38 +705,19 @@ function escapeHtml(value)
         return "";
     }
 
-
     return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 
 /*
- * Show element
+ * =========================
+ * SHOW / HIDE
+ * =========================
  */
 
 function show(element)
@@ -792,27 +725,23 @@ function show(element)
     if (!element)
         return;
 
-    element.style.display =
-        "block";
+    element.style.display = "block";
 }
 
-
-/*
- * Hide element
- */
 
 function hide(element)
 {
     if (!element)
         return;
 
-    element.style.display =
-        "none";
+    element.style.display = "none";
 }
 
 
 /*
- * Load global submission statistics
+ * =========================
+ * LOAD GLOBAL STATISTICS
+ * =========================
  */
 
 async function loadSubmissionStats()
@@ -839,8 +768,7 @@ async function loadSubmissionStats()
             await fetch(
                 `${API}/stats`,
                 {
-                    method:
-                        "GET",
+                    method: "GET",
 
                     headers:
                     {
@@ -872,7 +800,7 @@ async function loadSubmissionStats()
     catch (error)
     {
         console.error(
-            "Submission statistics error:",
+            "Statistics error:",
             error
         );
 
@@ -887,9 +815,14 @@ async function loadSubmissionStats()
 
 
 /*
- * Load user's submissions
+ * =========================
+ * LOAD USER SUBMISSIONS
+ * =========================
  *
- * Multiple submissions are allowed.
+ * This is only used to retrieve
+ * submission history.
+ *
+ * It does NOT prevent submission.
  */
 
 async function loadMySubmissions()
@@ -906,8 +839,7 @@ async function loadMySubmissions()
             await fetch(
                 `${API}/mine`,
                 {
-                    method:
-                        "GET",
+                    method: "GET",
 
                     headers:
                     {
@@ -921,10 +853,24 @@ async function loadMySubmissions()
             );
 
 
+        /*
+         * Token is invalid.
+         */
+
+        if (response.status === 401)
+        {
+            console.warn(
+                "Authentication token is invalid."
+            );
+
+            return null;
+        }
+
+
         if (!response.ok)
         {
             throw new Error(
-                "Unable to load your submissions."
+                "Unable to load submissions."
             );
         }
 
@@ -933,17 +879,21 @@ async function loadMySubmissions()
             await response.json();
 
 
+        if (
+            !Array.isArray(submissions)
+        )
+        {
+            return [];
+        }
+
+
         console.log(
             "My submissions:",
             submissions
         );
 
 
-        return Array.isArray(
-            submissions
-        )
-            ? submissions
-            : [];
+        return submissions;
     }
     catch (error)
     {
@@ -952,41 +902,41 @@ async function loadMySubmissions()
             error
         );
 
-
         return [];
     }
 }
 
 
 /*
- * Initialize
+ * =========================
+ * INITIALIZE
+ * =========================
  */
 
 async function initialize()
 {
     /*
-     * Hide loading screen
+     * Hide loading screen.
      */
 
     hide(loading);
 
 
     /*
-     * Load global statistics
+     * Load public statistics.
      */
 
     await loadSubmissionStats();
 
 
     /*
-     * Not signed in
+     * Not signed in.
      */
 
     if (!token)
     {
         accountStatus.textContent =
             "Not signed in.";
-
 
         show(notSignedIn);
 
@@ -995,7 +945,7 @@ async function initialize()
 
 
     /*
-     * Signed in
+     * Display account information.
      */
 
     accountStatus.textContent =
@@ -1010,19 +960,45 @@ async function initialize()
     /*
      * Load submission history.
      *
-     * This does NOT prevent the user
-     * from submitting another app.
+     * IMPORTANT:
+     *
+     * We do not check for pending
+     * submissions here.
+     *
+     * Multiple submissions are allowed.
      */
 
-    await loadMySubmissions();
+    const submissions =
+        await loadMySubmissions();
 
 
     /*
-     * Always show uploader.
+     * Invalid token.
      *
-     * Users can submit multiple apps,
-     * including while other submissions
-     * are pending review.
+     * If the API tells us the token
+     * is invalid, show the sign-in
+     * screen instead of allowing a
+     * submission that will fail.
+     */
+
+    if (submissions === null)
+    {
+        accountStatus.textContent =
+            "Session expired.";
+
+        hide(uploader);
+
+        show(notSignedIn);
+
+        return;
+    }
+
+
+    /*
+     * Always show the uploader.
+     *
+     * Pending, approved, or rejected
+     * submissions do not matter.
      */
 
     show(uploader);
@@ -1030,126 +1006,124 @@ async function initialize()
 
 
 /*
- * Submit application
+ * =========================
+ * SUBMIT APPLICATION
+ * =========================
  */
 
 submitButton.addEventListener(
     "click",
-    async () =>
-{
-    message.textContent =
-        "";
-
-
-    /*
-     * Make sure the user
-     * is authenticated.
-     */
-
-    if (!token)
+    async function()
     {
         message.textContent =
-            "Please sign in before submitting an application.";
-
-        return;
-    }
+            "";
 
 
-    /*
-     * Read fields
-     */
+        /*
+         * Make sure we have a token.
+         */
 
-    const Title =
-        document.getElementById(
-            "Title"
-        ).value.trim();
+        if (!token)
+        {
+            message.textContent =
+                "Please sign in before submitting an application.";
 
-
-    const Category =
-        document.getElementById(
-            "Category"
-        ).value.trim();
+            return;
+        }
 
 
-    const Subtitle =
-        document.getElementById(
-            "Subtitle"
-        ).value.trim();
+        /*
+         * Read form values.
+         */
+
+        const Title =
+            document.getElementById(
+                "Title"
+            ).value.trim();
 
 
-    const Publisher =
-        document.getElementById(
-            "Publisher"
-        ).value.trim();
+        const Category =
+            document.getElementById(
+                "Category"
+            ).value.trim();
 
 
-    const Version =
-        document.getElementById(
-            "Version"
-        ).value.trim();
+        const Subtitle =
+            document.getElementById(
+                "Subtitle"
+            ).value.trim();
 
 
-    const Framework =
-        document.getElementById(
-            "Framework"
-        ).value.trim();
+        const Publisher =
+            document.getElementById(
+                "Publisher"
+            ).value.trim();
 
 
-    const ImagePath =
-        document.getElementById(
-            "ImagePath"
-        ).value.trim();
+        const Version =
+            document.getElementById(
+                "Version"
+            ).value.trim();
 
 
-    const DetailImagePath =
-        document.getElementById(
-            "DetailImagePath"
-        ).value.trim();
+        const Framework =
+            document.getElementById(
+                "Framework"
+            ).value.trim();
 
 
-    const DownloadUrl =
-        document.getElementById(
-            "DownloadUrl"
-        ).value.trim();
+        const ImagePath =
+            document.getElementById(
+                "ImagePath"
+            ).value.trim();
 
 
-    const Description =
-        document.getElementById(
-            "Description"
-        ).value.trim();
+        const DetailImagePath =
+            document.getElementById(
+                "DetailImagePath"
+            ).value.trim();
 
 
-    /*
-     * Client-side validation
-     */
-
-    if (
-        !Title ||
-        !Category ||
-        !Subtitle ||
-        !Publisher ||
-        !Version ||
-        !Framework ||
-        !ImagePath ||
-        !DetailImagePath ||
-        !DownloadUrl ||
-        !Description
-    )
-    {
-        message.textContent =
-            "Please fill in all required fields.";
-
-        return;
-    }
+        const DownloadUrl =
+            document.getElementById(
+                "DownloadUrl"
+            ).value.trim();
 
 
-    /*
-     * Validate URL format
-     * before sending to server.
-     */
+        const Description =
+            document.getElementById(
+                "Description"
+            ).value.trim();
 
-    try
-    {
+
+        /*
+         * Required fields.
+         */
+
+        if (
+            !Title ||
+            !Category ||
+            !Subtitle ||
+            !Publisher ||
+            !Version ||
+            !Framework ||
+            !ImagePath ||
+            !DetailImagePath ||
+            !DownloadUrl ||
+            !Description
+        )
+        {
+            message.textContent =
+                "Please fill in all required fields.";
+
+            return;
+        }
+
+
+        /*
+         * Validate URLs.
+         */
+
         const urls =
         [
             {
@@ -1178,135 +1152,285 @@ submitButton.addEventListener(
         ];
 
 
-        for (
-            const item of urls
-        )
+        try
         {
-            const url =
-                new URL(
-                    item.value
-                );
-
-
-            if (
-                url.protocol !== "http:" &&
-                url.protocol !== "https:"
+            for (
+                const item of urls
             )
             {
-                throw new Error(
-                    item.name +
-                    " URL must use HTTP or HTTPS."
-                );
+                const url =
+                    new URL(
+                        item.value
+                    );
+
+
+                if (
+                    url.protocol !== "http:" &&
+                    url.protocol !== "https:"
+                )
+                {
+                    throw new Error(
+                        item.name +
+                        " URL must use HTTP or HTTPS."
+                    );
+                }
             }
         }
-    }
-    catch (error)
-    {
+        catch (error)
+        {
+            message.textContent =
+                error.message ||
+                "One or more URLs are invalid.";
+
+            return;
+        }
+
+
+        /*
+         * Disable submit button.
+         */
+
+        submitButton.disabled =
+            true;
+
+        submitButton.textContent =
+            "Submitting...";
+
+
         message.textContent =
-            error.message ||
-            "One or more URLs are invalid.";
-
-        return;
-    }
+            "Submitting application for review...";
 
 
-    /*
-     * Disable button
-     */
+        /*
+         * Submit to API.
+         */
 
-    submitButton.disabled =
-        true;
-
-
-    submitButton.textContent =
-        "Submitting...";
-
-
-    message.textContent =
-        "Submitting application for review...";
-
-
-    try
-    {
-        const response =
-            await fetch(
-                `${API}/submit`,
-                {
-                    method:
-                        "POST",
-
-                    headers:
+        try
+        {
+            const response =
+                await fetch(
+                    `${API}/submit`,
                     {
-                        "Content-Type":
-                            "application/json",
+                        method: "POST",
 
-                        "Authorization":
-                            "Bearer " + token,
+                        headers:
+                        {
+                            "Content-Type":
+                                "application/json",
 
-                        "Accept":
-                            "application/json"
-                    },
+                            "Authorization":
+                                "Bearer " + token,
 
-                    body:
-                        JSON.stringify({
+                            "Accept":
+                                "application/json"
+                        },
 
-                            Title,
+                        body:
+                            JSON.stringify(
+                            {
+                                Title:
+                                    Title,
 
-                            Category,
+                                Category:
+                                    Category,
 
-                            Subtitle,
+                                Subtitle:
+                                    Subtitle,
 
-                            Publisher,
+                                Publisher:
+                                    Publisher,
 
-                            ImagePath,
+                                ImagePath:
+                                    ImagePath,
 
-                            DetailImagePath,
+                                DetailImagePath:
+                                    DetailImagePath,
 
-                            Version,
+                                Version:
+                                    Version,
 
-                            Framework,
+                                Framework:
+                                    Framework,
 
-                            Description,
+                                Description:
+                                    Description,
 
-                            DownloadUrl
+                                DownloadUrl:
+                                    DownloadUrl
+                            })
+                    }
+                );
 
-                        })
+
+            /*
+             * Read response.
+             */
+
+            let data = null;
+
+
+            try
+            {
+                data =
+                    await response.json();
+            }
+            catch
+            {
+                data = null;
+            }
+
+
+            /*
+             * Invalid token.
+             */
+
+            if (
+                response.status === 401
+            )
+            {
+                message.textContent =
+                    (
+                        data &&
+                        data.error
+                    ) ||
+                    "Invalid or missing token. Please sign in again.";
+
+                submitButton.disabled =
+                    false;
+
+                submitButton.textContent =
+                    "Submit Application";
+
+                return;
+            }
+
+
+            /*
+             * Other API errors.
+             */
+
+            if (!response.ok)
+            {
+                message.textContent =
+                    (
+                        data &&
+                        data.error
+                    ) ||
+                    "Unable to submit application.";
+
+                submitButton.disabled =
+                    false;
+
+                submitButton.textContent =
+                    "Submit Application";
+
+                return;
+            }
+
+
+            /*
+             * Submission successful.
+             */
+
+            console.log(
+                "Application submitted:",
+                data
+            );
+
+
+            /*
+             * Hide uploader.
+             */
+
+            hide(uploader);
+
+
+            /*
+             * Show success screen.
+             */
+
+            show(success);
+
+
+            /*
+             * Update pending count.
+             */
+
+            if (pendingCount)
+            {
+                const current =
+                    Number(
+                        pendingCount.textContent
+                    );
+
+
+                if (
+                    !Number.isNaN(current)
+                )
+                {
+                    pendingCount.textContent =
+                        current + 1;
+                }
+            }
+
+
+            /*
+             * Clear form.
+             */
+
+            const fields =
+            [
+                "Title",
+                "Category",
+                "Subtitle",
+                "Publisher",
+                "Version",
+                "Framework",
+                "ImagePath",
+                "DetailImagePath",
+                "DownloadUrl",
+                "Description"
+            ];
+
+
+            fields.forEach(
+                function(id)
+                {
+                    const element =
+                        document.getElementById(
+                            id
+                        );
+
+
+                    if (element)
+                    {
+                        element.value =
+                            "";
+                    }
                 }
             );
 
 
-        /*
-         * Read response
-         */
+            /*
+             * Reset button state.
+             */
 
-        let data =
-            null;
+            submitButton.disabled =
+                false;
 
-
-        try
-        {
-            data =
-                await response.json();
+            submitButton.textContent =
+                "Submit Application";
         }
-        catch
+        catch (error)
         {
-            data =
-                null;
-        }
+            console.error(
+                "Submission error:",
+                error
+            );
 
 
-        /*
-         * Submission failed
-         */
-
-        if (!response.ok)
-        {
             message.textContent =
-                (
-                    data &&
-                    data.error
-                ) ||
-                "Unable to submit application.";
+                "Unable to connect to the GDC server.";
 
 
             submitButton.disabled =
@@ -1315,140 +1439,15 @@ submitButton.addEventListener(
 
             submitButton.textContent =
                 "Submit Application";
-
-
-            return;
         }
-
-
-        /*
-         * Submission successful
-         */
-
-        hide(uploader);
-
-        show(success);
-
-
-        /*
-         * Update pending count
-         */
-
-        if (pendingCount)
-        {
-            const current =
-                Number(
-                    pendingCount.textContent
-                );
-
-
-            if (
-                !Number.isNaN(current)
-            )
-            {
-                pendingCount.textContent =
-                    current + 1;
-            }
-        }
-
-
-        /*
-         * Clear form
-         */
-
-        document
-            .getElementById(
-                "Title"
-            )
-            .value = "";
-
-
-        document
-            .getElementById(
-                "Category"
-            )
-            .value = "";
-
-
-        document
-            .getElementById(
-                "Subtitle"
-            )
-            .value = "";
-
-
-        document
-            .getElementById(
-                "Publisher"
-            )
-            .value = "";
-
-
-        document
-            .getElementById(
-                "Version"
-            )
-            .value = "";
-
-
-        document
-            .getElementById(
-                "Framework"
-            )
-            .value = "";
-
-
-        document
-            .getElementById(
-                "ImagePath"
-            )
-            .value = "";
-
-
-        document
-            .getElementById(
-                "DetailImagePath"
-            )
-            .value = "";
-
-
-        document
-            .getElementById(
-                "DownloadUrl"
-            )
-            .value = "";
-
-
-        document
-            .getElementById(
-                "Description"
-            )
-            .value = "";
     }
-    catch (error)
-    {
-        console.error(
-            "Submission error:",
-            error
-        );
-
-
-        message.textContent =
-            "Unable to connect to the GDC server.";
-
-
-        submitButton.disabled =
-            false;
-
-
-        submitButton.textContent =
-            "Submit Application";
-    }
-});
+);
 
 
 /*
- * Start
+ * =========================
+ * START
+ * =========================
  */
 
 initialize();
