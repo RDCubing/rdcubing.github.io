@@ -667,9 +667,6 @@ const notSignedIn =
 const uploader =
     document.getElementById("uploader");
 
-const success =
-    document.getElementById("success");
-
 const accountStatus =
     document.getElementById("accountStatus");
 
@@ -687,31 +684,6 @@ const approvedCount =
 
 const pendingCount =
     document.getElementById("pendingCount");
-
-
-/*
- * =========================
- * ESCAPE HTML
- * =========================
- */
-
-function escapeHtml(value)
-{
-    if (
-        value === undefined ||
-        value === null
-    )
-    {
-        return "";
-    }
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
 
 
 /*
@@ -740,7 +712,7 @@ function hide(element)
 
 /*
  * =========================
- * LOAD GLOBAL STATISTICS
+ * LOAD STATISTICS
  * =========================
  */
 
@@ -768,7 +740,8 @@ async function loadSubmissionStats()
             await fetch(
                 `${API}/stats`,
                 {
-                    method: "GET",
+                    method:
+                        "GET",
 
                     headers:
                     {
@@ -782,7 +755,7 @@ async function loadSubmissionStats()
         if (!response.ok)
         {
             throw new Error(
-                "Unable to load submission statistics."
+                "Unable to load statistics."
             );
         }
 
@@ -816,22 +789,36 @@ async function loadSubmissionStats()
 
 /*
  * =========================
- * LOAD USER SUBMISSIONS
+ * CHECK AUTHENTICATION
  * =========================
- *
- * This is only used to retrieve
- * submission history.
- *
- * It does NOT prevent submission.
  */
 
-async function loadMySubmissions()
+async function checkAuthentication()
 {
     if (!token)
     {
-        return [];
+        accountStatus.textContent =
+            "Not signed in.";
+
+        show(notSignedIn);
+
+        return false;
     }
 
+
+    accountStatus.textContent =
+        "Signed in as " +
+        (username || "User");
+
+
+    usernameDisplay.textContent =
+        username || "User";
+
+
+    /*
+     * Verify that the token
+     * actually works.
+     */
 
     try
     {
@@ -839,7 +826,8 @@ async function loadMySubmissions()
             await fetch(
                 `${API}/mine`,
                 {
-                    method: "GET",
+                    method:
+                        "GET",
 
                     headers:
                     {
@@ -853,56 +841,45 @@ async function loadMySubmissions()
             );
 
 
-        /*
-         * Token is invalid.
-         */
-
         if (response.status === 401)
         {
-            console.warn(
-                "Authentication token is invalid."
-            );
+            accountStatus.textContent =
+                "Session expired.";
 
-            return null;
+            hide(uploader);
+
+            show(notSignedIn);
+
+            return false;
         }
 
 
         if (!response.ok)
         {
-            throw new Error(
-                "Unable to load submissions."
+            console.warn(
+                "Unable to verify session."
             );
         }
 
 
-        const submissions =
-            await response.json();
-
-
-        if (
-            !Array.isArray(submissions)
-        )
-        {
-            return [];
-        }
-
-
-        console.log(
-            "My submissions:",
-            submissions
-        );
-
-
-        return submissions;
+        return true;
     }
     catch (error)
     {
         console.error(
-            "My submissions error:",
+            "Authentication check error:",
             error
         );
 
-        return [];
+
+        /*
+         * Don't automatically log
+         * the user out just because
+         * the API is temporarily
+         * unreachable.
+         */
+
+        return true;
     }
 }
 
@@ -915,90 +892,26 @@ async function loadMySubmissions()
 
 async function initialize()
 {
-    /*
-     * Hide loading screen.
-     */
-
     hide(loading);
-
-
-    /*
-     * Load public statistics.
-     */
 
     await loadSubmissionStats();
 
 
-    /*
-     * Not signed in.
-     */
+    const authenticated =
+        await checkAuthentication();
 
-    if (!token)
+
+    if (!authenticated)
     {
-        accountStatus.textContent =
-            "Not signed in.";
-
-        show(notSignedIn);
-
         return;
     }
 
 
     /*
-     * Display account information.
-     */
-
-    accountStatus.textContent =
-        "Signed in as " +
-        (username || "User");
-
-
-    usernameDisplay.textContent =
-        username || "User";
-
-
-    /*
-     * Load submission history.
+     * Always show uploader.
      *
-     * IMPORTANT:
-     *
-     * We do not check for pending
-     * submissions here.
-     *
-     * Multiple submissions are allowed.
-     */
-
-    const submissions =
-        await loadMySubmissions();
-
-
-    /*
-     * Invalid token.
-     *
-     * If the API tells us the token
-     * is invalid, show the sign-in
-     * screen instead of allowing a
-     * submission that will fail.
-     */
-
-    if (submissions === null)
-    {
-        accountStatus.textContent =
-            "Session expired.";
-
-        hide(uploader);
-
-        show(notSignedIn);
-
-        return;
-    }
-
-
-    /*
-     * Always show the uploader.
-     *
-     * Pending, approved, or rejected
-     * submissions do not matter.
+     * Pending submissions do NOT
+     * prevent another submission.
      */
 
     show(uploader);
@@ -1020,7 +933,8 @@ submitButton.addEventListener(
 
 
         /*
-         * Make sure we have a token.
+         * Make sure the user
+         * is signed in.
          */
 
         if (!token)
@@ -1033,7 +947,7 @@ submitButton.addEventListener(
 
 
         /*
-         * Read form values.
+         * Read fields.
          */
 
         const Title =
@@ -1187,7 +1101,7 @@ submitButton.addEventListener(
 
 
         /*
-         * Disable submit button.
+         * Disable button.
          */
 
         submitButton.disabled =
@@ -1202,7 +1116,7 @@ submitButton.addEventListener(
 
 
         /*
-         * Submit to API.
+         * Send submission.
          */
 
         try
@@ -1211,7 +1125,8 @@ submitButton.addEventListener(
                 await fetch(
                     `${API}/submit`,
                     {
-                        method: "POST",
+                        method:
+                            "POST",
 
                         headers:
                         {
@@ -1263,10 +1178,11 @@ submitButton.addEventListener(
 
 
             /*
-             * Read response.
+             * Read API response.
              */
 
-            let data = null;
+            let data =
+                null;
 
 
             try
@@ -1276,7 +1192,8 @@ submitButton.addEventListener(
             }
             catch
             {
-                data = null;
+                data =
+                    null;
             }
 
 
@@ -1294,6 +1211,7 @@ submitButton.addEventListener(
                         data.error
                     ) ||
                     "Invalid or missing token. Please sign in again.";
+
 
                 submitButton.disabled =
                     false;
@@ -1318,6 +1236,7 @@ submitButton.addEventListener(
                     ) ||
                     "Unable to submit application.";
 
+
                 submitButton.disabled =
                     false;
 
@@ -1329,97 +1248,28 @@ submitButton.addEventListener(
 
 
             /*
-             * Submission successful.
+             * =========================
+             * SUCCESS
+             * =========================
+             *
+             * Only show the dialog.
+             * Do NOT show the old
+             * success screen.
              */
 
-            console.log(
-                "Application submitted:",
-                data
+            alert(
+                "Application submitted successfully!\n\n" +
+                "Your application has been submitted " +
+                "and is now waiting for review."
             );
 
 
             /*
-             * Hide uploader.
+             * Refresh the page after
+             * the user closes the dialog.
              */
 
-            hide(uploader);
-
-
-            /*
-             * Show success screen.
-             */
-
-            show(success);
-
-
-            /*
-             * Update pending count.
-             */
-
-            if (pendingCount)
-            {
-                const current =
-                    Number(
-                        pendingCount.textContent
-                    );
-
-
-                if (
-                    !Number.isNaN(current)
-                )
-                {
-                    pendingCount.textContent =
-                        current + 1;
-                }
-            }
-
-
-            /*
-             * Clear form.
-             */
-
-            const fields =
-            [
-                "Title",
-                "Category",
-                "Subtitle",
-                "Publisher",
-                "Version",
-                "Framework",
-                "ImagePath",
-                "DetailImagePath",
-                "DownloadUrl",
-                "Description"
-            ];
-
-
-            fields.forEach(
-                function(id)
-                {
-                    const element =
-                        document.getElementById(
-                            id
-                        );
-
-
-                    if (element)
-                    {
-                        element.value =
-                            "";
-                    }
-                }
-            );
-
-
-            /*
-             * Reset button state.
-             */
-
-            submitButton.disabled =
-                false;
-
-            submitButton.textContent =
-                "Submit Application";
+            window.location.reload();
         }
         catch (error)
         {
@@ -1435,7 +1285,6 @@ submitButton.addEventListener(
 
             submitButton.disabled =
                 false;
-
 
             submitButton.textContent =
                 "Submit Application";
