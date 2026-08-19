@@ -332,6 +332,13 @@ You are signed in as:
 Your GDC account session is currently active.
 </p>
 
+<p>
+<strong>Session expires in:</strong>
+<span id="sessionExpires">
+    Checking...
+</span>
+</p>
+
 <button
  class="button"
  id="logoutButton">
@@ -390,6 +397,169 @@ const accountStatus =
 
 const usernameDisplay =
     document.getElementById("usernameDisplay");
+	
+	const sessionExpires =
+    document.getElementById("sessionExpires");
+
+
+function updateSessionExpiration()
+{
+    if (!sessionExpires)
+    {
+        return;
+    }
+
+
+    if (!token)
+    {
+        sessionExpires.textContent =
+            "Not signed in.";
+
+        return;
+    }
+
+
+    const expiration =
+        getTokenExpiration(token);
+
+
+    if (!expiration)
+    {
+        sessionExpires.textContent =
+            "No expiration";
+
+        return;
+    }
+
+
+    const remaining =
+        expiration - Date.now();
+
+
+    /*
+     * JWT expired
+     */
+
+    if (remaining <= 0)
+    {
+        sessionExpires.textContent =
+            "Expired.";
+
+
+        /*
+         * Remove expired session.
+         */
+
+        localStorage.removeItem("token");
+
+        localStorage.removeItem("username");
+
+
+        /*
+         * Update account state.
+         */
+
+        loggedIn.style.display =
+            "none";
+
+        loggedOut.style.display =
+            "block";
+
+
+        accountStatus.textContent =
+            "Session expired.";
+
+
+        /*
+         * Show expiration message.
+         */
+
+        const message =
+            document.getElementById(
+                "loginMessage"
+            );
+
+
+        if (message)
+        {
+            message.textContent =
+                "Your session has expired. Please sign in again.";
+        }
+
+
+        return;
+    }
+
+
+    const totalSeconds =
+        Math.floor(
+            remaining / 1000
+        );
+
+
+    const days =
+        Math.floor(
+            totalSeconds / 86400
+        );
+
+
+    const hours =
+        Math.floor(
+            (totalSeconds % 86400) / 3600
+        );
+
+
+    const minutes =
+        Math.floor(
+            (totalSeconds % 3600) / 60
+        );
+
+
+    const seconds =
+        totalSeconds % 60;
+
+
+    const parts = [];
+
+
+    if (days > 0)
+    {
+        parts.push(
+            `${days} day${days !== 1 ? "s" : ""}`
+        );
+    }
+
+
+    if (hours > 0)
+    {
+        parts.push(
+            `${hours} hour${hours !== 1 ? "s" : ""}`
+        );
+    }
+
+
+    if (minutes > 0)
+    {
+        parts.push(
+            `${minutes} minute${minutes !== 1 ? "s" : ""}`
+        );
+    }
+
+
+    if (
+        seconds > 0 ||
+        parts.length === 0
+    )
+    {
+        parts.push(
+            `${seconds} second${seconds !== 1 ? "s" : ""}`
+        );
+    }
+
+
+    sessionExpires.textContent =
+        parts.join(", ");
+}
 
 
 /*
