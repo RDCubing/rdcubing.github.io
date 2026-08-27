@@ -133,156 +133,103 @@ NeonStore WebStore
 
 <script src="/js/theme.js"></script>
 <script>
-
-
 const apiUrl =
-"https://raw.githubusercontent.com/RDCubing/geekhubapi/main/projects.json";
+  "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/projects.json";
 
+function createApp(app) {
+  const div = document.createElement("div");
+  div.className = "app";
 
+  div.onclick = function () {
+    location.href =
+      "/webstore/app?id=" + encodeURIComponent(app.Id);
+  };
 
+  div.innerHTML = `
+    <img src="${app.ImagePath}">
+    <div>
+      <div class="app-title">${app.Title}</div>
+      <div class="app-sub">
+        ${app.Publisher}
+        <br>
+        ${app.Subtitle}
+      </div>
+    </div>
+  `;
 
-function createApp(app)
-{
-
-
-let div=document.createElement("div");
-
-
-div.className="app";
-
-
-
-div.onclick=function(){
-
-location.href =
-"/webstore/app?id=" +
-encodeURIComponent(app.Id);
-
-};
-
-
-
-
-div.innerHTML=`
-
-<img src="${app.ImagePath}">
-
-
-<div>
-
-
-<div class="app-title">
-
-${app.Title}
-
-</div>
-
-
-
-<div class="app-sub">
-
-${app.Publisher}
-
-<br>
-
-${app.Subtitle}
-
-</div>
-
-
-
-</div>
-
-`;
-
-
-
-return div;
-
-
+  return div;
 }
-const appsPerPage = 10;
 
+const appsPerPage = 10;
 let allApps = [];
 let currentPage = 1;
 
 function renderPage(page) {
+  const container = document.getElementById("neonApps");
+  container.innerHTML = "";
 
-    const container = document.getElementById("neonApps");
-    container.innerHTML = "";
+  const start = (page - 1) * appsPerPage;
+  const end = start + appsPerPage;
 
-    const start = (page - 1) * appsPerPage;
-    const end = start + appsPerPage;
+  allApps.slice(start, end).forEach((app) => {
+    container.appendChild(createApp(app));
+  });
 
-    allApps
-        .slice(start, end)
-        .forEach(app => {
-            container.appendChild(createApp(app));
-        });
-
-    renderPagination();
+  renderPagination();
 }
 
 function renderPagination() {
+  let pagination = document.getElementById("pagination");
 
-    let pagination = document.getElementById("pagination");
+  if (!pagination) {
+    pagination = document.createElement("div");
+    pagination.id = "pagination";
+    pagination.style.marginTop = "20px";
+    pagination.style.textAlign = "center";
+    document.getElementById("neonApps").after(pagination);
+  }
 
-    if (!pagination) {
-        pagination = document.createElement("div");
-        pagination.id = "pagination";
-        pagination.style.marginTop = "20px";
-        pagination.style.textAlign = "center";
-        document.getElementById("neonApps").after(pagination);
+  pagination.innerHTML = "";
+
+  const totalPages = Math.ceil(allApps.length / appsPerPage);
+
+  for (let i = 1; i <= totalPages; i++) {
+    const button = document.createElement("button");
+    button.textContent = i;
+    button.style.margin = "0 4px";
+    button.style.padding = "6px 12px";
+    button.style.cursor = "pointer";
+
+    if (i === currentPage) {
+      button.disabled = true;
     }
 
-    pagination.innerHTML = "";
+    button.onclick = () => {
+      currentPage = i;
+      renderPage(currentPage);
+    };
 
-    const totalPages = Math.ceil(allApps.length / appsPerPage);
-
-    for (let i = 1; i <= totalPages; i++) {
-
-        const button = document.createElement("button");
-
-        button.textContent = i;
-
-        button.style.margin = "0 4px";
-        button.style.padding = "6px 12px";
-        button.style.cursor = "pointer";
-
-        if (i === currentPage) {
-            button.disabled = true;
-        }
-
-        button.onclick = () => {
-            currentPage = i;
-            renderPage(currentPage);
-        };
-
-        pagination.appendChild(button);
-    }
+    pagination.appendChild(button);
+  }
 }
 
 fetch(apiUrl)
-.then(r => r.json())
-.then(data => {
+  .then((r) => r.json())
+  .then((data) => {
+    // Check if root is already an array, otherwise extract and flatten all arrays inside the object
+    allApps = Array.isArray(data)
+      ? data
+      : Object.values(data).filter(Array.isArray).flat();
 
-    allApps = [
-        ...data.NeonStore,
-        ...data.OtherPlatforms
-    ];
-
-    allApps.sort((a, b) => a.Title.localeCompare(b.Title));
+    // Sort alphabetically by Title
+    allApps.sort((a, b) => (a.Title || "").localeCompare(b.Title || ""));
 
     renderPage(1);
-
-})
-.catch(() => {
+  })
+  .catch(() => {
     document.getElementById("neonApps").innerHTML =
-        "Unable to load applications.";
-});
-
-
-
+      "Unable to load applications.";
+  });
 </script>
 
 
