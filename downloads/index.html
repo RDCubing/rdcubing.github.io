@@ -130,13 +130,53 @@ Downloads
 <script src="/js/theme.js"></script>
 <script>
 
-// Determine which endpoint and default image to use based on the pathname ("prism" vs "neon")
+// Check if the current page context is prism vs neon/default
 const isPrism = window.location.pathname.includes("prism");
 
 const fetchUrl = isPrism 
     ? "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/updateprism.json" 
     : "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/update.json";
 
-const defaultImage = isPrism
-    ? "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/Images/PrismStore.png"
-    : "https://raw.githubusercontent.
+const defaultImage = isPrism ? "PrismStore.png" : "neonstore.png";
+
+fetch(fetchUrl)
+.then(r => r.json())
+.then(data => {
+
+    let app = data.PrismStore ?? data.NeonStore ?? data;
+
+    // If it's an array, pick the top app or fallback to the first element
+    if (Array.isArray(app)) {
+        app = app.find(item => item.TopApp === "Yes") || app[0];
+    }
+
+    document.getElementById("title").textContent =
+        app.Name || app.Title || (isPrism ? "PrismStore" : "NeonStore");
+
+    document.getElementById("version").textContent =
+        "Version: " + (app.Version || "Unknown");
+
+    document.getElementById("description").textContent =
+        app.Description || "";
+
+    document.getElementById("download").href =
+        app.Download || app.DownloadUrl || app.Url || "#";
+
+    // Update the image source dynamically using the JSON ImagePath or the local folder image
+    const imgElement = document.getElementById("app-image");
+    if (imgElement) {
+        imgElement.src = app.ImagePath || defaultImage;
+    }
+
+})
+.catch(() => {
+
+    document.querySelector(".panel").innerHTML =
+        "<b>Unable to load release information.</b>";
+
+});
+
+</script>
+
+</body>
+</html>
