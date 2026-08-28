@@ -98,7 +98,6 @@ Geek Devs Community
             <div class="download">
 
                 <div class="icon-box">
-                    <!-- Added id="app-image" so the script can target it dynamically -->
                     <img id="app-image" src="neonstore.png" alt="App Icon">
                 </div>
 
@@ -131,46 +130,13 @@ Downloads
 <script src="/js/theme.js"></script>
 <script>
 
-// Determine which endpoint/file to fetch based on context, or default to update.json
-const fetchUrl = window.location.pathname.includes("prism") 
+// Determine which endpoint and default image to use based on the pathname ("prism" vs "neon")
+const isPrism = window.location.pathname.includes("prism");
+
+const fetchUrl = isPrism 
     ? "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/updateprism.json" 
     : "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/update.json";
 
-fetch(fetchUrl)
-.then(r => r.json())
-.then(data => {
-
-    // Support PrismStore, NeonStore, or direct array/object
-    const app = data.PrismStore ?? data.NeonStore ?? data;
-
-    document.getElementById("title").textContent =
-        app.Name || app.Title || "Store";
-
-    document.getElementById("version").textContent =
-        "Version: " + (app.Version || "Unknown");
-
-    document.getElementById("description").textContent =
-        app.Description || "";
-
-    document.getElementById("download").href =
-        app.Download || app.DownloadUrl || app.Url;
-
-    // Dynamically update the app icon image source
-    const imgElement = document.getElementById("app-image");
-    if (imgElement) {
-        // Checks if the json has ImagePath, otherwise defaults to the PrismStore.png / NeonStore style image
-        imgElement.src = app.ImagePath || "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/Images/PrismStore.png";
-    }
-
-})
-.catch(() => {
-
-    document.querySelector(".panel").innerHTML =
-        "<b>Unable to load release information.</b>";
-
-});
-
-</script>
-
-</body>
-</html>
+const defaultImage = isPrism
+    ? "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/Images/PrismStore.png"
+    : "https://raw.githubusercontent.
