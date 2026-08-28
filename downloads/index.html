@@ -98,7 +98,8 @@ Geek Devs Community
             <div class="download">
 
                 <div class="icon-box">
-                    <img src="neonstore.png" alt="NeonStore Icon">
+                    <!-- Added id="app-image" so the script can target it dynamically -->
+                    <img id="app-image" src="neonstore.png" alt="App Icon">
                 </div>
 
                 <div>
@@ -154,9 +155,10 @@ fetch(fetchUrl)
     document.getElementById("download").href =
         app.Download || app.DownloadUrl || app.Url;
 
-    // Optional: Update image if you have an element with id="app-image"
+    // Dynamically update the app icon image source
     const imgElement = document.getElementById("app-image");
     if (imgElement) {
+        // Checks if the json has ImagePath, otherwise defaults to the PrismStore.png / NeonStore style image
         imgElement.src = app.ImagePath || "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/Images/PrismStore.png";
     }
 
