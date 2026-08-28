@@ -42,12 +42,8 @@ Geek Devs Community
     <a href="/downloads/">Downloads</a>
     <a target="_blank" href="https://discord.gg/YBsVhkcHT4">Discord</a>
     <a href="/services/">Services</a>
-	<a href="/news/">
-    News
-</a>
-	<a href="/account/">
-    My Account
-</a>
+	<a href="/news/">News</a>
+	<a href="/account/">My Account</a>
 	<a href="https://gdcr.dankassassin368.com/">Subdomain</a>
 	<a href="https://rdcubing.github.io/">GitHub Pages</a>
     <a target="_blank" href="https://github.com/RDCubing">GitHub</a>
@@ -88,35 +84,16 @@ Geek Devs Community
 
         <p>
             Download the latest Geek Devs Community software.
-            This page always displays the newest version published through the update service.
+            This page always displays the newest versions published through the update services.
         </p>
 
-        <h2 id="latest">Latest Release</h2>
+        <h2 id="latest">Latest Releases</h2>
 
-        <div class="panel">
-
-            <div class="download">
-
-                <div class="icon-box">
-                    <img id="app-image" src="neonstore.png" alt="App Icon">
-                </div>
-
-                <div>
-
-                    <h3 id="title">Loading...</h3>
-
-                    <p id="version"></p>
-
-                    <p id="description"></p>
-
-                    <a id="download" class="button" target="_blank">
-                        Download
-                    </a>
-
-                </div>
-
+        <!-- Container where both panels (NeonStore and PrismStore) will be dynamically loaded -->
+        <div id="releases-container">
+            <div class="panel">
+                <p style="text-align: center; padding: 20px;"><b>Loading release information...</b></p>
             </div>
-
         </div>
 
     </div>
@@ -130,50 +107,71 @@ Downloads
 <script src="/js/theme.js"></script>
 <script>
 
-// Check if the current page context is prism vs neon/default
-const isPrism = window.location.pathname.includes("prism");
+// Fetch both update.json (NeonStore) and updateprism.json (PrismStore) simultaneously
+Promise.all([
+    fetch("https://raw.githubusercontent.com/RDCubing/geekhubapi/main/update.json").then(r => r.json()),
+    fetch("https://raw.githubusercontent.com/RDCubing/geekhubapi/main/updateprism.json").then(r => r.json())
+])
+.then(([neonData, prismData]) => {
+    
+    // Extract items helper (supports arrays, wrapped properties, or fallback objects)
+    const getApp = (data, key, defaultImg) => {
+        let items = data[key] ?? data;
+        if (Array.isArray(items)) {
+            // Find top app or fallback to the first entry
+            items = items.find(i => i.TopApp === "Yes") || items[0];
+        }
+        return {
+            title: items.Name || items.Title || "Store App",
+            version: items.Version || "Unknown",
+            description: items.Description || "",
+            downloadUrl: items.Download || items.DownloadUrl || items.Url || "#",
+            imagePath: items.ImagePath || defaultImg
+        };
+    };
 
-const fetchUrl = isPrism 
-    ? "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/updateprism.json" 
-    : "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/update.json";
+    const neonApp = getApp(neonData, "NeonStore", "neonstore.png");
+    const prismApp = getApp(prismData, "PrismStore", "PrismStore.png");
 
-const defaultImage = isPrism ? "PrismStore.png" : "neonstore.png";
+    // Build HTML for both items
+    const container = document.getElementById("releases-container");
+    container.innerHTML = `
+        <div class="panel" style="margin-bottom: 20px;">
+            <div class="download">
+                <div class="icon-box">
+                    <img src="${neonApp.imagePath}" alt="NeonStore Icon" onerror="this.src='neonstore.png'">
+                </div>
+                <div>
+                    <h3>${neonApp.title}</h3>
+                    <p>Version: ${neonApp.version}</p>
+                    <p>${neonApp.description}</p>
+                    <a href="${neonApp.downloadUrl}" class="button" target="_blank">Download</a>
+                </div>
+            </div>
+        </div>
 
-fetch(fetchUrl)
-.then(r => r.json())
-.then(data => {
-
-    let app = data.PrismStore ?? data.NeonStore ?? data;
-
-    // If it's an array, pick the top app or fallback to the first element
-    if (Array.isArray(app)) {
-        app = app.find(item => item.TopApp === "Yes") || app[0];
-    }
-
-    document.getElementById("title").textContent =
-        app.Name || app.Title || (isPrism ? "PrismStore" : "NeonStore");
-
-    document.getElementById("version").textContent =
-        "Version: " + (app.Version || "Unknown");
-
-    document.getElementById("description").textContent =
-        app.Description || "";
-
-    document.getElementById("download").href =
-        app.Download || app.DownloadUrl || app.Url || "#";
-
-    // Update the image source dynamically using the JSON ImagePath or the local folder image
-    const imgElement = document.getElementById("app-image");
-    if (imgElement) {
-        imgElement.src = app.ImagePath || defaultImage;
-    }
+        <div class="panel">
+            <div class="download">
+                <div class="icon-box">
+                    <img src="${prismApp.imagePath}" alt="PrismStore Icon" onerror="this.src='PrismStore.png'">
+                </div>
+                <div>
+                    <h3>${prismApp.title}</h3>
+                    <p>Version: ${prismApp.version}</p>
+                    <p>${prismApp.description}</p>
+                    <a href="${prismApp.downloadUrl}" class="button" target="_blank">Download</a>
+                </div>
+            </div>
+        </div>
+    `;
 
 })
 .catch(() => {
-
-    document.querySelector(".panel").innerHTML =
-        "<b>Unable to load release information.</b>";
-
+    document.getElementById("releases-container").innerHTML = `
+        <div class="panel">
+            <p style="text-align: center; color: red;"><b>Unable to load release information.</b></p>
+        </div>
+    `;
 });
 
 </script>
