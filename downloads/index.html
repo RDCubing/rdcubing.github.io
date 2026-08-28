@@ -130,14 +130,20 @@ Downloads
 <script src="/js/theme.js"></script>
 <script>
 
-fetch("https://raw.githubusercontent.com/RDCubing/geekhubapi/main/update.json")
+// Determine which endpoint/file to fetch based on context, or default to update.json
+const fetchUrl = window.location.pathname.includes("prism") 
+    ? "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/updateprism.json" 
+    : "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/update.json";
+
+fetch(fetchUrl)
 .then(r => r.json())
 .then(data => {
 
-    const app = data.NeonStore ?? data;
+    // Support PrismStore, NeonStore, or direct array/object
+    const app = data.PrismStore ?? data.NeonStore ?? data;
 
     document.getElementById("title").textContent =
-        app.Name || app.Title || "NeonStore";
+        app.Name || app.Title || "Store";
 
     document.getElementById("version").textContent =
         "Version: " + (app.Version || "Unknown");
@@ -147,6 +153,12 @@ fetch("https://raw.githubusercontent.com/RDCubing/geekhubapi/main/update.json")
 
     document.getElementById("download").href =
         app.Download || app.DownloadUrl || app.Url;
+
+    // Optional: Update image if you have an element with id="app-image"
+    const imgElement = document.getElementById("app-image");
+    if (imgElement) {
+        imgElement.src = app.ImagePath || "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/Images/PrismStore.png";
+    }
 
 })
 .catch(() => {
