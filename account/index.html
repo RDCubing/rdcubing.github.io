@@ -178,6 +178,18 @@ Geek Devs Community
 Sign in to your Geek Devs Community account.
 </p>
 
+<!-- ADD DISCORD LOGIN BUTTON -->
+<a href="https://gdcr.dankassassin368.com/ns-status/auth/discord" style="text-decoration: none;">
+    <button type="button" class="button" style="background: #5865F2; color: #fff; border: 1px solid #4752C4; display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 6px 12px; margin-bottom: 12px;">
+        <svg width="20" height="20" viewBox="0 0 127.14 96.36" fill="#fff">
+            <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,45.91,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,45.91,96.12,53,91.08,65.69,84.69,65.69Z"/>
+        </svg>
+        Sign In with Discord
+    </button>
+</a>
+
+<div style="margin-bottom: 12px; color: #888;">— or use credentials —</div>
+
 <label>
 Username
 </label>
@@ -308,17 +320,19 @@ Register </button>
 
 <div class="box">
 
-<p>
 
-You are signed in as:
-
-<br><br>
-
-<b id="usernameDisplay">
-    Loading...
-</b>
-
-</p>
+<div style="display: flex; align-items: center; gap: 15px;">
+    <!-- USER PROFILE AVATAR -->
+    <img id="userAvatar" 
+         src="" 
+         alt="Profile Picture" 
+         style="width: 64px; height: 64px; border-radius: 50%; display: none; border: 2px solid #5865F2; object-fit: cover;">
+    
+    <div>
+        <p style="margin: 0;">You are signed in as:</p>
+        <b id="usernameDisplay" style="font-size: 1.2em;">Loading...</b>
+    </div>
+</div>
 
 </div>
 
@@ -370,532 +384,226 @@ Powered by HTML
 <script src="/js/theme.js"></script>
 
 <script>
+/* =========================
+   HANDLE DISCORD REDIRECT FIRST
+========================= */
+const urlParams = new URLSearchParams(window.location.search);
+const redirectToken = urlParams.get("token");
+const redirectUsername = urlParams.get("username");
+const redirectAvatar = urlParams.get("avatar");
+const authError = urlParams.get("error");
 
-const API =
-    "https://gdcr.dankassassin368.com/ns-status/auth";
+if (redirectToken) {
+    localStorage.setItem("token", redirectToken);
+    if (redirectUsername) localStorage.setItem("username", redirectUsername);
+    if (redirectAvatar) localStorage.setItem("avatar", redirectAvatar);
 
+    // Clean query parameters from address bar without reloading
+    window.history.replaceState({}, document.title, window.location.pathname);
+}
 
-const token =
-    localStorage.getItem("token");
+/* =========================
+   SESSION & STATE SETUP
+========================= */
+const API = "https://gdcr.dankassassin368.com/ns-status/auth";
+const token = localStorage.getItem("token");
+const storedUsername = localStorage.getItem("username");
+const storedAvatar = localStorage.getItem("avatar");
 
+const userAvatar = document.getElementById("userAvatar");
+const loggedOut = document.getElementById("loggedOut");
+const loggedIn = document.getElementById("loggedIn");
+const accountStatus = document.getElementById("accountStatus");
+const usernameDisplay = document.getElementById("usernameDisplay");
+const sessionExpires = document.getElementById("sessionExpires");
 
-const storedUsername =
-    localStorage.getItem("username");
-
-
-const loggedOut =
-    document.getElementById("loggedOut");
-
-
-const loggedIn =
-    document.getElementById("loggedIn");
-
-
-const accountStatus =
-    document.getElementById("accountStatus");
-
-
-const usernameDisplay =
-    document.getElementById("usernameDisplay");
-	
-	const sessionExpires =
-    document.getElementById("sessionExpires");
-	
-	console.log("Token:", token);
-console.log("Session element:", sessionExpires);
-console.log("Expiration:", getTokenExpiration(token));
-
-function getTokenExpiration(token)
-{
-    try
-    {
-        const parts =
-            token.split(".");
-
-        if (parts.length !== 3)
-        {
-            return null;
-        }
-
-        const payload =
-            JSON.parse(
-                atob(
-                    parts[1]
-                        .replace(/-/g, "+")
-                        .replace(/_/g, "/")
-                )
-            );
-
-        if (!payload.exp)
-        {
-            return null;
-        }
-
-        return payload.exp * 1000;
+if (authError) {
+    const message = document.getElementById("loginMessage");
+    if (message) {
+        message.textContent = "Discord sign in failed: " + authError;
     }
-    catch
-    {
+}
+
+function getTokenExpiration(token) {
+    try {
+        const parts = token.split(".");
+        if (parts.length !== 3) return null;
+
+        const payload = JSON.parse(
+            atob(parts[1].replace(/-/g, "+").replace(/_/g, "/"))
+        );
+
+        return payload.exp ? payload.exp * 1000 : null;
+    } catch {
         return null;
     }
 }
 
+function updateSessionExpiration() {
+    if (!sessionExpires) return;
 
-function updateSessionExpiration()
-{
-    if (!sessionExpires)
-    {
+    if (!token) {
+        sessionExpires.textContent = "Not signed in.";
         return;
     }
 
-
-    if (!token)
-    {
-        sessionExpires.textContent =
-            "Not signed in.";
-
+    const expiration = getTokenExpiration(token);
+    if (!expiration) {
+        sessionExpires.textContent = "No expiration";
         return;
     }
 
+    const remaining = expiration - Date.now();
 
-    const expiration =
-        getTokenExpiration(token);
-
-
-    if (!expiration)
-    {
-        sessionExpires.textContent =
-            "No expiration";
-
-        return;
-    }
-
-
-    const remaining =
-        expiration - Date.now();
-
-
-    /*
-     * JWT expired
-     */
-
-    if (remaining <= 0)
-    {
-        sessionExpires.textContent =
-            "Expired.";
-
-
-        /*
-         * Remove expired session.
-         */
-
+    if (remaining <= 0) {
+        sessionExpires.textContent = "Expired.";
         localStorage.removeItem("token");
-
         localStorage.removeItem("username");
+        localStorage.removeItem("avatar");
 
+        loggedIn.style.display = "none";
+        loggedOut.style.display = "block";
+        accountStatus.textContent = "Session expired.";
 
-        /*
-         * Update account state.
-         */
-
-        loggedIn.style.display =
-            "none";
-
-        loggedOut.style.display =
-            "block";
-
-
-        accountStatus.textContent =
-            "Session expired.";
-
-
-        /*
-         * Show expiration message.
-         */
-
-        const message =
-            document.getElementById(
-                "loginMessage"
-            );
-
-
-        if (message)
-        {
-            message.textContent =
-                "Your session has expired. Please sign in again.";
+        const message = document.getElementById("loginMessage");
+        if (message) {
+            message.textContent = "Your session has expired. Please sign in again.";
         }
-
-
         return;
     }
 
-
-    const totalSeconds =
-        Math.floor(
-            remaining / 1000
-        );
-
-
-    const days =
-        Math.floor(
-            totalSeconds / 86400
-        );
-
-
-    const hours =
-        Math.floor(
-            (totalSeconds % 86400) / 3600
-        );
-
-
-    const minutes =
-        Math.floor(
-            (totalSeconds % 3600) / 60
-        );
-
-
-    const seconds =
-        totalSeconds % 60;
-
+    const totalSeconds = Math.floor(remaining / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
 
     const parts = [];
-
-
-    if (days > 0)
-    {
-        parts.push(
-            `${days} day${days !== 1 ? "s" : ""}`
-        );
+    if (days > 0) parts.push(`${days} day${days !== 1 ? "s" : ""}`);
+    if (hours > 0) parts.push(`${hours} hour${hours !== 1 ? "s" : ""}`);
+    if (minutes > 0) parts.push(`${minutes} minute${minutes !== 1 ? "s" : ""}`);
+    if (seconds > 0 || parts.length === 0) {
+        parts.push(`${seconds} second${seconds !== 1 ? "s" : ""}`);
     }
 
-
-    if (hours > 0)
-    {
-        parts.push(
-            `${hours} hour${hours !== 1 ? "s" : ""}`
-        );
-    }
-
-
-    if (minutes > 0)
-    {
-        parts.push(
-            `${minutes} minute${minutes !== 1 ? "s" : ""}`
-        );
-    }
-
-
-    if (
-        seconds > 0 ||
-        parts.length === 0
-    )
-    {
-        parts.push(
-            `${seconds} second${seconds !== 1 ? "s" : ""}`
-        );
-    }
-
-
-    sessionExpires.textContent =
-        parts.join(", ");
+    sessionExpires.textContent = parts.join(", ");
 }
 
 updateSessionExpiration();
+setInterval(updateSessionExpiration, 1000);
 
-setInterval(
-    updateSessionExpiration,
-    1000
-);
-
-
-/*
- * Check login state
- */
-
+/* =========================
+   RENDER INITIAL AUTH STATE
+========================= */
 if (token) {
-
     loggedOut.style.display = "none";
-
     loggedIn.style.display = "block";
+    usernameDisplay.textContent = storedUsername || "User";
+    accountStatus.textContent = "Signed in as " + (storedUsername || "User");
 
-    usernameDisplay.textContent =
-        storedUsername || "User";
-
-    accountStatus.textContent =
-        "Signed in as " +
-        (storedUsername || "User");
-
-}
-else {
-
+    if (storedAvatar && userAvatar) {
+        userAvatar.src = storedAvatar;
+        userAvatar.style.display = "block";
+    }
+} else {
     loggedOut.style.display = "block";
-
     loggedIn.style.display = "none";
-
-    accountStatus.textContent =
-        "Not signed in.";
-
+    accountStatus.textContent = "Not signed in.";
 }
 
+/* =========================
+   LOGIN
+========================= */
+document.getElementById("loginButton").addEventListener("click", async () => {
+    const username = document.getElementById("loginUsername").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    const message = document.getElementById("loginMessage");
 
-/*
- * LOGIN
- */
-
-document
-    .getElementById("loginButton")
-    .addEventListener("click", async () => {
-
-        const username =
-            document
-                .getElementById("loginUsername")
-                .value
-                .trim();
-
-        const password =
-            document
-                .getElementById("loginPassword")
-                .value;
-
-
-        const message =
-            document.getElementById(
-                "loginMessage"
-            );
-
-
-        message.textContent =
-            "Signing in...";
-
-
-        try {
-
-            const response =
-                await fetch(
-                    `${API}/login`,
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body: JSON.stringify({
-                            username,
-                            password
-                        })
-                    }
-                );
-
-
-            const data =
-                await response.json();
-
-
-            if (!response.ok || !data.token) {
-
-                message.textContent =
-                    data.error ||
-                    "Unable to sign in.";
-
-                return;
-
-            }
-
-
-            localStorage.setItem(
-                "token",
-                data.token
-            );
-
-
-            if (data.username) {
-
-                localStorage.setItem(
-                    "username",
-                    data.username
-                );
-
-            }
-            else {
-
-                localStorage.setItem(
-                    "username",
-                    username
-                );
-
-            }
-
-
-            location.reload();
-
-        }
-        catch (error) {
-
-            message.textContent =
-                "Unable to connect to the server.";
-
-            console.error(error);
-
-        }
-
-    });
-
-
-/*
-
-* REGISTER
-  */
-
-document
-.getElementById("registerButton")
-.addEventListener("click", async () => {
-
-    const username =
-        document
-            .getElementById("registerUsername")
-            .value
-            .trim();
-
-    const email =
-        document
-            .getElementById("registerEmail")
-            .value
-            .trim();
-
-    const password =
-        document
-            .getElementById("registerPassword")
-            .value;
-
-    const passwordVerify =
-        document
-            .getElementById("registerPasswordVerify")
-            .value;
-
-
-    const message =
-        document.getElementById(
-            "registerMessage"
-        );
-
-
-    /*
-     * Verify passwords
-     */
-
-    if (password !== passwordVerify) {
-
-        message.textContent =
-            "Passwords do not match.";
-
-        return;
-
-    }
-
-
-    if (!username || !email || !password) {
-
-        message.textContent =
-            "Please fill in all fields.";
-
-        return;
-
-    }
-
-
-    message.textContent =
-        "Creating account...";
-
+    message.textContent = "Signing in...";
 
     try {
+        const response = await fetch(`${API}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+        });
 
-        const response =
-            await fetch(
-                `${API}/register`,
-                {
-                    method: "POST",
+        const data = await response.json();
 
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        username,
-                        email,
-                        password
-                    })
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if (!response.ok) {
-
-            message.textContent =
-                data.error ||
-                "Unable to create account.";
-
+        if (!response.ok || !data.token) {
+            message.textContent = data.error || "Unable to sign in.";
             return;
-
         }
 
-
-        message.textContent =
-            "Account created successfully. You can now sign in.";
-
-
-        document
-            .getElementById("registerUsername")
-            .value = "";
-
-        document
-            .getElementById("registerEmail")
-            .value = "";
-
-        document
-            .getElementById("registerPassword")
-            .value = "";
-
-        document
-            .getElementById("registerPasswordVerify")
-            .value = "";
-
-    }
-    catch (error) {
-
-        message.textContent =
-            "Unable to connect to the server.";
-
-        console.error(error);
-
-    }
-
-});
-
-
-
-
-/*
- * SIGN OUT
- */
-
-document
-    .getElementById("logoutButton")
-    .addEventListener("click", () => {
-
-        localStorage.removeItem("token");
-
-        localStorage.removeItem("username");
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("username", data.username || username);
+        if (data.avatar) {
+            localStorage.setItem("avatar", data.avatar);
+        }
 
         location.reload();
+    } catch (error) {
+        message.textContent = "Unable to connect to the server.";
+        console.error(error);
+    }
+});
 
-    });
+/* =========================
+   REGISTER
+========================= */
+document.getElementById("registerButton").addEventListener("click", async () => {
+    const username = document.getElementById("registerUsername").value.trim();
+    const email = document.getElementById("registerEmail").value.trim();
+    const password = document.getElementById("registerPassword").value;
+    const passwordVerify = document.getElementById("registerPasswordVerify").value;
+    const message = document.getElementById("registerMessage");
 
+    if (password !== passwordVerify) {
+        message.textContent = "Passwords do not match.";
+        return;
+    }
+
+    if (!username || !email || !password) {
+        message.textContent = "Please fill in all fields.";
+        return;
+    }
+
+    message.textContent = "Creating account...";
+
+    try {
+        const response = await fetch(`${API}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            message.textContent = data.error || "Unable to create account.";
+            return;
+        }
+
+        message.textContent = "Account created successfully. You can now sign in.";
+        document.getElementById("registerUsername").value = "";
+        document.getElementById("registerEmail").value = "";
+        document.getElementById("registerPassword").value = "";
+        document.getElementById("registerPasswordVerify").value = "";
+    } catch (error) {
+        message.textContent = "Unable to connect to the server.";
+        console.error(error);
+    }
+});
+
+/* =========================
+   SIGN OUT
+========================= */
+document.getElementById("logoutButton").addEventListener("click", () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("avatar");
+    location.reload();
+});
 </script>
 
 </body>
