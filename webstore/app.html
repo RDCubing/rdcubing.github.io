@@ -66,10 +66,8 @@
     <a href="/webstore/">WebStore</a>
 
     <a href="/webstore/apps/">All Apps</a>
-	
-	<a href="/webstore/uploader/">
-    Upload App
-</a>
+    
+    <a href="/webstore/uploader/">Upload App</a>
 
     <a href="/downloads/">Downloads</a>
 
@@ -359,12 +357,10 @@ async function loadApp() {
             throw new Error("Unable to load applications.");
         }
 
-        // Parse text & sanitize any invalid trailing commas
         const rawText = await response.text();
         const sanitized = rawText.replace(/,\s*([\]}])/g, "$1");
         const data = JSON.parse(sanitized);
 
-        // Dynamically collect all apps from every category array
         const apps = Array.isArray(data)
             ? data
             : Object.values(data).filter(Array.isArray).flat();
@@ -512,7 +508,6 @@ async function loadReviews() {
 
         reviews = data;
 
-        // Newest updated reviews first
         reviews.sort((a, b) => {
             return new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt);
         });
@@ -589,6 +584,7 @@ function displayReviewForm() {
 
     const token = localStorage.getItem("token");
     const username = localStorage.getItem("username");
+    const avatar = localStorage.getItem("avatar");
 
     if (!token || !username) {
         form.innerHTML = `
@@ -608,14 +604,21 @@ function displayReviewForm() {
     const existingRating = existingReview ? existingReview.rating : 5;
     const existingComment = existingReview ? existingReview.comment : "";
 
+    const avatarElement = avatar 
+        ? `<img src="${escapeHtml(avatar)}" alt="Avatar" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid #5865F2;">`
+        : `<span style="width: 28px; height: 28px; border-radius: 50%; background: #5865F2; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">${escapeHtml(username.charAt(0).toUpperCase())}</span>`;
+
     form.innerHTML = `
         <div class="panel">
             <p>
                 <b>${existingReview ? "Your Review" : "Write a Review"}</b>
             </p>
-            <p>
-                Reviewing as: <b>${escapeHtml(username)}</b>
-            </p>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                ${avatarElement}
+                <div>
+                    Reviewing as: <b>${escapeHtml(username)}</b>
+                </div>
+            </div>
 
             <label for="reviewRating">Rating</label>
             <br><br>
@@ -677,6 +680,7 @@ async function submitReview() {
     const rating = Number(document.getElementById("reviewRating").value);
     const comment = document.getElementById("reviewComment").value.trim();
     const message = document.getElementById("reviewMessage");
+    const avatar = localStorage.getItem("avatar");
 
     if (rating < 1 || rating > 5) {
         message.textContent = "Please select a valid rating.";
@@ -705,7 +709,8 @@ async function submitReview() {
             body: JSON.stringify({
                 appId: currentApp.Id,
                 rating: rating,
-                comment: comment
+                comment: comment,
+                avatar: avatar || null
             })
         });
 
@@ -813,24 +818,32 @@ function displayReviews(page) {
         const rating = Number(review.rating);
         const date = formatReviewDate(review.updatedAt || review.createdAt);
 
-        box.innerHTML = `
-            <div>
-                <b>${escapeHtml(review.username)}</b>
-                &nbsp;|&nbsp;
-                <span>${getStars(rating)}</span>
-                &nbsp;
-                <span>${rating}/5</span>
-            </div>
+        const avatarElement = review.avatar
+            ? `<img src="${escapeHtml(review.avatar)}" alt="${escapeHtml(review.username)}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #5865F2;">`
+            : `<span style="width: 32px; height: 32px; border-radius: 50%; background: #5865F2; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold;">${escapeHtml((review.username || "U").charAt(0).toUpperCase())}</span>`;
 
-            ${
-                date
-                    ? `<div style="margin-top:5px; font-size:smaller;">${escapeHtml(date)}</div>`
-                    : ""
-            }
+        box.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px;">
+                ${avatarElement}
+                <div>
+                    <div>
+                        <b>${escapeHtml(review.username)}</b>
+                        &nbsp;|&nbsp;
+                        <span>${getStars(rating)}</span>
+                        &nbsp;
+                        <span>${rating}/5</span>
+                    </div>
+                    ${
+                        date
+                            ? `<div style="font-size: smaller; color: #888; margin-top: 2px;">${escapeHtml(date)}</div>`
+                            : ""
+                    }
+                </div>
+            </div>
 
             <hr>
 
-            <p>${escapeHtml(review.comment)}</p>
+            <p style="margin: 0; white-space: pre-wrap;">${escapeHtml(review.comment)}</p>
         `;
 
         container.appendChild(box);
@@ -914,4 +927,3 @@ loadApp();
 </body>
 
 </html>
-
