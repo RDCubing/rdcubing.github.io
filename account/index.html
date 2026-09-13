@@ -400,6 +400,7 @@ const redirectToken = urlParams.get("token");
 const redirectUsername = urlParams.get("username");
 const redirectAvatar = urlParams.get("avatar");
 const authError = urlParams.get("error");
+const nameCollision = urlParams.get("name_collision");
 
 if (redirectToken) {
     localStorage.setItem("token", redirectToken);
@@ -415,8 +416,8 @@ if (redirectToken) {
 ========================= */
 const API = "https://gdcr.dankassassin368.com/ns-status/auth";
 const token = localStorage.getItem("token");
-const storedUsername = localStorage.getItem("username");
-const storedAvatar = localStorage.getItem("avatar");
+let storedUsername = localStorage.getItem("username");
+let storedAvatar = localStorage.getItem("avatar");
 
 const userAvatar = document.getElementById("userAvatar");
 const loggedOut = document.getElementById("loggedOut");
@@ -446,7 +447,6 @@ if (authError) {
                     link.textContent = "Copy error";
                 }, 2000);
             }).catch(() => {
-                // Fallback for older browsers or restricted environments
                 const tempInput = document.createElement("textarea");
                 tempInput.value = fullError;
                 document.body.appendChild(tempInput);
@@ -533,17 +533,79 @@ updateSessionExpiration();
 setInterval(updateSessionExpiration, 1000);
 
 /* =========================
-   RENDER INITIAL AUTH STATE
+   RENDER PROFILE STATE
 ========================= */
+function renderProfile(username, avatar) {
+    usernameDisplay.textContent = username || "User";
+    accountStatus.textContent = "Signed in as " + (username || "User");
+
+    if (avatar && userAvatar) {
+        userAvatar.src = avatar;
+        userAvatar.style.display = "block";
+    } else if (userAvatar) {
+        userAvatar.style.display = "none";
+    }
+}
+
+/* =========================
+   LIVE PROFILE HYDRATION (/me)
+========================= */
+async function syncLiveProfile() {
+    if (!token) return;
+
+    try {
+        const response = await fetch(`${API}/me`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            
+            // Persist the fresh database snapshot
+            localStorage.setItem("username", data.username);
+            if (data.avatar) {
+                localStorage.setItem("avatar", data.avatar);
+            } else {
+                localStorage.removeItem("avatar");
+            }
+
+            // Update DOM with live data
+            renderProfile(data.username, data.avatar);
+        } else if (response.status === 401) {
+            // Token expired or invalid on server
+            localStorage.removeItem("token");
+            localStorage.removeItem("username");
+            localStorage.removeItem("avatar");
+            location.reload();
+        }
+    } catch (err) {
+        console.warn("Could not sync live profile with server:", err);
+    }
+}
+
 if (token) {
     loggedOut.style.display = "none";
     loggedIn.style.display = "block";
-    usernameDisplay.textContent = storedUsername || "User";
-    accountStatus.textContent = "Signed in as " + (storedUsername || "User");
+    
+    // 1. Immediately paint UI using cached data
+    renderProfile(storedUsername, storedAvatar);
 
-    if (storedAvatar && userAvatar) {
-        userAvatar.src = storedAvatar;
-        userAvatar.style.display = "block";
+    // 2. Fetch fresh live profile in background
+    syncLiveProfile();
+
+    // 3. Inform user if their Discord handle collided and had to be suffixed
+    if (nameCollision) {
+        const announcement = document.querySelector(".announcement");
+        if (announcement) {
+            const notice = document.createElement("p");
+            notice.style.color = "#e67e22";
+            notice.style.fontSize = "0.9em";
+            notice.style.marginTop = "8px";
+            notice.textContent = "Notice: Your Discord username was already taken, so a discriminator tag was appended.";
+            announcement.appendChild(notice);
+        }
     }
 } else {
     loggedOut.style.display = "block";
