@@ -1,184 +1,75 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta property="og:type"
-      content="website">
-
-<meta property="og:title"
-      content="Account - Geek Devs Community">
-
-<meta property="og:description"
-      content="Sign in to your Geek Devs Community account and manage your profile, applications, and community activity.">
-
-<meta property="og:image"
-      content="https://raw.githubusercontent.com/RDCubing/rdcubing.github.io/main/8BackgroundNew.png">
-
-<meta property="og:url"
-      content="https://gdcr.dankassassin368.com/account/">
-
-<meta property="og:site_name"
-      content="Geek Devs Community">
-
+<meta property="og:type" content="website">
+<meta property="og:title" content="Account - Geek Devs Community">
+<meta property="og:description" content="Sign in to your Geek Devs Community account and manage your profile, applications, and community activity.">
+<meta property="og:image" content="https://raw.githubusercontent.com/RDCubing/rdcubing.github.io/main/8BackgroundNew.png">
+<meta property="og:url" content="https://gdcr.dankassassin368.com/account/">
+<meta property="og:site_name" content="Geek Devs Community">
 <title>Account - Geek Devs Community</title>
-
-<link rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/favicon-32x32.png">
-
-<link rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/favicon-16x16.png">
-
-<link rel="apple-touch-icon"
-      href="/apple-touch-icon.png">
-
-<link id="theme-style"
-      rel="stylesheet"
-      href="/css/index/classic.css">
-
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link id="theme-style" rel="stylesheet" href="/css/index/classic.css">
 </head>
-
 <body>
 
 <div class="header">
-
 Geek Devs Community
-
 <span>| Account</span>
-
 </div>
 
 <div class="nav">
-
 <a href="/">Home</a>
-
 <a href="/webstore/">WebStore</a>
-
 <a href="/downloads/">Downloads</a>
-
-<a target="_blank"
-   href="https://discord.gg/YBsVhkcHT4">
-    Discord
-</a>
-
+<a target="_blank" href="https://discord.gg/YBsVhkcHT4">Discord</a>
 <a href="/services/">Services</a>
-<a href="/news/">
-    News
-</a>
-
-<a href="/account/">
-    My Account
-</a>
-
-<a href="https://gdcr.dankassassin368.com/">
-    Subdomain
-</a>
-
-<a href="https://rdcubing.github.io/">
-    GitHub Pages
-</a>
-
-<a target="_blank"
-   href="https://github.com/RDCubing">
-    GitHub
-</a>
-
+<a href="/news/">News</a>
+<a href="/account/">My Account</a>
+<a href="https://gdcr.dankassassin368.com/">Subdomain</a>
+<a href="https://rdcubing.github.io/">GitHub Pages</a>
+<a target="_blank" href="https://github.com/RDCubing">GitHub</a>
 </div>
 
 <div class="container">
-
 <div class="sidebar">
-
 <h3>Settings</h3>
-
 <select id="themeSelector">
-
-<option value="default">
-    Default
-</option>
-
-<option value="classic">
-    Classic
-</option>
-
-<option value="standard">
-    Standard
-</option>
-
-<option value="luna">
-    Luna
-</option>
-
-<option value="vista">
-    Vista
-</option>
-
-<option value="msdn">
-    MSDN
-</option>
-
-<option value="fluent">
-    Fluent
-</option>
-
+<option value="default">Default</option>
+<option value="classic">Classic</option>
+<option value="standard">Standard</option>
+<option value="luna">Luna</option>
+<option value="vista">Vista</option>
+<option value="msdn">MSDN</option>
+<option value="fluent">Fluent</option>
 </select>
 
 <h3>Account</h3>
-
-<a href="#account">
-    Account
-</a>
-
-<a href="#signin">
-    Sign In
-</a>
-
-<a href="#register">
-    Register
-</a>
-
-<a href="#session">
-    Session
-</a>
+<a href="#account">Account</a>
+<a href="#signin">Sign In</a>
+<a href="#register">Register</a>
+<a href="#session">Session</a>
 
 <div class="announcement">
-
 <h4>Account Status</h4>
-
 <div id="accountStatus">
     Checking account...
 </div>
-
 </div>
-
 </div>
 
 <div class="content">
-
-<h1 id="account">
-    Account
-</h1>
+<h1 id="account">Account</h1>
 
 <div id="loggedOut">
-
-<h2 id="signin">
-    Sign In
-</h2>
-
+<h2 id="signin">Sign In</h2>
 <div class="box">
+<p>Sign in to your Geek Devs Community account.</p>
 
-<p>
-Sign in to your Geek Devs Community account.
-</p>
-
-<!-- Inside index.html -->
 <a id="discordLoginBtn" 
    href="https://gdcr.dankassassin368.com/ns-status/auth/discord" 
    class="button" 
@@ -191,200 +82,76 @@ Sign in to your Geek Devs Community account.
 
 <div style="margin-bottom: 12px; color: #888;">— or use credentials —</div>
 
-<label>
-Username
-</label>
+<label>Username</label><br>
+<input id="loginUsername" type="text" autocomplete="username"><br><br>
 
-<br>
+<label>Password</label><br>
+<input id="loginPassword" type="password" autocomplete="current-password"><br><br>
 
-<input
-id="loginUsername"
-type="text"
-autocomplete="username"
-
->
-
-<br><br>
-
-<label>
-Password
-</label>
-
-<br>
-
-<input
-id="loginPassword"
-type="password"
-autocomplete="current-password"
-
->
-
-<br><br>
-
-<button
- class="button"
- id="loginButton">
-Sign In </button>
-
+<button class="button" id="loginButton">Sign In</button>
 <div id="loginMessage"></div>
-
 </div>
 
-<h2 id="register">
-    Register
-</h2>
-
+<h2 id="register">Register</h2>
 <div class="box">
+<p>Create a Geek Devs Community account.</p>
 
-<p>
-Create a Geek Devs Community account.
-</p>
+<label>Username</label><br>
+<input id="registerUsername" type="text" autocomplete="username"><br><br>
 
-<label>
-Username
-</label>
+<label>Email</label><br>
+<input id="registerEmail" type="email" autocomplete="email"><br><br>
 
-<br>
+<label>Password</label><br>
+<input id="registerPassword" type="password" autocomplete="new-password"><br><br>
 
-<input
-id="registerUsername"
-type="text"
-autocomplete="username"
+<label>Verify Password</label><br>
+<input id="registerPasswordVerify" type="password" autocomplete="new-password"><br><br>
 
->
-
-<br><br>
-
-<label>
-Email
-</label>
-
-<br>
-
-<input
-id="registerEmail"
-type="email"
-autocomplete="email"
-
->
-
-<br><br>
-
-<label>
-Password
-</label>
-
-<br>
-
-<input
-id="registerPassword"
-type="password"
-autocomplete="new-password"
-
->
-
-<br><br>
-
-<label>
-Verify Password
-</label>
-
-<br>
-
-<input
-id="registerPasswordVerify"
-type="password"
-autocomplete="new-password"
-
->
-
-<br><br>
-
-<button
-class="button"
-id="registerButton">
-Register </button>
-
+<button class="button" id="registerButton">Register</button>
 <div id="registerMessage"></div>
-
+</div>
 </div>
 
-
-</div>
-
-<div id="loggedIn"
-     style="display:none;">
-
-<h2>
-    Welcome
-</h2>
-
+<div id="loggedIn" style="display:none;">
+<h2>Welcome</h2>
 <div class="box">
-
-
-<div style="display: flex; align-items: center; gap: 15px;">
-    <!-- USER PROFILE AVATAR -->
-    <img id="userAvatar" 
-         src="" 
-         alt="Profile Picture" 
-         style="width: 64px; height: 64px; border-radius: 50%; display: none; border: 2px solid #5865F2; object-fit: cover;">
-    
-    <div>
-        <p style="margin: 0;">You are signed in as:</p>
-        <b id="usernameDisplay" style="font-size: 1.2em;">Loading...</b>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <img id="userAvatar" 
+             src="" 
+             alt="Profile Picture" 
+             style="width: 64px; height: 64px; border-radius: 50%; display: none; border: 2px solid #5865F2; object-fit: cover;">
+        <div>
+            <p style="margin: 0;">You are signed in as:</p>
+            <b id="usernameDisplay" style="font-size: 1.2em;">Loading...</b>
+        </div>
     </div>
 </div>
 
-</div>
-
-<h2 id="session">
-    Session
-</h2>
-
+<h2 id="session">Session</h2>
 <div class="box">
-
-<p>
-Your GDC account session is currently active.
-</p>
-
+<p>Your GDC account session is currently active.</p>
 <p>
 <strong>Session expires in:</strong>
-<span id="sessionExpires">
-    Checking...
-</span>
+<span id="sessionExpires">Checking...</span>
 </p>
-
-<button
- class="button"
- id="logoutButton">
-
-Sign Out
-
-</button>
-
+<button class="button" id="logoutButton">Sign Out</button>
 <div id="logoutMessage"></div>
-
+</div>
 </div>
 
 </div>
-
-</div>
-
 </div>
 
 <div class="footer">
-
 © 2026 Geek Devs Community<br>
-
 REIMP - Reimplementation Project<br>
-
 Powered by HTML
-
 </div>
 
 <script src="/js/theme.js"></script>
 <script>
-// Attach the current website origin dynamically
+// Attach the current website origin dynamically to the Discord button
 const discordBtn = document.getElementById("discordLoginBtn");
 if (discordBtn) {
     discordBtn.href = `https://gdcr.dankassassin368.com/ns-status/auth/discord?origin=${encodeURIComponent(window.location.origin)}`;
@@ -397,15 +164,38 @@ if (discordBtn) {
 ========================= */
 const urlParams = new URLSearchParams(window.location.search);
 const redirectToken = urlParams.get("token");
-const redirectUsername = urlParams.get("username");
-const redirectAvatar = urlParams.get("avatar");
+let redirectUsername = urlParams.get("username");
+let redirectAvatar = urlParams.get("avatar");
 const authError = urlParams.get("error");
 const nameCollision = urlParams.get("name_collision");
+const appProtocol = urlParams.get("app_protocol");
+
+// Safely decode URI components to handle emojis, spaces, and Unicode
+if (redirectUsername) {
+    try {
+        redirectUsername = decodeURIComponent(redirectUsername);
+    } catch {}
+}
+
+if (redirectAvatar) {
+    try {
+        redirectAvatar = decodeURIComponent(redirectAvatar);
+    } catch {}
+}
 
 if (redirectToken) {
     localStorage.setItem("token", redirectToken);
     if (redirectUsername) localStorage.setItem("username", redirectUsername);
     if (redirectAvatar) localStorage.setItem("avatar", redirectAvatar);
+
+    // If an external app requested the login flow, activate it via deep link
+    if (appProtocol) {
+        const targetScheme = decodeURIComponent(appProtocol).replace(/[^a-zA-Z0-9_-]/g, "");
+        const deepLink = `${targetScheme}://auth?token=${encodeURIComponent(redirectToken)}&username=${encodeURIComponent(redirectUsername || "")}&avatar=${encodeURIComponent(redirectAvatar || "")}`;
+        
+        // Launch the matching native client
+        window.location.href = deepLink;
+    }
 
     // Clean query parameters from address bar without reloading
     window.history.replaceState({}, document.title, window.location.pathname);
@@ -709,5 +499,4 @@ document.getElementById("logoutButton").addEventListener("click", () => {
 </script>
 
 </body>
-
 </html>
