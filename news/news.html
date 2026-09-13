@@ -675,127 +675,60 @@ else {
  * Setup comment form
  */
 
+/*
+ * Setup comment form
+ */
 function setupCommentForm() {
+    const container = document.getElementById("commentFormContainer");
+    if (!container) return;
 
-    const container =
-        document.getElementById(
-            "commentFormContainer"
-        );
-
-
-    if (!container) {
-        return;
-    }
-
-
-    const token =
-        localStorage.getItem("token");
-
-
-    const username =
-        localStorage.getItem("username");
-
-
-    /*
-     * Not signed in
-     */
+    const token = localStorage.getItem("token");
+    const username = localStorage.getItem("username");
+    const avatar = localStorage.getItem("avatar");
 
     if (!token || !username) {
-
         container.innerHTML = `
-
             <div class="box">
-
-                <p>
-                    You must be signed in to
-                    leave a comment.
-                </p>
-
-                <a class="button"
-                   href="/account/">
-                    Sign In
-                </a>
-
+                <p>You must be signed in to leave a comment.</p>
+                <a class="button" href="/account/">Sign In</a>
             </div>
-
             <br>
-
         `;
-
         return;
-
     }
 
-
-    /*
-     * Signed in
-     */
+    // Avatar element or default fallback
+    const avatarImg = avatar 
+        ? `<img src="${escapeHtml(avatar)}" alt="Avatar" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid #5865F2;">`
+        : `<span style="width: 28px; height: 28px; border-radius: 50%; background: #5865F2; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">${escapeHtml(username.charAt(0).toUpperCase())}</span>`;
 
     container.innerHTML = `
-
         <div class="box">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                ${avatarImg}
+                <div>
+                    Commenting as: <b>${escapeHtml(username)}</b>
+                </div>
+            </div>
 
-            <p>
-
-                Commenting as:
-
-                <b>
-                    ${escapeHtml(username)}
-                </b>
-
-            </p>
-
-
-            <label for="commentText">
-                Comment
-            </label>
-
+            <label for="commentText">Comment</label>
             <br><br>
-
 
             <textarea
                 id="commentText"
                 rows="5"
-                style="
-                    width: 100%;
-                    max-width: 700px;
-                    box-sizing: border-box;
-                "
+                style="width: 100%; max-width: 700px; box-sizing: border-box;"
                 placeholder="Write a comment..."
             ></textarea>
-
-
             <br><br>
 
-
-            <button
-                class="button"
-                id="postCommentButton">
-
-                Post Comment
-
-            </button>
-
-
-            <div id="commentMessage"
-                 style="margin-top: 10px;">
-
-            </div>
-
+            <button class="button" id="postCommentButton">Post Comment</button>
+            <div id="commentMessage" style="margin-top: 10px;"></div>
         </div>
-
         <br>
-
     `;
 
-
-    document
-        .getElementById("postCommentButton")
-        .addEventListener(
-            "click",
-            postComment
-        );
-
+    document.getElementById("postCommentButton").addEventListener("click", postComment);
 }
 
 
@@ -803,146 +736,63 @@ function setupCommentForm() {
  * Post comment
  */
 
+/*
+ * Post comment
+ */
 async function postComment() {
-
-    const token =
-        localStorage.getItem("token");
-
-
-    const username =
-        localStorage.getItem("username");
-
-
-    const textarea =
-        document.getElementById(
-            "commentText"
-        );
-
-
-    const message =
-        document.getElementById(
-            "commentMessage"
-        );
-
+    const token = localStorage.getItem("token");
+    const username = localStorage.getItem("username");
+    const avatar = localStorage.getItem("avatar");
+    const textarea = document.getElementById("commentText");
+    const message = document.getElementById("commentMessage");
 
     if (!token || !username) {
-
-        message.textContent =
-            "Please sign in first.";
-
+        message.textContent = "Please sign in first.";
         return;
-
     }
 
-
-    const comment =
-        textarea.value.trim();
-
-
+    const comment = textarea.value.trim();
     if (!comment) {
-
-        message.textContent =
-            "Please enter a comment.";
-
+        message.textContent = "Please enter a comment.";
         return;
-
     }
 
-
-    message.textContent =
-        "Posting comment...";
-
+    message.textContent = "Posting comment...";
 
     try {
-
-        const response =
-            await fetch(
-                COMMENTS_URL,
-                {
-                    method: "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/json",
-
-                        "Authorization":
-                            "Bearer " + token
-
-                    },
-
-                    body: JSON.stringify({
-
-                        newsId:
-                            currentNews.newsId,
-
-                        username:
-                            username,
-
-                        comment:
-                            comment
-
-                    })
-
-                }
-            );
-
+        const response = await fetch(COMMENTS_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({
+                newsId: currentNews.newsId,
+                username: username,
+                avatar: avatar || null,
+                comment: comment
+            })
+        });
 
         let data = null;
-
-
         try {
-
-            data =
-                await response.json();
-
-        }
-        catch (e) {
-
+            data = await response.json();
+        } catch (e) {
             data = null;
-
         }
-
 
         if (!response.ok) {
-
-            message.textContent =
-                (
-                    data &&
-                    data.error
-                ) ||
-                "Unable to post comment.";
-
+            message.textContent = (data && data.error) || "Unable to post comment.";
             return;
-
         }
 
-
         textarea.value = "";
-
-
-        message.textContent =
-            "Comment posted successfully.";
-
-
-        /*
-         * Reload comments so the
-         * new comment appears.
-         */
-
+        message.textContent = "Comment posted successfully.";
         await loadComments();
-
-    }
-    catch (error) {
-
+    } catch (error) {
         console.error(error);
-
-
-        message.textContent =
-            "Unable to connect to the server.";
-
+        message.textContent = "Unable to connect to the server.";
     }
-
 }
 
 
