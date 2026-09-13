@@ -428,7 +428,39 @@ const sessionExpires = document.getElementById("sessionExpires");
 if (authError) {
     const message = document.getElementById("loginMessage");
     if (message) {
-        message.textContent = "Discord sign in failed: " + authError;
+        const fullError = `Discord sign in failed: ${authError}`;
+        
+        message.innerHTML = `
+            ${fullError} 
+            <a href="#" id="copyErrorLink" style="margin-left: 8px; color: #5865F2; text-decoration: underline; cursor: pointer;">
+                Copy error
+            </a>
+        `;
+
+        document.getElementById("copyErrorLink").addEventListener("click", (e) => {
+            e.preventDefault();
+            navigator.clipboard.writeText(fullError).then(() => {
+                const link = document.getElementById("copyErrorLink");
+                link.textContent = "Copied!";
+                setTimeout(() => {
+                    link.textContent = "Copy error";
+                }, 2000);
+            }).catch(() => {
+                // Fallback for older browsers or restricted environments
+                const tempInput = document.createElement("textarea");
+                tempInput.value = fullError;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempInput);
+
+                const link = document.getElementById("copyErrorLink");
+                link.textContent = "Copied!";
+                setTimeout(() => {
+                    link.textContent = "Copy error";
+                }, 2000);
+            });
+        });
     }
 }
 
