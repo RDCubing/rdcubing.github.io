@@ -126,6 +126,11 @@ Geek Devs Community
             <b id="usernameDisplay" style="font-size: 1.2em;">Loading...</b>
         </div>
     </div>
+	<div id="userStats" style="margin-top: 10px; font-size: 0.95em; color: #aaa;">
+    <span>Reviews: <strong id="reviewsCount" style="color: #fff;">0</strong></span>
+    <span style="margin: 0 8px;">•</span>
+    <span>Comments: <strong id="commentsCount" style="color: #fff;">0</strong></span>
+</div>
 </div>
 
 <h2 id="session">Session</h2>
@@ -208,6 +213,8 @@ const API = "https://gdcr.dankassassin368.com/ns-status/auth";
 const token = localStorage.getItem("token");
 let storedUsername = localStorage.getItem("username");
 let storedAvatar = localStorage.getItem("avatar");
+let storedReviewsCount = localStorage.getItem("reviewsCount") || "0";
+let storedCommentsCount = localStorage.getItem("commentsCount") || "0";
 
 const userAvatar = document.getElementById("userAvatar");
 const loggedOut = document.getElementById("loggedOut");
@@ -215,6 +222,10 @@ const loggedIn = document.getElementById("loggedIn");
 const accountStatus = document.getElementById("accountStatus");
 const usernameDisplay = document.getElementById("usernameDisplay");
 const sessionExpires = document.getElementById("sessionExpires");
+
+// Elements for reviews and comments counts
+const reviewsCountDisplay = document.getElementById("reviewsCount");
+const commentsCountDisplay = document.getElementById("commentsCount");
 
 if (authError) {
     const message = document.getElementById("loginMessage");
@@ -290,6 +301,8 @@ function updateSessionExpiration() {
         localStorage.removeItem("token");
         localStorage.removeItem("username");
         localStorage.removeItem("avatar");
+        localStorage.removeItem("reviewsCount");
+        localStorage.removeItem("commentsCount");
 
         loggedIn.style.display = "none";
         loggedOut.style.display = "block";
@@ -325,15 +338,21 @@ setInterval(updateSessionExpiration, 1000);
 /* =========================
    RENDER PROFILE STATE
 ========================= */
-function renderProfile(username, avatar) {
-    usernameDisplay.textContent = username || "User";
-    accountStatus.textContent = "Signed in as " + (username || "User");
+function renderProfile(username, avatar, stats) {
+    if (usernameDisplay) usernameDisplay.textContent = username || "User";
+    if (accountStatus) accountStatus.textContent = "Signed in as " + (username || "User");
 
     if (avatar && userAvatar) {
         userAvatar.src = avatar;
         userAvatar.style.display = "block";
     } else if (userAvatar) {
         userAvatar.style.display = "none";
+    }
+
+    // Display reviews and comments counts
+    if (stats) {
+        if (reviewsCountDisplay) reviewsCountDisplay.textContent = stats.reviews ?? 0;
+        if (commentsCountDisplay) commentsCountDisplay.textContent = stats.comments ?? 0;
     }
 }
 
@@ -361,13 +380,21 @@ async function syncLiveProfile() {
                 localStorage.removeItem("avatar");
             }
 
-            // Update DOM with live data
-            renderProfile(data.username, data.avatar);
+            // Cache live stats
+            if (data.stats) {
+                localStorage.setItem("reviewsCount", data.stats.reviews ?? 0);
+                localStorage.setItem("commentsCount", data.stats.comments ?? 0);
+            }
+
+            // Update DOM with live data and counts
+            renderProfile(data.username, data.avatar, data.stats);
         } else if (response.status === 401) {
             // Token expired or invalid on server
             localStorage.removeItem("token");
             localStorage.removeItem("username");
             localStorage.removeItem("avatar");
+            localStorage.removeItem("reviewsCount");
+            localStorage.removeItem("commentsCount");
             location.reload();
         }
     } catch (err) {
@@ -380,9 +407,12 @@ if (token) {
     loggedIn.style.display = "block";
     
     // 1. Immediately paint UI using cached data
-    renderProfile(storedUsername, storedAvatar);
+    renderProfile(storedUsername, storedAvatar, {
+        reviews: storedReviewsCount,
+        comments: storedCommentsCount
+    });
 
-    // 2. Fetch fresh live profile in background
+    // 2. Fetch fresh live profile & statistics in background
     syncLiveProfile();
 
     // 3. Inform user if their Discord handle collided and had to be suffixed
@@ -494,6 +524,8 @@ document.getElementById("logoutButton").addEventListener("click", () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("avatar");
+    localStorage.removeItem("reviewsCount");
+    localStorage.removeItem("commentsCount");
     location.reload();
 });
 </script>
