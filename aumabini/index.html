@@ -403,7 +403,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            display: flex; /* Visible by default until stream confirms loading */
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -627,7 +627,7 @@
                 <button class="btn-header" onclick="openDocs()" style="border-color: var(--au-gold);">Docs</button>
                 <button class="btn-header btn-logout" onclick="logout()">Sign Out</button>
             </div>
-            <p id="live-time" class="header-datetime">Connecting to Gateway...</p>
+            <p id="live-time" class="header-datetime">Connecting to Gateways...</p>
         </div>
     </div>
 
@@ -810,9 +810,8 @@ Project Leader   : Rahmiel B. Baldovino
 Adviser          : Sir Jobert Mandigma
 Monitoring Gates : Donada Gate & Taft Gate (AU - Mabini Campus)
 --------------------------------------------------------------------------------
-Channel ID       : 3482463
-Fields           : 1-4 (Donada: Depth, Temp, Hum, Lux)
-                 : 5-8 (Taft: Depth, Temp, Hum, Lux)
+Donada Channel Read Key : GBSKZ1CJ72FDWGG0
+Taft Channel Read Key   : DKOXWIEC7F5PYX67
 ================================================================================
                 </pre>
             </div>
@@ -820,15 +819,13 @@ Fields           : 1-4 (Donada: Depth, Temp, Hum, Lux)
     </div>
 
     <script>
-        const AU_CHANNEL = {
-            channelId: "3482463",
-            readKey: "GBSKZ1CJ72FDWGG0"
-        };
-
+        // Dedicated dual configuration per station
         const stationFieldMaps = {
             donada: {
                 name: "Donada Gate",
                 cctvLabel: "AU CCTV - Donada Gate",
+                channelId: "3482463",
+                readKey: "GBSKZ1CJ72FDWGG0", // Donada Read Key
                 depthField: "field1",
                 tempField: "field2",
                 humField: "field3",
@@ -838,6 +835,8 @@ Fields           : 1-4 (Donada: Depth, Temp, Hum, Lux)
             taft: {
                 name: "Taft Gate",
                 cctvLabel: "AU CCTV - Taft Gate",
+                channelId: "3482463",
+                readKey: "DKOXWIEC7F5PYX67", // Taft Read Key
                 depthField: "field5",
                 tempField: "field6",
                 humField: "field7",
@@ -846,8 +845,13 @@ Fields           : 1-4 (Donada: Depth, Temp, Hum, Lux)
             }
         };
 
+        // Independent storage buffer per station
+        const stationData = {
+            donada: [],
+            taft: []
+        };
+
         let currentStation = 'donada';
-        let latestFeeds = [];
         let modalChart = null;
         let currentModalMetric = null;
 
@@ -880,7 +884,6 @@ Fields           : 1-4 (Donada: Depth, Temp, Hum, Lux)
         function openDocs() { document.getElementById('docs-overlay').style.display = 'block'; }
         function closeDocs() { document.getElementById('docs-overlay').style.display = 'none'; }
 
-        // Non-blocking CCTV image test
         function testCameraStream() {
             const isLocal = ['localhost', '127.0.0.1', '192.168.'].some(host => window.location.hostname.includes(host));
             const isHttps = window.location.protocol === 'https:';
@@ -916,13 +919,14 @@ Fields           : 1-4 (Donada: Depth, Temp, Hum, Lux)
         }
 
         function exportTelemetryCSV() {
-            if (!latestFeeds || latestFeeds.length === 0) {
+            const feeds = stationData[currentStation];
+            if (!feeds || feeds.length === 0) {
                 alert("No telemetry records loaded to export.");
                 return;
             }
 
             let csv = "Timestamp,Station,WaterDepth_cm,Temperature_degC,Humidity_percent,Light_Lux\n";
-            latestFeeds.forEach(f => {
+            feeds.forEach(f => {
                 const map = stationFieldMaps[currentStation];
                 csv += `"${f.created_at}","${map.name}",${f[map.depthField]||0},${f[map.tempField]||0},${f[map.humField]||0},${f[map.lightField]||0}\n`;
             });
@@ -956,14 +960,15 @@ Fields           : 1-4 (Donada: Depth, Temp, Hum, Lux)
         }
 
         function renderPopupChart(metricKey) {
-            if (!window.Chart || !latestFeeds || latestFeeds.length === 0) return;
+            const feeds = stationData[currentStation];
+            if (!window.Chart || !feeds || feeds.length === 0) return;
 
             const config = metricConfigs[metricKey];
             const map = stationFieldMaps[currentStation];
             const fieldName = map[config.fieldProp];
 
-            const labels = latestFeeds.map(f => new Date(f.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-            const data = latestFeeds.map(f => parseFloat(f[fieldName]) || 0);
+            const labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+            const data = feeds.map(f => parseFloat(f[fieldName]) || 0);
 
             const ctx = document.getElementById('popupTrendChart').getContext('2d');
             if (modalChart) modalChart.destroy();
@@ -996,33 +1001,47 @@ Fields           : 1-4 (Donada: Depth, Temp, Hum, Lux)
             });
         }
 
-        async function fetchCombinedFeed() {
+        // Fetch using the specific station's channel & API key
+        async function fetchStationFeed(stationKey) {
+            const station = stationFieldMaps[stationKey];
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 6000); // 6s timeout guard
+            const timeoutId = setTimeout(() => controller.abort(), 6000);
 
             try {
-                const url = `https://api.thingspeak.com/channels/${AU_CHANNEL.channelId}/feeds.json?api_key=${AU_CHANNEL.readKey}&results=15`;
+                const url = `https://api.thingspeak.com/channels/${station.channelId}/feeds.json?api_key=${station.readKey}&results=15`;
                 const response = await fetch(url, { signal: controller.signal });
                 clearTimeout(timeoutId);
 
-                if (!response.ok) throw new Error("HTTP error");
+                if (!response.ok) throw new Error(`HTTP error ${response.status}`);
                 const json = await response.json();
-                latestFeeds = json.feeds || [];
+                stationData[stationKey] = json.feeds || [];
 
-                if (latestFeeds.length > 0) {
+                if (stationKey === currentStation) {
                     renderUI();
                     if (currentModalMetric) renderPopupChart(currentModalMetric);
                 }
             } catch (err) {
-                document.getElementById('live-time').innerText = "Status: Feed Unreachable";
+                console.warn(`Error fetching ${station.name}:`, err);
+                if (stationKey === currentStation && (!stationData[stationKey] || stationData[stationKey].length === 0)) {
+                    document.getElementById('live-time').innerText = `${station.name}: Feed Unreachable`;
+                }
             }
         }
 
+        // Fetch data for both stations simultaneously
+        async function fetchAllStations() {
+            await Promise.all([
+                fetchStationFeed('donada'),
+                fetchStationFeed('taft')
+            ]);
+        }
+
         function renderUI() {
-            if (!latestFeeds || latestFeeds.length === 0) return;
+            const feeds = stationData[currentStation];
+            if (!feeds || feeds.length === 0) return;
 
             const map = stationFieldMaps[currentStation];
-            const latest = latestFeeds[latestFeeds.length - 1];
+            const latest = feeds[feeds.length - 1];
 
             const depth = parseFloat(latest[map.depthField]) || 0.0;
             const temp = parseFloat(latest[map.tempField]) || 0.0;
@@ -1038,8 +1057,8 @@ Fields           : 1-4 (Donada: Depth, Temp, Hum, Lux)
             document.getElementById('live-time').innerText = `${rawDate.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' })} | ${rawDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
 
             let rateOfRise = 0.0;
-            if (latestFeeds.length >= 2) {
-                const prev = latestFeeds[latestFeeds.length - 2];
+            if (feeds.length >= 2) {
+                const prev = feeds[feeds.length - 2];
                 const prevDepth = parseFloat(prev[map.depthField]) || 0.0;
                 const timeDiffMinutes = (new Date(latest.created_at) - new Date(prev.created_at)) / 60000;
                 if (timeDiffMinutes > 0) rateOfRise = (depth - prevDepth) / timeDiffMinutes;
@@ -1114,11 +1133,10 @@ Fields           : 1-4 (Donada: Depth, Temp, Hum, Lux)
             if (currentModalMetric) renderPopupChart(currentModalMetric);
         }
 
-        // Fire immediately without waiting for images or external resources
         document.addEventListener("DOMContentLoaded", () => {
-            fetchCombinedFeed();
+            fetchAllStations();
             testCameraStream();
-            setInterval(fetchCombinedFeed, 20000);
+            setInterval(fetchAllStations, 20000);
         });
     </script>
 </body>
