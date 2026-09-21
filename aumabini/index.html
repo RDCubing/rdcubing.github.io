@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AU - Mabini Campus Flood & Surveillance Telemetry</title>
-    <!-- Preconnect & Defer external Chart.js to eliminate parser blocking -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://api.thingspeak.com">
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
@@ -754,13 +753,20 @@
         <!-- Right Panel: CCTV Stream & Project Info -->
         <div class="right-panel">
             <div class="video-card">
-                <div class="card-title">Live Gate Surveillance</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                    <div class="card-title" style="margin-bottom: 0;">Live Gate Surveillance</div>
+                    <div style="font-size: 0.75rem; color: #475569; background: #eef2f6; border: 1px solid #cbd5e1; padding: 2px 8px; border-radius: 4px; font-family: monospace;">
+                        RTSP Stream IP: <b id="display-stream-ip" style="color: var(--au-blue);">192.168.1.2:8080</b>
+                    </div>
+                </div>
+                
                 <div class="video-wrapper">
                     <span class="video-tag"><span class="live-dot"></span> LIVE CCTV</span>
                     
                     <div class="camera-fallback" id="cam-fallback">
                         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                         <span id="cam-fallback-msg">Camera Offline / Local LAN Only</span>
+                        <span id="cam-fallback-endpoint" style="font-size: 0.75rem; font-family: monospace; color: #94a3b8;"></span>
                     </div>
 
                     <img id="camera-feed" alt="Live Gate Surveillance" style="display:none;"
@@ -819,33 +825,39 @@ Taft Channel (3502339) Read Key   : DKOXWIEC7F5PYX67
     </div>
 
     <script>
-        // Dedicated dual configuration per station
+        const DEFAULT_LOCAL_IP = "192.168.1.2";
+        const STREAM_PORT = "8080";
+
+        const isLocalHost = ['localhost', '127.0.0.1', '192.168.'].some(h => window.location.hostname.includes(h));
+        const streamHost = (isLocalHost && window.location.hostname) ? window.location.hostname : DEFAULT_LOCAL_IP;
+
+        function getStreamUrl(station) {
+            return `http://${streamHost}:${STREAM_PORT}/stream/${station}`;
+        }
+
         const stationFieldMaps = {
             donada: {
                 name: "Donada Gate",
                 cctvLabel: "AU CCTV - Donada Gate",
-                channelId: "3482463",               // Donada Channel ID
-                readKey: "GBSKZ1CJ72FDWGG0",         // Donada Read API Key
-                depthField: "field1",               // Field 1: Donada Water Depth
-                tempField: "field2",                // Field 2: Donada Temp
-                humField: "field3",                 // Field 3: Donada Humidity
-                lightField: "field4",               // Field 4: Donada Light
-                streamUrl: "http://192.168.1.2:8080/stream/donada"
+                channelId: "3482463",
+                readKey: "GBSKZ1CJ72FDWGG0",
+                depthField: "field1",
+                tempField: "field2",
+                humField: "field3",
+                lightField: "field4"
             },
             taft: {
                 name: "Taft Gate",
                 cctvLabel: "AU CCTV - Taft Gate",
-                channelId: "3502339",               // Taft Channel ID
-                readKey: "DKOXWIEC7F5PYX67",         // Taft Read API Key
-                depthField: "field1",               // Field 1: Taft Water Depth
-                tempField: "field2",                // Mirrors Donada Temp
-                humField: "field3",                 // Mirrors Donada Humidity
-                lightField: "field4",               // Field 4: Taft Light
-                streamUrl: "http://192.168.1.2:8080/stream/taft"
+                channelId: "3502339",
+                readKey: "DKOXWIEC7F5PYX67",
+                depthField: "field1",
+                tempField: "field2",
+                humField: "field3",
+                lightField: "field4"
             }
         };
 
-        // Independent storage buffer per station
         const stationData = {
             donada: [],
             taft: []
@@ -885,28 +897,36 @@ Taft Channel (3502339) Read Key   : DKOXWIEC7F5PYX67
         function closeDocs() { document.getElementById('docs-overlay').style.display = 'none'; }
 
         function testCameraStream() {
-            const isLocal = ['localhost', '127.0.0.1', '192.168.'].some(host => window.location.hostname.includes(host));
-            const isHttps = window.location.protocol === 'https:';
-            const fallbackMsg = document.getElementById('cam-fallback-msg');
-            const fallback = document.getElementById('cam-fallback');
-            const cam = document.getElementById('camera-feed');
+    // Allow localhost, local IPs, and direct file openings (file:///)
+    const isLocal = ['localhost', '127.0.0.1', '192.168.', '10.', '172.'].some(host => window.location.hostname.includes(host)) 
+                    || window.location.protocol === 'file:';
+    const isHttps = window.location.protocol === 'https:';
+    const fallbackMsg = document.getElementById('cam-fallback-msg');
+    const fallbackIp = document.getElementById('cam-fallback-endpoint');
+    const fallback = document.getElementById('cam-fallback');
+    const cam = document.getElementById('camera-feed');
+    const targetUrl = getStreamUrl(currentStation);
 
-            if (isHttps) {
-                fallback.style.display = 'flex';
-                cam.style.display = 'none';
-                fallbackMsg.innerText = "CCTV blocked by HTTPS Mixed Content. View via HTTP LAN.";
-                return;
-            }
+    const displayIp = document.getElementById('display-stream-ip');
+    if (displayIp) displayIp.innerText = `${streamHost}:${STREAM_PORT}`;
+    if (fallbackIp) fallbackIp.innerText = targetUrl;
 
-            if (!isLocal) {
-                fallback.style.display = 'flex';
-                cam.style.display = 'none';
-                fallbackMsg.innerText = "Camera LAN IP Unreachable from Web Host";
-                return;
-            }
+    if (isHttps) {
+        fallback.style.display = 'flex';
+        cam.style.display = 'none';
+        fallbackMsg.innerText = "CCTV blocked by HTTPS Mixed Content. View via HTTP LAN.";
+        return;
+    }
 
-            cam.src = stationFieldMaps[currentStation].streamUrl;
-        }
+    if (!isLocal) {
+        fallback.style.display = 'flex';
+        cam.style.display = 'none';
+        fallbackMsg.innerText = "Camera LAN IP Unreachable from Web Host";
+        return;
+    }
+
+    cam.src = targetUrl;
+}
 
         function handleCameraError() {
             document.getElementById('cam-fallback').style.display = 'flex';
@@ -925,7 +945,6 @@ Taft Channel (3502339) Read Key   : DKOXWIEC7F5PYX67
                 return;
             }
 
-            // Reference Donada feed for mirrored climate data
             const donadaFeeds = stationData.donada;
             const latestDonada = (donadaFeeds && donadaFeeds.length > 0) ? donadaFeeds[donadaFeeds.length - 1] : null;
 
@@ -935,7 +954,6 @@ Taft Channel (3502339) Read Key   : DKOXWIEC7F5PYX67
                 const d = f[map.depthField] || 0;
                 const l = f[map.lightField] || 0;
                 
-                // If Taft, use Donada's climate data
                 let temp = f[map.tempField] || 0;
                 let hum = f[map.humField] || 0;
                 if (currentStation === 'taft' && latestDonada) {
@@ -975,7 +993,6 @@ Taft Channel (3502339) Read Key   : DKOXWIEC7F5PYX67
         }
 
         function renderPopupChart(metricKey) {
-            // For temp/humidity, Taft directly charts Donada's feeds
             const targetStation = (currentStation === 'taft' && (metricKey === 'temp' || metricKey === 'humidity')) 
                                   ? 'donada' 
                                   : currentStation;
@@ -1061,11 +1078,9 @@ Taft Channel (3502339) Read Key   : DKOXWIEC7F5PYX67
             const map = stationFieldMaps[currentStation];
             const latest = feeds[feeds.length - 1];
 
-            // Real-time Water Depth and Ambient Light for selected station
             const depth = parseFloat(latest[map.depthField]) || 0.0;
             const light = parseFloat(latest[map.lightField]) || 0.0;
 
-            // Temperature and Humidity: Use Donada's live values as constant for Taft
             let temp = 0.0;
             let humidity = 0.0;
             const donadaFeeds = stationData.donada;
@@ -1074,7 +1089,6 @@ Taft Channel (3502339) Read Key   : DKOXWIEC7F5PYX67
                 temp = parseFloat(latest[map.tempField]) || 0.0;
                 humidity = parseFloat(latest[map.humField]) || 0.0;
             } else {
-                // Taft Gate inherits temperature and humidity from Donada Gate
                 if (donadaFeeds && donadaFeeds.length > 0) {
                     const latestDonada = donadaFeeds[donadaFeeds.length - 1];
                     temp = parseFloat(latestDonada.field2) || 0.0;
