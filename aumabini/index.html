@@ -810,8 +810,8 @@ Project Leader   : Rahmiel B. Baldovino
 Adviser          : Sir Jobert Mandigma
 Monitoring Gates : Donada Gate & Taft Gate (AU - Mabini Campus)
 --------------------------------------------------------------------------------
-Donada Channel Read Key : GBSKZ1CJ72FDWGG0
-Taft Channel Read Key   : DKOXWIEC7F5PYX67
+Donada Channel (3482463) Read Key : GBSKZ1CJ72FDWGG0
+Taft Channel (3502339) Read Key   : DKOXWIEC7F5PYX67
 ================================================================================
                 </pre>
             </div>
@@ -820,7 +820,7 @@ Taft Channel Read Key   : DKOXWIEC7F5PYX67
 
     <script>
         // Dedicated dual configuration per station
-	const stationFieldMaps = {
+        const stationFieldMaps = {
             donada: {
                 name: "Donada Gate",
                 cctvLabel: "AU CCTV - Donada Gate",
@@ -838,8 +838,8 @@ Taft Channel Read Key   : DKOXWIEC7F5PYX67
                 channelId: "3502339",               // Taft Channel ID
                 readKey: "DKOXWIEC7F5PYX67",         // Taft Read API Key
                 depthField: "field1",               // Field 1: Taft Water Depth
-                tempField: "field2",                // Field 2: Taft Temp (mirrored from Donada)
-                humField: "field3",                 // Field 3: Taft Humidity (mirrored from Donada)
+                tempField: "field2",                // Mirrors Donada Temp
+                humField: "field3",                 // Mirrors Donada Humidity
                 lightField: "field4",               // Field 4: Taft Light
                 streamUrl: "http://192.168.1.2:8080/stream/taft"
             }
@@ -925,10 +925,25 @@ Taft Channel Read Key   : DKOXWIEC7F5PYX67
                 return;
             }
 
+            // Reference Donada feed for mirrored climate data
+            const donadaFeeds = stationData.donada;
+            const latestDonada = (donadaFeeds && donadaFeeds.length > 0) ? donadaFeeds[donadaFeeds.length - 1] : null;
+
             let csv = "Timestamp,Station,WaterDepth_cm,Temperature_degC,Humidity_percent,Light_Lux\n";
             feeds.forEach(f => {
                 const map = stationFieldMaps[currentStation];
-                csv += `"${f.created_at}","${map.name}",${f[map.depthField]||0},${f[map.tempField]||0},${f[map.humField]||0},${f[map.lightField]||0}\n`;
+                const d = f[map.depthField] || 0;
+                const l = f[map.lightField] || 0;
+                
+                // If Taft, use Donada's climate data
+                let temp = f[map.tempField] || 0;
+                let hum = f[map.humField] || 0;
+                if (currentStation === 'taft' && latestDonada) {
+                    temp = latestDonada.field2 || 0;
+                    hum = latestDonada.field3 || 0;
+                }
+
+                csv += `"${f.created_at}","${map.name}",${d},${temp},${hum},${l}\n`;
             });
 
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -960,11 +975,16 @@ Taft Channel Read Key   : DKOXWIEC7F5PYX67
         }
 
         function renderPopupChart(metricKey) {
-            const feeds = stationData[currentStation];
+            // For temp/humidity, Taft directly charts Donada's feeds
+            const targetStation = (currentStation === 'taft' && (metricKey === 'temp' || metricKey === 'humidity')) 
+                                  ? 'donada' 
+                                  : currentStation;
+
+            const feeds = stationData[targetStation];
             if (!window.Chart || !feeds || feeds.length === 0) return;
 
             const config = metricConfigs[metricKey];
-            const map = stationFieldMaps[currentStation];
+            const map = stationFieldMaps[targetStation];
             const fieldName = map[config.fieldProp];
 
             const labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
@@ -1001,7 +1021,6 @@ Taft Channel Read Key   : DKOXWIEC7F5PYX67
             });
         }
 
-        // Fetch using the specific station's channel & API key
         async function fetchStationFeed(stationKey) {
             const station = stationFieldMaps[stationKey];
             const controller = new AbortController();
@@ -1016,7 +1035,7 @@ Taft Channel Read Key   : DKOXWIEC7F5PYX67
                 const json = await response.json();
                 stationData[stationKey] = json.feeds || [];
 
-                if (stationKey === currentStation) {
+                if (stationKey === currentStation || (currentStation === 'taft' && stationKey === 'donada')) {
                     renderUI();
                     if (currentModalMetric) renderPopupChart(currentModalMetric);
                 }
@@ -1028,7 +1047,6 @@ Taft Channel Read Key   : DKOXWIEC7F5PYX67
             }
         }
 
-        // Fetch data for both stations simultaneously
         async function fetchAllStations() {
             await Promise.all([
                 fetchStationFeed('donada'),
@@ -1043,15 +1061,31 @@ Taft Channel Read Key   : DKOXWIEC7F5PYX67
             const map = stationFieldMaps[currentStation];
             const latest = feeds[feeds.length - 1];
 
+            // Real-time Water Depth and Ambient Light for selected station
             const depth = parseFloat(latest[map.depthField]) || 0.0;
-            const temp = parseFloat(latest[map.tempField]) || 0.0;
-            const humidity = parseFloat(latest[map.humField]) || 0.0;
             const light = parseFloat(latest[map.lightField]) || 0.0;
+
+            // Temperature and Humidity: Use Donada's live values as constant for Taft
+            let temp = 0.0;
+            let humidity = 0.0;
+            const donadaFeeds = stationData.donada;
+            
+            if (currentStation === 'donada') {
+                temp = parseFloat(latest[map.tempField]) || 0.0;
+                humidity = parseFloat(latest[map.humField]) || 0.0;
+            } else {
+                // Taft Gate inherits temperature and humidity from Donada Gate
+                if (donadaFeeds && donadaFeeds.length > 0) {
+                    const latestDonada = donadaFeeds[donadaFeeds.length - 1];
+                    temp = parseFloat(latestDonada.field2) || 0.0;
+                    humidity = parseFloat(latestDonada.field3) || 0.0;
+                }
+            }
             
             const rawDate = new Date(latest.created_at);
             document.getElementById('val-depth').innerText = depth.toFixed(1);
-            document.getElementById('val-temp').innerText = temp.toFixed(1);
-            document.getElementById('val-humidity').innerText = humidity.toFixed(1);
+            document.getElementById('val-temp').innerText = temp > 0 ? temp.toFixed(1) : "--";
+            document.getElementById('val-humidity').innerText = humidity > 0 ? humidity.toFixed(1) : "--";
             document.getElementById('val-light').innerText = light.toFixed(0);
             document.getElementById('val-timestamp').innerText = rawDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             document.getElementById('live-time').innerText = `${rawDate.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' })} | ${rawDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
