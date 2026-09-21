@@ -820,27 +820,27 @@ Taft Channel Read Key   : DKOXWIEC7F5PYX67
 
     <script>
         // Dedicated dual configuration per station
-        const stationFieldMaps = {
+	const stationFieldMaps = {
             donada: {
                 name: "Donada Gate",
                 cctvLabel: "AU CCTV - Donada Gate",
-                channelId: "3482463",
-                readKey: "GBSKZ1CJ72FDWGG0", // Donada Read Key
-                depthField: "field1",
-                tempField: "field2",
-                humField: "field3",
-                lightField: "field4",
+                channelId: "3482463",               // Donada Channel ID
+                readKey: "GBSKZ1CJ72FDWGG0",         // Donada Read API Key
+                depthField: "field1",               // Field 1: Donada Water Depth
+                tempField: "field2",                // Field 2: Donada Temp
+                humField: "field3",                 // Field 3: Donada Humidity
+                lightField: "field4",               // Field 4: Donada Light
                 streamUrl: "http://192.168.1.2:8080/stream/donada"
             },
             taft: {
                 name: "Taft Gate",
                 cctvLabel: "AU CCTV - Taft Gate",
-                channelId: "3482463",
-                readKey: "DKOXWIEC7F5PYX67", // Taft Read Key
-                depthField: "field5",
-                tempField: "field6",
-                humField: "field7",
-                lightField: "field8",
+                channelId: "3502339",               // Taft Channel ID
+                readKey: "DKOXWIEC7F5PYX67",         // Taft Read API Key
+                depthField: "field1",               // Field 1: Taft Water Depth
+                tempField: "field2",                // Field 2: Taft Temp (mirrored from Donada)
+                humField: "field3",                 // Field 3: Taft Humidity (mirrored from Donada)
+                lightField: "field4",               // Field 4: Taft Light
                 streamUrl: "http://192.168.1.2:8080/stream/taft"
             }
         };
