@@ -13,92 +13,380 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link id="theme-style" rel="stylesheet" href="/css/index/classic.css">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+a {
+    color: #002D96;
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #660066;
+}
+
+a:hover {
+    color: #CC0000;
+}
+
+.header-wrapper {
+    background-color: #003399;
+    border-bottom: 1px solid #001A4E;
+    color: #FFFFFF;
+    padding: 10px 18px 8px 18px;
+}
+
+.header-brand {
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: -0.5px;
+    color: #FFFFFF;
+}
+
+.header-brand span {
+    font-size: 13px;
+    font-weight: normal;
+    color: #B4C6E7;
+}
+
+.header-subtext {
+    font-size: 10px;
+    color: #D6E0F5;
+    margin-top: 2px;
+}
+
+.nav-bar {
+    background-color: #ECE9D8;
+    border-top: 1px solid #FFFFFF;
+    border-bottom: 1px solid #ACA899;
+    padding: 3px 12px;
+    font-size: 11px;
+}
+
+.nav-bar a {
+    display: inline-block;
+    padding: 3px 7px;
+    color: #000000;
+    text-decoration: none;
+    border: 1px solid transparent;
+}
+
+.nav-bar a:hover {
+    background-color: #B6BDD2;
+    border: 1px solid #0A246A;
+    color: #000000;
+    text-decoration: none;
+}
+
+.nav-separator {
+    color: #999999;
+    padding: 0 1px;
+}
+
+.page-layout {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.sidebar-cell {
+    display: table-cell;
+    width: 250px;
+    vertical-align: top;
+    background-color: #F1EFE2;
+    border-right: 1px solid #ACA899;
+    padding: 10px 8px 20px 10px;
+}
+
+.content-cell {
+    display: table-cell;
+    vertical-align: top;
+    background-color: #FFFFFF;
+    padding: 16px 24px 30px 24px;
+}
+
+.sidebar-panel {
+    background-color: #FFFFFF;
+    border: 1px solid #7F9DB9;
+    margin-bottom: 12px;
+    padding: 0;
+}
+
+.sidebar-panel-header {
+    background: linear-gradient(to right, #2B579A 0%, #6E8DBA 100%);
+    background-color: #2B579A;
+    color: #FFFFFF;
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 3px 6px;
+    border-bottom: 1px solid #1C3A6B;
+}
+
+.sidebar-panel-body {
+    padding: 8px 6px;
+    font-size: 11px;
+}
+
+.tree-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tree-item {
+    margin: 2px 0;
+    padding-left: 14px;
+    position: relative;
+}
+
+.tree-item::before {
+    content: "■";
+    position: absolute;
+    left: 2px;
+    font-size: 7px;
+    color: #003399;
+    top: 2px;
+}
+
+.tree-item a {
+    color: #002D96;
+    text-decoration: none;
+    display: block;
+    padding: 1px 2px;
+}
+
+.tree-item a:hover {
+    background-color: #316AC5;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+h1 {
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 20px;
+    color: #003399;
+    margin: 0 0 12px 0;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #003399;
+    font-weight: bold;
+}
+
+h2 {
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 13px;
+    color: #003399;
+    margin: 22px 0 6px 0;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #ACA899;
+    font-weight: bold;
+}
+
+p {
+    margin: 0 0 10px 0;
+}
+
+textarea {
+    font-family: Verdana, Tahoma, sans-serif;
+    font-size: 11px;
+    border: 1px solid #7F9DB9;
+    background: #FFFFFF;
+    padding: 4px;
+}
+
+.box {
+    background-color: #F7F6F0;
+    border: 1px solid #D0CEBF;
+    border-left: 4px solid #003399;
+    padding: 8px 12px;
+    margin: 8px 0 14px 0;
+}
+
+.announcement-item {
+    background-color: #FFFFFF;
+    border: 1px solid #ACA899;
+    padding: 6px;
+    margin-bottom: 6px;
+}
+
+.announcement-title {
+    font-weight: bold;
+    color: #002D96;
+}
+
+.announcement-date {
+    color: #707070;
+    font-size: 10px;
+    margin: 1px 0 3px 0;
+}
+
+.button {
+    display: inline-block;
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 11px;
+    padding: 2px 10px;
+    color: #000000;
+    text-decoration: none;
+    background-color: #ECE9D8;
+    border-top: 1px solid #FFFFFF;
+    border-left: 1px solid #FFFFFF;
+    border-right: 1px solid #707070;
+    border-bottom: 1px solid #707070;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.button:hover {
+    color: #000000;
+    background-color: #F5F4EA;
+    text-decoration: none;
+}
+
+.button:active {
+    border-top: 1px solid #707070;
+    border-left: 1px solid #707070;
+    border-right: 1px solid #FFFFFF;
+    border-bottom: 1px solid #FFFFFF;
+    background-color: #E2DFD3;
+}
+
+.footer-wrapper {
+    background-color: #ECE9D8;
+    border-top: 1px solid #ACA899;
+    border-bottom: 1px solid #707070;
+    padding: 10px 20px;
+    font-size: 10px;
+    color: #555555;
+    text-align: left;
+}
+
+.footer-wrapper hr {
+    height: 1px;
+    border: 0;
+    background-color: #ACA899;
+    margin: 6px 0;
+}
+
+@media screen and (max-width: 768px) {
+    .page-layout,
+    .sidebar-cell,
+    .content-cell {
+        display: block;
+        width: 100%;
+    }
+
+    .sidebar-cell {
+        border-right: none;
+        border-bottom: 1px solid #ACA899;
+    }
+}
+</style>
 </head>
+
 <body>
 
-<div class="header">
-Geek Devs Community
-<span>| News</span>
+<div class="header-wrapper">
+    <div class="header-brand">
+        Geek Devs Community <span>| News</span>
+    </div>
+    <div class="header-subtext">
+        Developer Network, Architecture Documentation, and Community Repositories
+    </div>
 </div>
 
-<div class="nav">
-<a href="/">Home</a>
-<a href="/webstore/">WebStore</a>
-<a href="/downloads/">Downloads</a>
-<a target="_blank" href="https://discord.gg/YBsVhkcHT4">Discord</a>
-<a href="/services/">Services</a>
-<a href="/news/">News</a>
-<a href="/account/">My Account</a>
-<a href="https://gdcr.dankassassin368.com/">Subdomain</a>
-<a href="https://rdcubing.github.io/">GitHub Pages</a>
-<a target="_blank" href="https://github.com/RDCubing">GitHub</a>
+<div class="nav-bar">
+    <a href="/">Home</a>
+    <span class="nav-separator">|</span>
+    <a href="/webstore/">WebStore</a>
+    <span class="nav-separator">|</span>
+    <a href="/downloads/">Downloads</a>
+    <span class="nav-separator">|</span>
+    <a target="_blank" href="https://discord.gg/YBsVhkcHT4">Discord</a>
+    <span class="nav-separator">|</span>
+    <a href="/services/">Services</a>
+    <span class="nav-separator">|</span>
+    <a href="/news/">News</a>
+    <span class="nav-separator">|</span>
+    <a href="/account/">My Account</a>
+    <span class="nav-separator">|</span>
+    <a href="https://gdcr.dankassassin368.com/">Subdomain</a>
+    <span class="nav-separator">|</span>
+    <a href="https://rdcubing.github.io/">GitHub Pages</a>
+    <span class="nav-separator">|</span>
+    <a target="_blank" href="https://github.com/RDCubing">GitHub</a>
 </div>
 
-<div class="container">
-<div class="sidebar">
-<h3>Settings</h3>
-<select id="themeSelector">
-<option value="default">Default</option>
-<option value="classic">Classic</option>
-<option value="standard">Standard</option>
-<option value="luna">Luna</option>
-<option value="vista">Vista</option>
-<option value="msdn">MSDN</option>
-<option value="fluent">Fluent</option>
-</select>
+<div class="page-layout">
 
-<h3>News</h3>
-<a href="/news/">All News</a>
-<a href="/news/#latest">Latest News</a>
-<a href="#comments">Comments</a>
+    <div class="sidebar-cell">
+        <div class="sidebar-panel">
+            <div class="sidebar-panel-header">Article Navigation</div>
+            <div class="sidebar-panel-body">
+                <ul class="tree-list">
+                    <li class="tree-item"><a href="/news/">All News</a></li>
+                    <li class="tree-item"><a href="/news/#latest">Latest Bulletins</a></li>
+                    <li class="tree-item"><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
 
-<div class="announcement">
-<h4>Latest News</h4>
-<div id="latestNews">Loading...</div>
-</div>
-</div>
+        <div class="sidebar-panel">
+            <div class="sidebar-panel-header">Latest Headlines</div>
+            <div class="sidebar-panel-body">
+                <div id="latestNews">Loading...</div>
+            </div>
+        </div>
+    </div>
 
-<div class="content">
-<div id="article">
-<h1>Loading news...</h1>
-</div>
-</div>
+    <div class="content-cell">
+        <div id="article">
+            <h1>Loading news...</h1>
+        </div>
+    </div>
 </div>
 
-<div class="footer">
-© 2026 Geek Devs Community<br>
-REIMP - Reimplementation Project<br>
-Powered by HTML
+<div class="footer-wrapper">
+    <div>
+        <a href="/">Geek Devs Community Home</a> | 
+        <a href="/webstore/">NeonStore</a> | 
+        <a href="/downloads/">Downloads</a> | 
+        <a href="/services/">Services</a> | 
+        <a href="https://github.com/RDCubing" target="_blank">GitHub</a>
+    </div>
+    <hr>
+    <div>
+        &copy; 2026 Geek Devs Community. All rights reserved.<br>
+        REIMP - Reimplementation Project | Announcements &amp; Dispatches
+    </div>
 </div>
-
-<script src="/js/theme.js"></script>
 
 <script>
-/*
- * API endpoints
- */
 const NEWS_URL = "https://raw.githubusercontent.com/RDCubing/gdcr-news-reimp2026/main/news/news.json";
 const NEWS_IMAGE_URL = "https://raw.githubusercontent.com/RDCubing/gdcr-news-reimp2026/main/news/images/";
 const COMMENTS_URL = "https://gdcr.dankassassin368.com/ns-status/comments/";
-
-/*
- * Comments per page
- */
 const COMMENTS_PER_PAGE = 5;
 
-/*
- * Elements & State
- */
 const article = document.getElementById("article");
 const latestNews = document.getElementById("latestNews");
 let currentNews = null;
 let commentsData = [];
 let currentCommentPage = 1;
 
-/*
- * Escape HTML
- */
 function escapeHtml(value) {
     if (value === undefined || value === null) return "";
     return String(value)
@@ -109,9 +397,6 @@ function escapeHtml(value) {
         .replace(/'/g, "&#039;");
 }
 
-/*
- * Parse YYYYMMDD-HHMM
- */
 function parseNewsDate(newsId) {
     if (!newsId || !/^\d{8}-\d{4}$/.test(newsId)) return null;
     const year = Number(newsId.substring(0, 4));
@@ -122,9 +407,6 @@ function parseNewsDate(newsId) {
     return new Date(year, month, day, hour, minute);
 }
 
-/*
- * Format news date
- */
 function formatNewsDate(newsId) {
     const date = parseNewsDate(newsId);
     if (!date) return newsId;
@@ -137,9 +419,6 @@ function formatNewsDate(newsId) {
     });
 }
 
-/*
- * Format comment timestamp
- */
 function formatCommentDate(timestamp) {
     if (!timestamp) return "";
     const date = new Date(timestamp);
@@ -153,15 +432,9 @@ function formatCommentDate(timestamp) {
     });
 }
 
-/*
- * Get news ID from URL
- */
 const params = new URLSearchParams(window.location.search);
 const newsId = params.get("id");
 
-/*
- * Load article
- */
 if (!newsId) {
     article.innerHTML = `
         <h1>News</h1>
@@ -201,15 +474,15 @@ if (!newsId) {
                     <img
                         src="${imageUrl}"
                         alt="${escapeHtml(item.title)}"
-                        style="width: 100%; max-width: 1000px; height: auto; display: block; margin-bottom: 20px;"
+                        style="width: 100%; max-width: 1000px; height: auto; display: block; margin-bottom: 12px; border: 1px solid #ACA899;"
                         onerror="this.style.display='none';"
                     >
-                    <p>
+                    <p style="color: #666; font-size: 10px;">
                         <b>${escapeHtml(item.author)}</b>
                         &nbsp;|&nbsp;
                         ${escapeHtml(formatNewsDate(item.newsId))}
                     </p>
-                    <hr>
+                    <hr style="height: 1px; border: 0; background-color: #D0CEBF; margin: 8px 0;">
                     <p><b>${escapeHtml(item.description)}</b></p>
                     <p>${escapeHtml(item.content).replace(/\n/g, "<br>")}</p>
                 </div>
@@ -218,7 +491,7 @@ if (!newsId) {
                 <h2 id="comments">Comments</h2>
                 <div id="commentFormContainer"></div>
                 <div id="commentsContainer">Loading comments...</div>
-                <div id="commentPagination" style="margin-top: 20px;"></div>
+                <div id="commentPagination" style="margin-top: 15px;"></div>
             `;
 
             setupCommentForm();
@@ -236,9 +509,6 @@ if (!newsId) {
         });
 }
 
-/*
- * Setup comment form
- */
 function setupCommentForm() {
     const container = document.getElementById("commentFormContainer");
     if (!container) return;
@@ -259,26 +529,25 @@ function setupCommentForm() {
     }
 
     const avatarImg = avatar 
-        ? `<img src="${escapeHtml(avatar)}" alt="Avatar" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid #5865F2;">`
-        : `<span style="width: 28px; height: 28px; border-radius: 50%; background: #5865F2; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">${escapeHtml(username.charAt(0).toUpperCase())}</span>`;
+        ? `<img src="${escapeHtml(avatar)}" alt="Avatar" style="width: 24px; height: 24px; border: 1px solid #7F9DB9; object-fit: cover;">`
+        : `<span style="width: 24px; height: 24px; background: #2B579A; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">${escapeHtml(username.charAt(0).toUpperCase())}</span>`;
 
     container.innerHTML = `
         <div class="box">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
                 ${avatarImg}
                 <div>Commenting as: <b>${escapeHtml(username)}</b></div>
             </div>
-            <label for="commentText">Comment</label>
-            <br><br>
+            <label for="commentText"><b>Comment:</b></label><br>
             <textarea
                 id="commentText"
-                rows="5"
-                style="width: 100%; max-width: 700px; box-sizing: border-box;"
+                rows="4"
+                style="width: 100%; max-width: 650px; box-sizing: border-box;"
                 placeholder="Write a comment..."
             ></textarea>
             <br><br>
             <button class="button" id="postCommentButton">Post Comment</button>
-            <div id="commentMessage" style="margin-top: 10px;"></div>
+            <div id="commentMessage" style="margin-top: 8px;"></div>
         </div>
         <br>
     `;
@@ -286,9 +555,6 @@ function setupCommentForm() {
     document.getElementById("postCommentButton").addEventListener("click", postComment);
 }
 
-/*
- * Post comment
- */
 async function postComment() {
     const token = localStorage.getItem("token");
     const username = localStorage.getItem("username");
@@ -345,9 +611,6 @@ async function postComment() {
     }
 }
 
-/*
- * Load comments
- */
 async function loadComments() {
     const commentsContainer = document.getElementById("commentsContainer");
     if (!commentsContainer) return;
@@ -394,9 +657,6 @@ async function loadComments() {
     }
 }
 
-/*
- * Display comments
- */
 function displayComments(page) {
     const commentsContainer = document.getElementById("commentsContainer");
     if (!commentsContainer) return;
@@ -421,23 +681,23 @@ function displayComments(page) {
     pageComments.forEach(comment => {
         const box = document.createElement("div");
         box.className = "box";
-        box.style.marginBottom = "15px";
+        box.style.marginBottom = "10px";
 
         const avatarElement = comment.avatar
-            ? `<img src="${escapeHtml(comment.avatar)}" alt="${escapeHtml(comment.username)}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #5865F2;">`
-            : `<span style="width: 32px; height: 32px; border-radius: 50%; background: #5865F2; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold;">${escapeHtml((comment.username || "U").charAt(0).toUpperCase())}</span>`;
+            ? `<img src="${escapeHtml(comment.avatar)}" alt="${escapeHtml(comment.username)}" style="width: 28px; height: 28px; border: 1px solid #7F9DB9; object-fit: cover;">`
+            : `<span style="width: 28px; height: 28px; background: #2B579A; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">${escapeHtml((comment.username || "U").charAt(0).toUpperCase())}</span>`;
 
         box.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
                 ${avatarElement}
                 <div>
                     <b>${escapeHtml(comment.username)}</b>
-                    <span style="color: #888; font-size: 0.9em; margin-left: 6px;">
+                    <span style="color: #666; font-size: 10px; margin-left: 6px;">
                         ${escapeHtml(formatCommentDate(comment.timestamp))}
                     </span>
                 </div>
             </div>
-            <hr>
+            <hr style="height: 1px; border: 0; background-color: #D0CEBF; margin: 6px 0;">
             <p style="margin: 0; white-space: pre-wrap;">${escapeHtml(comment.comment)}</p>
         `;
 
@@ -447,9 +707,6 @@ function displayComments(page) {
     createCommentPagination();
 }
 
-/*
- * Comment pagination
- */
 function createCommentPagination() {
     const commentPagination = document.getElementById("commentPagination");
     if (!commentPagination) return;
@@ -498,9 +755,6 @@ function createCommentPagination() {
     commentPagination.appendChild(wrapper);
 }
 
-/*
- * Load latest news sidebar
- */
 fetch(NEWS_URL)
     .then(response => {
         if (!response.ok) throw new Error("Unable to load news.");

@@ -3,83 +3,360 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta property="og:type"
-      content="website">
-
-<meta property="og:title"
-      content="Downloads - Geek Devs Community">
-
-<meta property="og:description"
-      content="Download software, applications, tools, and projects from the Geek Devs Community.">
-
-<meta property="og:image"
-      content="https://raw.githubusercontent.com/RDCubing/rdcubing.github.io/main/8BackgroundNew.png">
-
-<meta property="og:url"
-      content="https://gdcr.dankassassin368.com/downloads/">
-
-<meta property="og:site_name"
-      content="Geek Devs Community">
-
+<meta property="og:type" content="website">
+<meta property="og:title" content="Downloads - Geek Devs Community">
+<meta property="og:description" content="Download software, applications, tools, and projects from the Geek Devs Community.">
+<meta property="og:image" content="https://raw.githubusercontent.com/RDCubing/rdcubing.github.io/main/8BackgroundNew.png">
+<meta property="og:url" content="https://gdcr.dankassassin368.com/downloads/">
+<meta property="og:site_name" content="Geek Devs Community">
 <title>Geek Devs Community - Downloads</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-<link id="theme-style" rel="stylesheet" href="/css/downloads/index/classic.css">
+<style>
+* {
+    box-sizing: border-box;
+}
 
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+a {
+    color: #002D96;
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #660066;
+}
+
+a:hover {
+    color: #CC0000;
+}
+
+.header-wrapper {
+    background-color: #003399;
+    border-bottom: 1px solid #001A4E;
+    color: #FFFFFF;
+    padding: 10px 18px 8px 18px;
+}
+
+.header-brand {
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: -0.5px;
+    color: #FFFFFF;
+}
+
+.header-brand span {
+    font-size: 13px;
+    font-weight: normal;
+    color: #B4C6E7;
+}
+
+.header-subtext {
+    font-size: 10px;
+    color: #D6E0F5;
+    margin-top: 2px;
+}
+
+.nav-bar {
+    background-color: #ECE9D8;
+    border-top: 1px solid #FFFFFF;
+    border-bottom: 1px solid #ACA899;
+    padding: 3px 12px;
+    font-size: 11px;
+}
+
+.nav-bar a {
+    display: inline-block;
+    padding: 3px 7px;
+    color: #000000;
+    text-decoration: none;
+    border: 1px solid transparent;
+}
+
+.nav-bar a:hover {
+    background-color: #B6BDD2;
+    border: 1px solid #0A246A;
+    color: #000000;
+    text-decoration: none;
+}
+
+.nav-separator {
+    color: #999999;
+    padding: 0 1px;
+}
+
+.page-layout {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.sidebar-cell {
+    display: table-cell;
+    width: 250px;
+    vertical-align: top;
+    background-color: #F1EFE2;
+    border-right: 1px solid #ACA899;
+    padding: 10px 8px 20px 10px;
+}
+
+.content-cell {
+    display: table-cell;
+    vertical-align: top;
+    background-color: #FFFFFF;
+    padding: 16px 24px 30px 24px;
+}
+
+.sidebar-panel {
+    background-color: #FFFFFF;
+    border: 1px solid #7F9DB9;
+    margin-bottom: 12px;
+    padding: 0;
+}
+
+.sidebar-panel-header {
+    background: linear-gradient(to right, #2B579A 0%, #6E8DBA 100%);
+    background-color: #2B579A;
+    color: #FFFFFF;
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 3px 6px;
+    border-bottom: 1px solid #1C3A6B;
+}
+
+.sidebar-panel-body {
+    padding: 8px 6px;
+    font-size: 11px;
+}
+
+.tree-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tree-item {
+    margin: 2px 0;
+    padding-left: 14px;
+    position: relative;
+}
+
+.tree-item::before {
+    content: "■";
+    position: absolute;
+    left: 2px;
+    font-size: 7px;
+    color: #003399;
+    top: 2px;
+}
+
+.tree-item a {
+    color: #002D96;
+    text-decoration: none;
+    display: block;
+    padding: 1px 2px;
+}
+
+.tree-item a:hover {
+    background-color: #316AC5;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+h1 {
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 20px;
+    color: #003399;
+    margin: 0 0 12px 0;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #003399;
+    font-weight: bold;
+}
+
+h2 {
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 13px;
+    color: #003399;
+    margin: 22px 0 6px 0;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #ACA899;
+    font-weight: bold;
+}
+
+p {
+    margin: 0 0 10px 0;
+}
+
+.box, .panel {
+    background-color: #F7F6F0;
+    border: 1px solid #D0CEBF;
+    border-left: 4px solid #003399;
+    padding: 8px 12px;
+    margin: 8px 0 14px 0;
+}
+
+.download-entry {
+    display: table;
+    width: 100%;
+}
+
+.download-icon-cell {
+    display: table-cell;
+    width: 64px;
+    vertical-align: top;
+    padding-right: 12px;
+}
+
+.download-details-cell {
+    display: table-cell;
+    vertical-align: top;
+}
+
+.download-icon-cell img {
+    width: 48px;
+    height: 48px;
+    border: 1px solid #7F9DB9;
+    background: #FFFFFF;
+    display: block;
+}
+
+.button {
+    display: inline-block;
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 11px;
+    padding: 2px 10px;
+    color: #000000;
+    text-decoration: none;
+    background-color: #ECE9D8;
+    border-top: 1px solid #FFFFFF;
+    border-left: 1px solid #FFFFFF;
+    border-right: 1px solid #707070;
+    border-bottom: 1px solid #707070;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.button:hover {
+    color: #000000;
+    background-color: #F5F4EA;
+    text-decoration: none;
+}
+
+.button:active {
+    border-top: 1px solid #707070;
+    border-left: 1px solid #707070;
+    border-right: 1px solid #FFFFFF;
+    border-bottom: 1px solid #FFFFFF;
+    background-color: #E2DFD3;
+}
+
+.footer-wrapper {
+    background-color: #ECE9D8;
+    border-top: 1px solid #ACA899;
+    border-bottom: 1px solid #707070;
+    padding: 10px 20px;
+    font-size: 10px;
+    color: #555555;
+    text-align: left;
+}
+
+.footer-wrapper hr {
+    height: 1px;
+    border: 0;
+    background-color: #ACA899;
+    margin: 6px 0;
+}
+
+@media screen and (max-width: 768px) {
+    .page-layout,
+    .sidebar-cell,
+    .content-cell {
+        display: block;
+        width: 100%;
+    }
+
+    .sidebar-cell {
+        border-right: none;
+        border-bottom: 1px solid #ACA899;
+    }
+}
+</style>
 </head>
+
 <body>
 
-<div class="header">
-Geek Devs Community
-<span>| Downloads</span>
+<div class="header-wrapper">
+    <div class="header-brand">
+        Geek Devs Community <span>| Downloads</span>
+    </div>
+    <div class="header-subtext">
+        Developer Network, Architecture Documentation, and Community Repositories
+    </div>
 </div>
 
-<div class="nav">
+<div class="nav-bar">
     <a href="/">Home</a>
+    <span class="nav-separator">|</span>
     <a href="/webstore/">WebStore</a>
+    <span class="nav-separator">|</span>
     <a href="/downloads/">Downloads</a>
+    <span class="nav-separator">|</span>
     <a target="_blank" href="https://discord.gg/YBsVhkcHT4">Discord</a>
+    <span class="nav-separator">|</span>
     <a href="/services/">Services</a>
-	<a href="/news/">News</a>
-	<a href="/account/">My Account</a>
-	<a href="https://gdcr.dankassassin368.com/">Subdomain</a>
-	<a href="https://rdcubing.github.io/">GitHub Pages</a>
+    <span class="nav-separator">|</span>
+    <a href="/news/">News</a>
+    <span class="nav-separator">|</span>
+    <a href="/account/">My Account</a>
+    <span class="nav-separator">|</span>
+    <a href="https://gdcr.dankassassin368.com/">Subdomain</a>
+    <span class="nav-separator">|</span>
+    <a href="https://rdcubing.github.io/">GitHub Pages</a>
+    <span class="nav-separator">|</span>
     <a target="_blank" href="https://github.com/RDCubing">GitHub</a>
 </div>
 
-<div class="container">
+<div class="page-layout">
 
-    <div class="sidebar">
-	<h3>Settings</h3>
+    <div class="sidebar-cell">
+        <div class="sidebar-panel">
+            <div class="sidebar-panel-header">Downloads</div>
+            <div class="sidebar-panel-body">
+                <ul class="tree-list">
+                    <li class="tree-item"><a href="#latest">Latest Release</a></li>
+                </ul>
+            </div>
+        </div>
 
-    <select id="themeSelector">
-        <option value="default">Default</option>
-		<option value="classic">Classic</option>
-        <option value="standard">Standard</option>
-        <option value="luna">Luna</option>
-		<option value="vista">Vista</option>
-		<option value="msdn">MSDN</option>
-		<option value="fluent">Fluent</option>
-    </select>
-
-        <h3>Downloads</h3>
-
-        <a href="#latest">Latest Release</a>
-
-        <h3 style="margin-top:24px;">Resources</h3>
-
-        <a href="/webstore/">WebStore</a>
-        <a href="/webstore/apps/">All Applications</a>
-        <a href="/services/">Services</a>
-        <a href="https://github.com/RDCubing" target="_blank">GitHub</a>
-        <a href="https://discord.gg/YBsVhkcHT4" target="_blank">Discord</a>
-
+        <div class="sidebar-panel">
+            <div class="sidebar-panel-header">Resources</div>
+            <div class="sidebar-panel-body">
+                <ul class="tree-list">
+                    <li class="tree-item"><a href="/webstore/">WebStore</a></li>
+                    <li class="tree-item"><a href="/webstore/apps/">All Applications</a></li>
+                    <li class="tree-item"><a href="/services/">Services</a></li>
+                    <li class="tree-item"><a href="https://github.com/RDCubing" target="_blank">GitHub</a></li>
+                    <li class="tree-item"><a href="https://discord.gg/YBsVhkcHT4" target="_blank">Discord</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 
-    <div class="content">
-
+    <div class="content-cell">
         <h1>Downloads</h1>
 
         <p>
@@ -89,38 +366,60 @@ Geek Devs Community
 
         <h2 id="latest">Latest Releases</h2>
 
-        <!-- Container where both panels (NeonStore and PrismStore) will be dynamically loaded -->
         <div id="releases-container">
             <div class="panel">
-                <p style="text-align: center; padding: 20px;"><b>Loading release information...</b></p>
+                <p style="text-align: center; padding: 15px;"><b>Loading release information...</b></p>
             </div>
         </div>
-
     </div>
-
 </div>
 
-<div class="footer">
-© 2026 Geek Devs Community<br>
-Downloads
+<div class="footer-wrapper">
+    <div>
+        <a href="/">Geek Devs Community Home</a> | 
+        <a href="/webstore/">NeonStore</a> | 
+        <a href="/downloads/">Downloads</a> | 
+        <a href="/services/">Services</a> | 
+        <a href="https://github.com/RDCubing" target="_blank">GitHub</a>
+    </div>
+    <hr>
+    <div>
+        &copy; 2026 Geek Devs Community. All rights reserved.<br>
+        REIMP - Reimplementation Project | Binary Download &amp; Distribution Repository
+    </div>
 </div>
-<script src="/js/theme.js"></script>
+
 <script>
-
-// Fetch both update.json (NeonStore) and updateprism.json (PrismStore) simultaneously
 Promise.all([
-    fetch("https://raw.githubusercontent.com/RDCubing/geekhubapi/main/update.json").then(r => r.json()),
-    fetch("https://raw.githubusercontent.com/RDCubing/geekhubapi/main/updateprism.json").then(r => r.json())
+    fetch("https://raw.githubusercontent.com/RDCubing/geekhubapi/main/update.json").then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+    }),
+    fetch("https://raw.githubusercontent.com/RDCubing/geekhubapi/main/updateprism.json").then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+    })
 ])
-.then(([neonData, prismData]) => {
-    
-    // Extract items helper (supports arrays, wrapped properties, or fallback objects)
-    const getApp = (data, key, defaultImg) => {
-        let items = data[key] ?? data;
+.then(function (results) {
+    var neonData = results[0];
+    var prismData = results[1];
+
+    var getApp = function (data, key, defaultImg) {
+        var items = (data && data[key] !== undefined && data[key] !== null) ? data[key] : data;
+        
         if (Array.isArray(items)) {
-            // Find top app or fallback to the first entry
-            items = items.find(i => i.TopApp === "Yes") || items[0];
+            var topApp = null;
+            for (var i = 0; i < items.length; i++) {
+                if (items[i] && items[i].TopApp === "Yes") {
+                    topApp = items[i];
+                    break;
+                }
+            }
+            items = topApp || items[0] || {};
+        } else if (!items || typeof items !== "object") {
+            items = {};
         }
+
         return {
             title: items.Name || items.Title || "Store App",
             version: items.Version || "Unknown",
@@ -130,50 +429,48 @@ Promise.all([
         };
     };
 
-    const neonApp = getApp(neonData, "NeonStore", "neonstore.png");
-    const prismApp = getApp(prismData, "PrismStore", "PrismStore.png");
+    var neonApp = getApp(neonData, "NeonStore", "neonstore.png");
+    var prismApp = getApp(prismData, "PrismStore", "PrismStore.png");
 
-    // Build HTML for both items
-    const container = document.getElementById("releases-container");
-    container.innerHTML = `
-        <div class="panel" style="margin-bottom: 20px;">
-            <div class="download">
-                <div class="icon-box">
-                    <img src="${neonApp.imagePath}" alt="NeonStore Icon" onerror="this.src='neonstore.png'">
-                </div>
-                <div>
-                    <h3>${neonApp.title}</h3>
-                    <p>Version: ${neonApp.version}</p>
-                    <p>${neonApp.description}</p>
-                    <a href="${neonApp.downloadUrl}" class="button" target="_blank">Download</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel">
-            <div class="download">
-                <div class="icon-box">
-                    <img src="${prismApp.imagePath}" alt="PrismStore Icon" onerror="this.src='PrismStore.png'">
-                </div>
-                <div>
-                    <h3>${prismApp.title}</h3>
-                    <p>Version: ${prismApp.version}</p>
-                    <p>${prismApp.description}</p>
-                    <a href="${prismApp.downloadUrl}" class="button" target="_blank">Download</a>
-                </div>
-            </div>
-        </div>
-    `;
-
+    var container = document.getElementById("releases-container");
+    container.innerHTML =
+        '<div class="panel" style="margin-bottom: 12px;">' +
+            '<div class="download-entry">' +
+                '<div class="download-icon-cell">' +
+                    '<img src="' + neonApp.imagePath + '" alt="NeonStore Icon" onerror="this.src=\'neonstore.png\'">' +
+                '</div>' +
+                '<div class="download-details-cell">' +
+                    '<h3 style="margin: 0 0 4px 0; font-family: Tahoma, sans-serif; font-size: 13px; color: #003399;">' + neonApp.title + '</h3>' +
+                    '<p style="margin: 0 0 4px 0;"><b>Version:</b> ' + neonApp.version + '</p>' +
+                    '<p style="margin: 0 0 8px 0;">' + neonApp.description + '</p>' +
+                    '<a href="' + neonApp.downloadUrl + '" class="button" target="_blank">Download</a>' +
+                '</div>' +
+            '</div>' +
+        '</div>' +
+        '<div class="panel">' +
+            '<div class="download-entry">' +
+                '<div class="download-icon-cell">' +
+                    '<img src="' + prismApp.imagePath + '" alt="PrismStore Icon" onerror="this.src=\'PrismStore.png\'">' +
+                '</div>' +
+                '<div class="download-details-cell">' +
+                    '<h3 style="margin: 0 0 4px 0; font-family: Tahoma, sans-serif; font-size: 13px; color: #003399;">' + prismApp.title + '</h3>' +
+                    '<p style="margin: 0 0 4px 0;"><b>Version:</b> ' + prismApp.version + '</p>' +
+                    '<p style="margin: 0 0 8px 0;">' + prismApp.description + '</p>' +
+                    '<a href="' + prismApp.downloadUrl + '" class="button" target="_blank">Download</a>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
 })
-.catch(() => {
-    document.getElementById("releases-container").innerHTML = `
-        <div class="panel">
-            <p style="text-align: center; color: red;"><b>Unable to load release information.</b></p>
-        </div>
-    `;
+.catch(function (err) {
+    console.error("Downloads fetch failed:", err);
+    var container = document.getElementById("releases-container");
+    if (container) {
+        container.innerHTML =
+            '<div class="panel">' +
+                '<p style="text-align: center; color: #CC0000;"><b>Unable to load release information.</b></p>' +
+            '</div>';
+    }
 });
-
 </script>
 
 </body>
