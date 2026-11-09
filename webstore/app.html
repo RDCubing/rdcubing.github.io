@@ -392,18 +392,18 @@ select, textarea {
 </div>
 
 <script>
-const API_URL = "https://gdcr.dankassassin368.com/ns-status/reviews";
-const PROJECTS_URL = "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/projects.json";
-const REVIEWS_PER_PAGE = 5;
+var API_URL = "https://gdcr.dankassassin368.com/ns-status/reviews";
+var PROJECTS_URL = "https://raw.githubusercontent.com/RDCubing/geekhubapi/main/projects.json";
+var REVIEWS_PER_PAGE = 5;
 
-const params = new URLSearchParams(window.location.search);
-const appId = params.get("id");
+var params = new URLSearchParams(window.location.search);
+var appId = params.get("id");
 
-let currentApp = null;
-let reviews = [];
-let currentReviewPage = 1;
+var currentApp = null;
+var reviews = [];
+var currentReviewPage = 1;
 
-const appContainer = document.getElementById("app");
+var appContainer = document.getElementById("app");
 
 function escapeHtml(value) {
     if (value === undefined || value === null) {
@@ -418,9 +418,9 @@ function escapeHtml(value) {
 }
 
 function getStars(rating) {
-    const value = Number(rating) || 0;
-    let result = "";
-    for (let i = 1; i <= 5; i++) {
+    var value = Number(rating) || 0;
+    var result = "";
+    for (var i = 1; i <= 5; i++) {
         result += i <= value ? "★" : "☆";
     }
     return result;
@@ -428,7 +428,7 @@ function getStars(rating) {
 
 function formatReviewDate(dateValue) {
     if (!dateValue) return "";
-    const date = new Date(dateValue);
+    var date = new Date(dateValue);
     if (isNaN(date.getTime())) return "";
 
     return date.toLocaleString(undefined, {
@@ -440,123 +440,273 @@ function formatReviewDate(dateValue) {
     });
 }
 
-async function loadApp() {
-    if (!appId) {
-        appContainer.innerHTML = `
-            <h1>Application</h1>
-            <div class="panel">
-                <p>No application was specified.</p>
-                <a class="button" href="/webstore/apps/">Back to Applications</a>
-            </div>
-        `;
+function displayApp() {
+    appContainer.innerHTML =
+        '<h1 id="details">' + escapeHtml(currentApp.Title) + '</h1>' +
+        '<div class="panel">' +
+            '<div class="app-header">' +
+                '<img class="app-icon" src="' + escapeHtml(currentApp.ImagePath || '') + '" alt="' + escapeHtml(currentApp.Title || '') + '">' +
+                '<div>' +
+                    '<div class="title">' + escapeHtml(currentApp.Title) + '</div>' +
+                    '<div class="subtitle">' +
+                        escapeHtml(currentApp.Publisher || "Unknown Publisher") +
+                        '<br>' +
+                        escapeHtml(currentApp.Subtitle || "") +
+                    '</div>' +
+                    '<br>' +
+                    '<a class="button" href="' + escapeHtml(currentApp.DownloadUrl || '#') + '" target="_blank" rel="noopener">Download</a>' +
+                '</div>' +
+            '</div>' +
+        '</div>' +
+        '<h2 id="description">Description</h2>' +
+        '<div class="panel">' +
+            (currentApp.Description || "No description available.") +
+        '</div>' +
+        '<h2 id="information">Information</h2>' +
+        '<div class="panel">' +
+            '<b>Publisher:</b> ' + escapeHtml(currentApp.Publisher || "Unknown") + '<br><br>' +
+            '<b>Platform:</b> ' + escapeHtml(currentApp.Framework || currentApp.Platform || "Unknown") + '<br><br>' +
+            '<b>Version:</b> ' + escapeHtml(currentApp.Version || "Unknown") +
+        '</div>' +
+        '<h2 id="reviews">Reviews</h2>' +
+        '<div id="reviewSummary">Loading reviews...</div>' +
+        '<div id="reviewForm"></div>' +
+        '<div id="reviewsContainer">Loading reviews...</div>' +
+        '<div id="reviewPagination" style="margin-top:15px;"></div>';
+}
+
+function displayReviewSummary() {
+    var summary = document.getElementById("reviewSummary");
+    if (!summary) return;
+
+    if (reviews.length === 0) {
+        summary.innerHTML =
+            '<div class="panel">' +
+                '<b>No reviews yet.</b>' +
+                '<p>Be the first to review this application.</p>' +
+            '</div>';
         return;
     }
 
-    try {
-        const response = await fetch(PROJECTS_URL);
-        if (!response.ok) {
-            throw new Error("Unable to load applications.");
-        }
-
-        const rawText = await response.text();
-        const sanitized = rawText.replace(/,\s*([\]}])/g, "$1");
-        const data = JSON.parse(sanitized);
-
-        const apps = Array.isArray(data)
-            ? data
-            : Object.values(data).filter(Array.isArray).flat();
-
-        currentApp = apps.find(app => String(app.Id) === String(appId));
-
-        if (!currentApp) {
-            appContainer.innerHTML = `
-                <h1>Application Not Found</h1>
-                <div class="panel">
-                    <p>The requested application could not be found.</p>
-                    <a class="button" href="/webstore/apps/">Back to Applications</a>
-                </div>
-            `;
-            return;
-        }
-
-        document.title = currentApp.Title + " - Geek Devs Community WebStore";
-        displayApp();
-        await loadReviews();
+    var total = 0;
+    for (var i = 0; i < reviews.length; i++) {
+        total += Number(reviews[i].rating) || 0;
     }
-    catch (error) {
-        console.error("Application loading error:", error);
-        appContainer.innerHTML = `
-            <h1>Error</h1>
-            <div class="panel">
-                <p>Unable to load application information.</p>
-                <p>${escapeHtml(error.message)}</p>
-            </div>
-        `;
+    var average = total / reviews.length;
+
+    summary.innerHTML =
+        '<div class="panel">' +
+            '<div style="font-size:20px; color:#003399;">' +
+                getStars(Math.round(average)) +
+            '</div>' +
+            '<div>' +
+                '<b>' + average.toFixed(1) + ' out of 5</b>' +
+                '&nbsp; (' + reviews.length + ' ' + (reviews.length === 1 ? "review" : "reviews") + ')' +
+            '</div>' +
+        '</div>';
+}
+
+function displayReviewForm() {
+    var form = document.getElementById("reviewForm");
+    if (!form) return;
+
+    var token = localStorage.getItem("token");
+    var username = localStorage.getItem("username");
+    var avatar = localStorage.getItem("avatar");
+
+    if (!token || !username) {
+        form.innerHTML =
+            '<div class="panel">' +
+                '<p>Sign in to leave a review.</p>' +
+                '<a class="button" href="/account/">Sign In</a>' +
+            '</div>' +
+            '<br>';
+        return;
+    }
+
+    var existingReview = null;
+    for (var i = 0; i < reviews.length; i++) {
+        if (String(reviews[i].username) === String(username)) {
+            existingReview = reviews[i];
+            break;
+        }
+    }
+
+    var existingRating = existingReview ? existingReview.rating : 5;
+    var existingComment = existingReview ? existingReview.comment : "";
+
+    var avatarElement = avatar
+        ? '<img src="' + escapeHtml(avatar) + '" alt="Avatar" style="width: 24px; height: 24px; border: 1px solid #7F9DB9; object-fit: cover;">'
+        : '<span style="width: 24px; height: 24px; background: #2B579A; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">' + escapeHtml(username.charAt(0).toUpperCase()) + '</span>';
+
+    form.innerHTML =
+        '<div class="panel">' +
+            '<p><b>' + (existingReview ? "Your Review" : "Write a Review") + '</b></p>' +
+            '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">' +
+                avatarElement +
+                '<div>Reviewing as: <b>' + escapeHtml(username) + '</b></div>' +
+            '</div>' +
+            '<label for="reviewRating"><b>Rating:</b></label><br>' +
+            '<select id="reviewRating">' +
+                '<option value="5"' + (Number(existingRating) === 5 ? ' selected' : '') + '>★★★★★ - 5</option>' +
+                '<option value="4"' + (Number(existingRating) === 4 ? ' selected' : '') + '>★★★★☆ - 4</option>' +
+                '<option value="3"' + (Number(existingRating) === 3 ? ' selected' : '') + '>★★★☆☆ - 3</option>' +
+                '<option value="2"' + (Number(existingRating) === 2 ? ' selected' : '') + '>★★☆☆☆ - 2</option>' +
+                '<option value="1"' + (Number(existingRating) === 1 ? ' selected' : '') + '>★☆☆☆☆ - 1</option>' +
+            '</select>' +
+            '<br><br>' +
+            '<label for="reviewComment"><b>Review:</b></label><br>' +
+            '<textarea id="reviewComment" rows="4" maxlength="500" style="width:100%; max-width:650px; box-sizing:border-box;" placeholder="Write your review...">' + escapeHtml(existingComment) + '</textarea>' +
+            '<br><br>' +
+            '<button class="button" id="submitReviewButton">' +
+                (existingReview ? "Update Review" : "Post Review") +
+            '</button>' +
+            (existingReview ? ' <button class="button" id="deleteReviewButton" style="margin-left:5px;">Delete Review</button>' : '') +
+            '<div id="reviewMessage" style="margin-top:8px;"></div>' +
+        '</div>' +
+        '<br>';
+
+    document.getElementById("submitReviewButton").addEventListener("click", submitReview);
+    if (existingReview) {
+        document.getElementById("deleteReviewButton").addEventListener("click", deleteReview);
     }
 }
 
-function displayApp() {
-    appContainer.innerHTML = `
-        <h1 id="details">${escapeHtml(currentApp.Title)}</h1>
+function displayReviews(page) {
+    var container = document.getElementById("reviewsContainer");
+    if (!container) return;
 
-        <div class="panel">
-            <div class="app-header">
-                <img class="app-icon" src="${escapeHtml(currentApp.ImagePath || '')}" alt="${escapeHtml(currentApp.Title || '')}">
-                <div>
-                    <div class="title">${escapeHtml(currentApp.Title)}</div>
-                    <div class="subtitle">
-                        ${escapeHtml(currentApp.Publisher || "Unknown Publisher")}
-                        <br>
-                        ${escapeHtml(currentApp.Subtitle || "")}
-                    </div>
-                    <br>
-                    <a class="button" href="${escapeHtml(currentApp.DownloadUrl || '#')}" target="_blank" rel="noopener">Download</a>
-                </div>
-            </div>
-        </div>
+    currentReviewPage = page;
+    container.innerHTML = "";
 
-        <h2 id="description">Description</h2>
-        <div class="panel">
-            ${currentApp.Description || "No description available."}
-        </div>
+    var start = (page - 1) * REVIEWS_PER_PAGE;
+    var end = start + REVIEWS_PER_PAGE;
+    var pageReviews = reviews.slice(start, end);
 
-        <h2 id="information">Information</h2>
-        <div class="panel">
-            <b>Publisher:</b> ${escapeHtml(currentApp.Publisher || "Unknown")}<br><br>
-            <b>Platform:</b> ${escapeHtml(currentApp.Framework || currentApp.Platform || "Unknown")}<br><br>
-            <b>Version:</b> ${escapeHtml(currentApp.Version || "Unknown")}
-        </div>
+    if (pageReviews.length === 0) {
+        container.innerHTML =
+            '<div class="panel">' +
+                '<p>No reviews yet.</p>' +
+            '</div>';
+        createReviewPagination();
+        return;
+    }
 
-        <h2 id="reviews">Reviews</h2>
-        <div id="reviewSummary">Loading reviews...</div>
-        <div id="reviewForm"></div>
-        <div id="reviewsContainer">Loading reviews...</div>
-        <div id="reviewPagination" style="margin-top:15px;"></div>
-    `;
+    for (var i = 0; i < pageReviews.length; i++) {
+        var review = pageReviews[i];
+        var box = document.createElement("div");
+        box.className = "panel";
+        box.style.marginBottom = "10px";
+
+        var rating = Number(review.rating);
+        var date = formatReviewDate(review.updatedAt || review.createdAt);
+
+        var avatarElement = review.avatar
+            ? '<img src="' + escapeHtml(review.avatar) + '" alt="' + escapeHtml(review.username) + '" style="width: 28px; height: 28px; border: 1px solid #7F9DB9; object-fit: cover;">'
+            : '<span style="width: 28px; height: 28px; background: #2B579A; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">' + escapeHtml((review.username || "U").charAt(0).toUpperCase()) + '</span>';
+
+        box.innerHTML =
+            '<div style="display: flex; align-items: center; gap: 8px;">' +
+                avatarElement +
+                '<div>' +
+                    '<div>' +
+                        '<b>' + escapeHtml(review.username) + '</b>' +
+                        '&nbsp;|&nbsp;' +
+                        '<span style="color: #003399;">' + getStars(rating) + '</span>' +
+                        '&nbsp;' +
+                        '<span>' + rating + '/5</span>' +
+                    '</div>' +
+                    (date ? '<div style="font-size: 10px; color: #666; margin-top: 1px;">' + escapeHtml(date) + '</div>' : '') +
+                '</div>' +
+            '</div>' +
+            '<hr style="height: 1px; border: 0; background-color: #D0CEBF; margin: 6px 0;">' +
+            '<p style="margin: 0; white-space: pre-wrap;">' + escapeHtml(review.comment) + '</p>';
+
+        container.appendChild(box);
+    }
+
+    createReviewPagination();
 }
 
-async function loadReviews() {
-    const container = document.getElementById("reviewsContainer");
+function createReviewPagination() {
+    var pagination = document.getElementById("reviewPagination");
+    if (!pagination) return;
+
+    pagination.innerHTML = "";
+    var totalPages = Math.ceil(reviews.length / REVIEWS_PER_PAGE);
+    if (totalPages <= 1) return;
+
+    var wrapper = document.createElement("div");
+
+    if (currentReviewPage > 1) {
+        var previous = document.createElement("button");
+        previous.className = "button";
+        previous.textContent = "Previous";
+        previous.style.marginRight = "5px";
+        previous.addEventListener("click", function () {
+            displayReviews(currentReviewPage - 1);
+            var el = document.getElementById("reviews");
+            if (el && el.scrollIntoView) el.scrollIntoView({ behavior: "smooth" });
+        });
+        wrapper.appendChild(previous);
+    }
+
+    for (var page = 1; page <= totalPages; page++) {
+        (function (p) {
+            var button = document.createElement("button");
+            button.className = "button";
+            button.textContent = p;
+            button.style.marginRight = "5px";
+
+            if (p === currentReviewPage) {
+                button.disabled = true;
+            }
+
+            button.addEventListener("click", function () {
+                displayReviews(p);
+                var el = document.getElementById("reviews");
+                if (el && el.scrollIntoView) el.scrollIntoView({ behavior: "smooth" });
+            });
+
+            wrapper.appendChild(button);
+        })(page);
+    }
+
+    if (currentReviewPage < totalPages) {
+        var next = document.createElement("button");
+        next.className = "button";
+        next.textContent = "Next";
+        next.addEventListener("click", function () {
+            displayReviews(currentReviewPage + 1);
+            var el = document.getElementById("reviews");
+            if (el && el.scrollIntoView) el.scrollIntoView({ behavior: "smooth" });
+        });
+        wrapper.appendChild(next);
+    }
+
+    pagination.appendChild(wrapper);
+}
+
+function loadReviews() {
+    var container = document.getElementById("reviewsContainer");
     if (!container) return;
 
     container.innerHTML = "Loading reviews...";
-    const url = API_URL + "/" + encodeURIComponent(currentApp.Id);
+    var url = API_URL + "/" + encodeURIComponent(currentApp.Id);
 
-    try {
-        const response = await fetch(url, {
-            method: "GET",
-            headers: { "Accept": "application/json" }
-        });
-
-        const text = await response.text();
-        if (!response.ok) {
-            throw new Error("HTTP " + response.status);
-        }
-
-        let data;
+    fetch(url, {
+        method: "GET",
+        headers: { "Accept": "application/json" }
+    })
+    .then(function (response) {
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        return response.text();
+    })
+    .then(function (text) {
+        var data;
         try {
             data = JSON.parse(text);
-        } catch {
+        } catch (e) {
             throw new Error("Reviews API returned invalid JSON.");
         }
 
@@ -565,139 +715,103 @@ async function loadReviews() {
         }
 
         reviews = data;
-        reviews.sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
+        reviews.sort(function (a, b) {
+            return new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt);
+        });
 
         currentReviewPage = 1;
-
         displayReviewSummary();
         displayReviewForm();
         displayReviews(1);
-    }
-    catch (error) {
+    })
+    .catch(function (error) {
         console.error("Reviews error:", error);
-        document.getElementById("reviewSummary").innerHTML = `
-            <div class="panel">
-                <b>Reviews</b>
-                <p>Unable to load reviews.</p>
-            </div>
-        `;
-        container.innerHTML = `
-            <div class="panel">
-                <b>Error:</b> ${escapeHtml(error.message)}
-            </div>
-        `;
-    }
+        var sum = document.getElementById("reviewSummary");
+        if (sum) {
+            sum.innerHTML =
+                '<div class="panel">' +
+                    '<b>Reviews</b>' +
+                    '<p>Unable to load reviews.</p>' +
+                '</div>';
+        }
+        container.innerHTML =
+            '<div class="panel">' +
+                '<b>Error:</b> ' + escapeHtml(error.message) +
+            '</div>';
+    });
 }
 
-function displayReviewSummary() {
-    const summary = document.getElementById("reviewSummary");
-    if (!summary) return;
-
-    if (reviews.length === 0) {
-        summary.innerHTML = `
-            <div class="panel">
-                <b>No reviews yet.</b>
-                <p>Be the first to review this application.</p>
-            </div>
-        `;
+function loadApp() {
+    if (!appId) {
+        appContainer.innerHTML =
+            '<h1>Application</h1>' +
+            '<div class="panel">' +
+                '<p>No application was specified.</p>' +
+                '<a class="button" href="/webstore/apps/">Back to Applications</a>' +
+            '</div>';
         return;
     }
 
-    const total = reviews.reduce((sum, review) => sum + Number(review.rating), 0);
-    const average = total / reviews.length;
+    fetch(PROJECTS_URL)
+        .then(function (response) {
+            if (!response.ok) throw new Error("HTTP " + response.status);
+            return response.text();
+        })
+        .then(function (rawText) {
+            var sanitized = rawText.replace(/,\s*([\]}])/g, "$1");
+            var data = JSON.parse(sanitized);
 
-    summary.innerHTML = `
-        <div class="panel">
-            <div style="font-size:20px; color:#003399;">
-                ${getStars(Math.round(average))}
-            </div>
-            <div>
-                <b>${average.toFixed(1)} out of 5</b>
-                &nbsp; (${reviews.length} ${reviews.length === 1 ? "review" : "reviews"})
-            </div>
-        </div>
-    `;
+            var apps = [];
+            if (Array.isArray(data)) {
+                apps = data;
+            } else if (data && typeof data === "object") {
+                for (var key in data) {
+                    if (Object.prototype.hasOwnProperty.call(data, key) && Array.isArray(data[key])) {
+                        apps = apps.concat(data[key]);
+                    }
+                }
+            }
+
+            for (var i = 0; i < apps.length; i++) {
+                if (String(apps[i].Id) === String(appId)) {
+                    currentApp = apps[i];
+                    break;
+                }
+            }
+
+            if (!currentApp) {
+                appContainer.innerHTML =
+                    '<h1>Application Not Found</h1>' +
+                    '<div class="panel">' +
+                        '<p>The requested application could not be found.</p>' +
+                        '<a class="button" href="/webstore/apps/">Back to Applications</a>' +
+                    '</div>';
+                return;
+            }
+
+            document.title = currentApp.Title + " - Geek Devs Community WebStore";
+            displayApp();
+            loadReviews();
+        })
+        .catch(function (error) {
+            console.error("Application loading error:", error);
+            appContainer.innerHTML =
+                '<h1>Error</h1>' +
+                '<div class="panel">' +
+                    '<p>Unable to load application information.</p>' +
+                    '<p>' + escapeHtml(error.message) + '</p>' +
+                '</div>';
+        });
 }
 
-function displayReviewForm() {
-    const form = document.getElementById("reviewForm");
-    if (!form) return;
-
-    const token = localStorage.getItem("token");
-    const username = localStorage.getItem("username");
-    const avatar = localStorage.getItem("avatar");
-
-    if (!token || !username) {
-        form.innerHTML = `
-            <div class="panel">
-                <p>Sign in to leave a review.</p>
-                <a class="button" href="/account/">Sign In</a>
-            </div>
-            <br>
-        `;
-        return;
-    }
-
-    const existingReview = reviews.find(review => String(review.username) === String(username));
-    const existingRating = existingReview ? existingReview.rating : 5;
-    const existingComment = existingReview ? existingReview.comment : "";
-
-    const avatarElement = avatar 
-        ? `<img src="${escapeHtml(avatar)}" alt="Avatar" style="width: 24px; height: 24px; border: 1px solid #7F9DB9; object-fit: cover;">`
-        : `<span style="width: 24px; height: 24px; background: #2B579A; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">${escapeHtml(username.charAt(0).toUpperCase())}</span>`;
-
-    form.innerHTML = `
-        <div class="panel">
-            <p><b>${existingReview ? "Your Review" : "Write a Review"}</b></p>
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                ${avatarElement}
-                <div>Reviewing as: <b>${escapeHtml(username)}</b></div>
-            </div>
-
-            <label for="reviewRating"><b>Rating:</b></label><br>
-            <select id="reviewRating">
-                <option value="5" ${Number(existingRating) === 5 ? "selected" : ""}>★★★★★ - 5</option>
-                <option value="4" ${Number(existingRating) === 4 ? "selected" : ""}>★★★★☆ - 4</option>
-                <option value="3" ${Number(existingRating) === 3 ? "selected" : ""}>★★★☆☆ - 3</option>
-                <option value="2" ${Number(existingRating) === 2 ? "selected" : ""}>★★☆☆☆ - 2</option>
-                <option value="1" ${Number(existingRating) === 1 ? "selected" : ""}>★☆☆☆☆ - 1</option>
-            </select>
-            <br><br>
-
-            <label for="reviewComment"><b>Review:</b></label><br>
-            <textarea
-                id="reviewComment"
-                rows="4"
-                maxlength="500"
-                style="width:100%; max-width:650px; box-sizing:border-box;"
-                placeholder="Write your review..."
-            >${escapeHtml(existingComment)}</textarea>
-            <br><br>
-
-            <button class="button" id="submitReviewButton">
-                ${existingReview ? "Update Review" : "Post Review"}
-            </button>
-
-            ${existingReview ? `<button class="button" id="deleteReviewButton" style="margin-left:5px;">Delete Review</button>` : ""}
-            <div id="reviewMessage" style="margin-top:8px;"></div>
-        </div>
-        <br>
-    `;
-
-    document.getElementById("submitReviewButton").addEventListener("click", submitReview);
-    if (existingReview) {
-        document.getElementById("deleteReviewButton").addEventListener("click", deleteReview);
-    }
-}
-
-async function submitReview() {
-    const token = localStorage.getItem("token");
+function submitReview() {
+    var token = localStorage.getItem("token");
     if (!token) return;
 
-    const rating = Number(document.getElementById("reviewRating").value);
-    const comment = document.getElementById("reviewComment").value.trim();
-    const message = document.getElementById("reviewMessage");
-    const avatar = localStorage.getItem("avatar");
+    var rating = Number(document.getElementById("reviewRating").value);
+    var comment = document.getElementById("reviewComment").value.trim();
+    var message = document.getElementById("reviewMessage");
+    var avatar = localStorage.getItem("avatar");
 
     if (rating < 1 || rating > 5) {
         message.textContent = "Please select a valid rating.";
@@ -716,187 +830,75 @@ async function submitReview() {
 
     message.textContent = "Posting review...";
 
-    try {
-        const response = await fetch(API_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
-            },
-            body: JSON.stringify({
-                appId: currentApp.Id,
-                rating: rating,
-                comment: comment,
-                avatar: avatar || null
-            })
+    fetch(API_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({
+            appId: currentApp.Id,
+            rating: rating,
+            comment: comment,
+            avatar: avatar || null
+        })
+    })
+    .then(function (response) {
+        return response.json().then(function (data) {
+            return { ok: response.ok, data: data };
+        }).catch(function () {
+            return { ok: response.ok, data: null };
         });
-
-        let data = null;
-        try {
-            data = await response.json();
-        } catch {
-            data = null;
-        }
-
-        if (!response.ok) {
-            message.textContent = (data && data.error) || "Unable to post review.";
+    })
+    .then(function (res) {
+        if (!res.ok) {
+            message.textContent = (res.data && res.data.error) || "Unable to post review.";
             return;
         }
 
         message.textContent = "Review saved successfully.";
-        await loadReviews();
-    }
-    catch (error) {
+        loadReviews();
+    })
+    .catch(function (error) {
         console.error(error);
         message.textContent = "Unable to connect to the review server.";
-    }
+    });
 }
 
-async function deleteReview() {
-    const token = localStorage.getItem("token");
+function deleteReview() {
+    var token = localStorage.getItem("token");
     if (!token) return;
 
     if (!confirm("Delete your review?")) {
         return;
     }
 
-    const message = document.getElementById("reviewMessage");
+    var message = document.getElementById("reviewMessage");
     message.textContent = "Deleting review...";
 
-    try {
-        const response = await fetch(API_URL + "/" + encodeURIComponent(currentApp.Id), {
-            method: "DELETE",
-            headers: { "Authorization": "Bearer " + token }
+    fetch(API_URL + "/" + encodeURIComponent(currentApp.Id), {
+        method: "DELETE",
+        headers: { "Authorization": "Bearer " + token }
+    })
+    .then(function (response) {
+        return response.json().then(function (data) {
+            return { ok: response.ok, data: data };
+        }).catch(function () {
+            return { ok: response.ok, data: null };
         });
-
-        let data = null;
-        try {
-            data = await response.json();
-        } catch {
-            data = null;
-        }
-
-        if (!response.ok) {
-            message.textContent = (data && data.error) || "Unable to delete review.";
+    })
+    .then(function (res) {
+        if (!res.ok) {
+            message.textContent = (res.data && res.data.error) || "Unable to delete review.";
             return;
         }
 
-        await loadReviews();
-    }
-    catch (error) {
+        loadReviews();
+    })
+    .catch(function (error) {
         console.error(error);
         message.textContent = "Unable to connect to the review server.";
-    }
-}
-
-function displayReviews(page) {
-    const container = document.getElementById("reviewsContainer");
-    if (!container) return;
-
-    currentReviewPage = page;
-    container.innerHTML = "";
-
-    const start = (page - 1) * REVIEWS_PER_PAGE;
-    const end = start + REVIEWS_PER_PAGE;
-    const pageReviews = reviews.slice(start, end);
-
-    if (pageReviews.length === 0) {
-        container.innerHTML = `
-            <div class="panel">
-                <p>No reviews yet.</p>
-            </div>
-        `;
-        createReviewPagination();
-        return;
-    }
-
-    pageReviews.forEach(review => {
-        const box = document.createElement("div");
-        box.className = "panel";
-        box.style.marginBottom = "10px";
-
-        const rating = Number(review.rating);
-        const date = formatReviewDate(review.updatedAt || review.createdAt);
-
-        const avatarElement = review.avatar
-            ? `<img src="${escapeHtml(review.avatar)}" alt="${escapeHtml(review.username)}" style="width: 28px; height: 28px; border: 1px solid #7F9DB9; object-fit: cover;">`
-            : `<span style="width: 28px; height: 28px; background: #2B579A; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">${escapeHtml((review.username || "U").charAt(0).toUpperCase())}</span>`;
-
-        box.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 8px;">
-                ${avatarElement}
-                <div>
-                    <div>
-                        <b>${escapeHtml(review.username)}</b>
-                        &nbsp;|&nbsp;
-                        <span style="color: #003399;">${getStars(rating)}</span>
-                        &nbsp;
-                        <span>${rating}/5</span>
-                    </div>
-                    ${date ? `<div style="font-size: 10px; color: #666; margin-top: 1px;">${escapeHtml(date)}</div>` : ""}
-                </div>
-            </div>
-            <hr style="height: 1px; border: 0; background-color: #D0CEBF; margin: 6px 0;">
-            <p style="margin: 0; white-space: pre-wrap;">${escapeHtml(review.comment)}</p>
-        `;
-        container.appendChild(box);
     });
-
-    createReviewPagination();
-}
-
-function createReviewPagination() {
-    const pagination = document.getElementById("reviewPagination");
-    if (!pagination) return;
-
-    pagination.innerHTML = "";
-    const totalPages = Math.ceil(reviews.length / REVIEWS_PER_PAGE);
-    if (totalPages <= 1) return;
-
-    const wrapper = document.createElement("div");
-
-    if (currentReviewPage > 1) {
-        const previous = document.createElement("button");
-        previous.className = "button";
-        previous.textContent = "Previous";
-        previous.style.marginRight = "5px";
-        previous.addEventListener("click", () => {
-            displayReviews(currentReviewPage - 1);
-            document.getElementById("reviews")?.scrollIntoView({ behavior: "smooth" });
-        });
-        wrapper.appendChild(previous);
-    }
-
-    for (let page = 1; page <= totalPages; page++) {
-        const button = document.createElement("button");
-        button.className = "button";
-        button.textContent = page;
-        button.style.marginRight = "5px";
-
-        if (page === currentReviewPage) {
-            button.disabled = true;
-        }
-
-        button.addEventListener("click", () => {
-            displayReviews(page);
-            document.getElementById("reviews")?.scrollIntoView({ behavior: "smooth" });
-        });
-
-        wrapper.appendChild(button);
-    }
-
-    if (currentReviewPage < totalPages) {
-        const next = document.createElement("button");
-        next.className = "button";
-        next.textContent = "Next";
-        next.addEventListener("click", () => {
-            displayReviews(currentReviewPage + 1);
-            document.getElementById("reviews")?.scrollIntoView({ behavior: "smooth" });
-        });
-        wrapper.appendChild(next);
-    }
-
-    pagination.appendChild(wrapper);
 }
 
 loadApp();
